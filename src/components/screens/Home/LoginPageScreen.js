@@ -1,9 +1,14 @@
-import React ,{ useState }from 'react';
+import React, {useEffect, useState} from 'react';
 
-import AuthAPI from "../services/AuthAPI";
+import AuthAPI from "../../services/AuthAPI";
 
 
 export default function LoginPageScreen({onLogin , history}){
+    console.log(history)
+
+    useEffect(() => {
+        document.title = "Login"
+    }, []);
 
 
     const[credentials, setCredentials] = useState({
@@ -28,7 +33,7 @@ export default function LoginPageScreen({onLogin , history}){
             await AuthAPI.authenticate(credentials);
             setError(false);
             onLogin(true);
-            history.replace('/DashboardHomePageScreen');
+            history.replace('/DashboardHomePage');
             }catch(error){
                 setError(
                 "Aucun compte ne possède cette adresse email ou alors les informations ne correspondent pas. ");

@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink, Link} from "react-router-dom";
 import AuthAPI from "../services/AuthAPI";
-
+import './navigation.scss';
 
 export default function Navigation({isAuthenticated,onLogout, history}){
 
@@ -10,41 +10,72 @@ export default function Navigation({isAuthenticated,onLogout, history}){
         onLogout(false);
         history.push("/login")
     }
+    const handleSubmit =(element)=> {
+        history.push("/"+element);
+    }
+
+    const logo= process.env.PUBLIC_URL + '/img/logo.png';
+
+
     return(
 
-            <nav className="navbar navbar-expand-lg navbar-black">
+            <nav className="navbar navbar-expand-lg navbar-light bg_header">
                 <div className="container-fluid">
 
-                    {(!isAuthenticated  && (
-                        <>
+                {(!isAuthenticated  && (
+                <>
                     <Link to='/' className='navbar-brand'>
-                        <img src="" alt="LOGO"/>
+                        <img src={logo} alt="LOGO" width="150" height="150"/>
                     </Link>
 
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
 
+                    <div className="collapse navbar-collapse" id="navbarNav">
+                        <ul className="navbar-nav">
 
-                            <NavLink exact to="/" href="#" className="">Accueil</NavLink>
-                            <NavLink exact to="/about" href="#" className="">A Propos</NavLink>
-                            <NavLink exact to="/notice" href="#" className="">Notice</NavLink>
+                                <li className="nav-item ">
+                                    <NavLink exact to="/" className="nav-link buttonHeader">Accueil</NavLink>
+                                </li>
 
+                                <li className="nav-item">
+                                    <NavLink exact to="/about"  className="nav-link buttonHeader">A Propos</NavLink>
+                                </li>
 
-                            <NavLink exact to="/login" href="#" className="btn btn-info my-2 mx-2">Se Connecter</NavLink>
+                                <li className="nav-item">
+                                    <NavLink exact to="/notice"  className="nav-link buttonHeader">Notice</NavLink>
+                                </li>
 
-                        </>
-                    )) || (
-                        <>
-                        <Link to='#' className='navbar-brand'>
-                            <img src="" alt="LOGO"/>
-                        </Link>
+                                <li className="nav-item d-flex flex-column">
+                                    <NavLink exact to="/login"  className="btn btn-connection mb-2">Se Connecter</NavLink>
+                                    <button onClick={() => handleSubmit('createNewRegisterPage')}
+                                            className="btn btn-gold ">Inscrivez-vous</button>
 
-                        <button onClick={handleLogout} className="btn btn-danger my-2 mx-2">Se Deconnecter</button>
-                        </>
+                                </li>
+
+                        </ul>
+
+                    </div>
+
+                </>
+                )) || (
+                <>
+                    <Link to='#' className='navbar-brand'>
+                        <img src={logo} alt="LOGO" width="150" height="150"/>
+                    </Link>
+
+                    <button onClick={handleLogout} className="btn btn-danger my-2 mx-2">Se Deconnecter</button>
+                </>
                     )
                     }
 
+
+
                 </div>
             </nav>
-
 
     );
 }

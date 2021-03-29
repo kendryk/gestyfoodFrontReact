@@ -4,6 +4,7 @@ import './App.scss';
 
 import {
     Navigation,
+    Footer,
     HomePageScreen,
     AboutPageScreen,
     NoticePageScreen,
@@ -18,91 +19,81 @@ import {
     PreferencePageScreen
 } from './components'
 
-
 import AuthAPI from "./components/services/AuthAPI";
 
-
 AuthAPI.setup();
-
 
 function App() {
 
     const[isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
     console.log(isAuthenticated);
 
-
     const NavigationWithRouter = withRouter (Navigation)
-
-
 
   return (
     <div className="App">
+
         <NavigationWithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
+        <main>
         <Switch>
-            <Route exact path="/" component={HomePageScreen}/>
 
-            <Route exact path="/about" component={AboutPageScreen}/>
-            <Route exact path="/notice" component={NoticePageScreen}/>
+            <Route exact path="/" render={props=> <HomePageScreen{...props}/>}/>
 
-            <Route exact path="/login"
-                   render={props=>
-                       <LoginPageScreen
-                           onLogin={setIsAuthenticated} {...props}
-                       />}
-            />
+            <Route exact path="/about" render={props=> <AboutPageScreen{...props}/>}/>
 
+            <Route exact path="/notice" render={props=> <NoticePageScreen{...props}/>}/>
 
+            <Route exact path="/login" render={props=> <LoginPageScreen onLogin={setIsAuthenticated} {...props}/>}/>
+
+            <Route exact path="/createNewRegisterPage" render={props=> <CreateNewRegisterPageScreen onLogin={setIsAuthenticated} {...props}/>}/>
+
+            <Route exact path="/dashboardHomePage" render={props=> <DashboardHomePageScreen onLogin={setIsAuthenticated} {...props}/>}/>
+
+            <Route exact path="/dashboardUnities" render={props=> <DashboardUnitiesScreen onLogin={setIsAuthenticated}  {...props}/>}/>
+
+            <Route exact
+                   path="/unity/:id"
+                   render={props=> <UnityPageScreen
+                       onLogin={setIsAuthenticated} {...props}/>}/>
 
 
             {/*TODO SECURISATION DES ROUTES*/}
 
 
-            <Route exact path="/createNewRegisterPageScreen"
-                   render={ props=> isAuthenticated ?  < CreateNewRegisterPageScreen{...props}/> : <Redirect to="/login"/>  }
-            />
+            {/*<Route exact path="/dashboardHomePageScreen"*/}
+            {/*       render={ props=> isAuthenticated ?  < DashboardHomePageScreen{...props}/> : <Redirect to="/login"/>  }*/}
+            {/*/>*/}
 
 
-            <Route exact path="/dashboardHomePageScreen"
-                   render={ props=> isAuthenticated ?  < DashboardHomePageScreen{...props}/> : <Redirect to="/login"/>  }
-            />
+            {/*<Route exact path="/dashboardUnitiesScreen"*/}
+            {/*       render={ props=> isAuthenticated ?  < DashboardUnitiesScreen{...props}/> : <Redirect to="/login"/>  }*/}
+            {/*/>*/}
 
+            {/*<Route exact path="/unityPageScreen"*/}
+            {/*       render={ props=> isAuthenticated ?  < UnityPageScreen{...props}/> : <Redirect to="/login"/>  }*/}
+            {/*/>*/}
 
-            <Route exact path="/dashboardHomePageScreen"
-                   render={ props=> isAuthenticated ?  < DashboardHomePageScreen{...props}/> : <Redirect to="/login"/>  }
-            />
-
-            <Route exact path="/dashboardUnitiesScreen"
-                   render={ props=> isAuthenticated ?  < DashboardUnitiesScreen{...props}/> : <Redirect to="/login"/>  }
-            />
-
-            <Route exact path="/unityPageScreen"
-                   render={ props=> isAuthenticated ?  < UnityPageScreen{...props}/> : <Redirect to="/login"/>  }
-            />
-
-            <Route exact path="/userPageScreen"
+            <Route exact path="/userPage"
                    render={ props=> isAuthenticated ?  < UserPageScreen{...props}/> : <Redirect to="/login"/>  }
             />
 
-            <Route exact path="/regimePageScreen"
+            <Route exact path="/regimePage"
                    render={ props=> isAuthenticated ?  < RegimePageScreen{...props}/> : <Redirect to="/login"/>  }
             />
-            <Route exact path="/gestionFoodPageScreen"
+            <Route exact path="/gestionFoodPage"
                    render={ props=> isAuthenticated ?  < GestionFoodPageScreen{...props}/> : <Redirect to="/login"/>  }
             />
-            <Route exact path="/preferencePageScreen"
+            <Route exact path="/preferencePage"
                    render={ props=> isAuthenticated ?  < PreferencePageScreen{...props}/> : <Redirect to="/login"/>  }
             />
-
-
-
-
-
-
-
 
         </Switch>
 
 
+
+
+        </main>
+       <Footer/>
     </div>
   );
 }

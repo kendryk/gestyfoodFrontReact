@@ -1,0 +1,91 @@
+
+  //Block-Welcome
+  .block_bg-hand{
+
+
+  .block-empty{
+    height:300px;
+    width:50%;
+
+  }
+  .block-welcome{
+
+    border-radius:15px;
+    background-color: rgba(150, 45, 33, 0.8);
+    box-shadow: 0 0 12px rgba(59,59,59, 0.8);
+    padding:2rem 2rem ;
+    margin: 5rem;
+    height:100%;
+    width:100%;
+
+
+  }
+}
+
+
+
+  .block_why{
+
+      .bg_myDark{
+        background-color: rgb(51, 51, 51);
+      }
+      .block-article{
+        color: rgb(251, 251, 251);
+        display:flex;
+        padding:2rem 4rem;
+
+      }
+      .ligne{
+
+        background-color:#D49725;
+        border-radius: 25px;
+        box-shadow: 0 0 12px rgba(255,255,255, 0.3);
+        width: 90%;
+        height: 10px;
+
+      }
+
+      .img{
+        width: 30rem;
+        margin: 2rem 0;
+      }
+
+  }
+
+
+
+
+
+  .block_when{
+
+    height:60rem;
+
+    .block_bg_hand{
+      background-image: url(../img/hand.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+      height:100%;
+
+      padding: 10rem 20rem;
+
+
+
+    }
+    .block_question{
+      width:100%;
+
+    }
+    .block_button{
+      display:flex;
+      justify-content: flex-end;
+      margin:15rem 0;
+      width:100%;
+    }
+
+
+
+
+  }
+
+
+

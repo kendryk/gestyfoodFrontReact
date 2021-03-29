@@ -5,8 +5,11 @@
 .btn-update{
   border: 1px solid blue;
   background:blue;
-  box-shadow: 0 0 15px #5b5b5b;
+  box-shadow: 0 0 15px rgba(91,91,91,0.2);
   color: white;
+  width: 10rem;
+  height: 3rem;
+
   &:hover{
     background:white;
     color: blue;
@@ -18,7 +21,7 @@
 .btn-gold{
   border: 1px solid #D49725;
   background-color:#D49725;
-  box-shadow: 0 0 15px #5b5b5b;
+  box-shadow: 0 0 15px rgba(91,91,91,0.2);
   color: white;
   width: 10rem;
   height: 3rem;

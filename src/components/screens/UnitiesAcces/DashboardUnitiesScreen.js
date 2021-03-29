@@ -3,9 +3,12 @@ import { Link} from "react-router-dom";
 import Aside from "../../layouts/Aside";
 import './dashboardUnities.scss';
 import Pagination from "../../layouts/Pagination"
-import UnitiesAPi from "../../services/UnitiesAPi";
+import UnitiesAPi from "../../../services/UnitiesAPi";
 
 export default function DashboardUnitiesScreen(){
+
+
+        console.log(window.location);
 
         const [unities, setUnities] = useState([]);
         const [currentPage, setCurrentPage]= useState(1);
@@ -113,36 +116,42 @@ export default function DashboardUnitiesScreen(){
                                 <p>Chargement...</p>
                         )}
                         {paginationUnities.map(unity =>
+                            <div>
+                                <Link
+                                    key={unity.id}
+                                    to={{
+                                        pathname: "/unity/"+unity.name,
 
-                            <Link
-                                key={unity.id}
-                                to={{
-                                    pathname: "/unity/"+unity.id,
-                                    state: {name: unity.name}
-                                    }}
-                                className='btn'>
-                            <div
-                                className='unity_element'
-                                key={unity.id}
-                                style={{ backgroundImage: `url(${unity.photo})`
-                             }}>
+                                        }}
+                                    className='btn'>
+
+                                <div
+                                    className='unity_element'
+                                    key={unity.id}
+                                    style={{ backgroundImage: `url(${unity.photo})`
+                                 }}>
+
+
+                                    <div className='unity_who'>
+                                        <div/>
+                                        <div className='unity_box'>
+                                            <h3>{unity.name}</h3>
+                                            <h3>Nombre de résidents: {unity.residents.length}</h3>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                </Link>
+
 
                                 <div className='unity_update'>
-                                    <div/>
+
                                     <button className='btn btn-update'> modif</button>
                                 </div>
-
-                                <div className='unity_who'>
-                                    <div/>
-                                    <div className='unity_box'>
-                                        <h3>{unity.name}</h3>
-                                        <h3>Nombre de résidents: {unity.residents.length}</h3>
-                                    </div>
-                                </div>
-
                             </div>
-                            </Link>
                         )}
+
                     </div>
 
        {/*version Table de donnée*/}

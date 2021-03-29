@@ -1,0 +1,18 @@
+.login_box{
+
+  border-radius: 25px;
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+  margin: 5rem;
+  padding:2rem
+
+}
+
+.login_box_form{
+  padding:2rem;
+
+  .form-group >label{
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+}
+

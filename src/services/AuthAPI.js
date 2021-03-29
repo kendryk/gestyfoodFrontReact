@@ -1,6 +1,9 @@
 import axios from 'axios';
 import jwtDecode from "jwt-decode";
 
+
+
+
 /**
  * Déconnection (suppression du token local storage)
  */
@@ -48,7 +51,7 @@ function setup(){
     const token = window.localStorage.getItem('authToken');
     //2. si le token est encore valide au niveau de la date expiration
     if (token){
-        const jwtData = jwtDecode(token)
+        const jwtData = jwtDecode(token);
         if((jwtData.exp * 1000) > new Date().getTime){
     //3 Donner le token à axios.
             setAxiosToken(token);
@@ -61,7 +64,7 @@ function setup(){
 }
 
 /**
- * permettre de savoir si on peur savoir si on est identifier ou non
+ * permettre de savoir si on peut savoir si on est identifier ou non
  * @returns {boolean}
  */
 function isAuthenticated() {
@@ -70,12 +73,21 @@ function isAuthenticated() {
     //2. si le token est encore valide au niveau de la date expiration
     if (token) {
         const jwtData = jwtDecode(token)
-        return (jwtData.exp * 1000) > new Date().getTime;
+        return(jwtData.exp * 1000) > new Date().getTime;
     }
     return false;
 }
 
-
+function isAuthenticatedName() {
+    //1. apperçoit-on  le token?
+    const token = window.localStorage.getItem('authToken');
+    //2. si le token est encore valide au niveau de la date expiration
+    if (token) {
+        const jwtData = jwtDecode(token)
+        return jwtData;
+    }
+    return false;
+}
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -83,5 +95,6 @@ export default{
     authenticate,
     logout,
     setup,
-    isAuthenticated
+    isAuthenticated,
+    isAuthenticatedName
 };

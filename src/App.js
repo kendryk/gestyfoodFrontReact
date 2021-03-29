@@ -10,6 +10,7 @@ import {
     NoticePageScreen,
     LoginPageScreen,
     CreateNewRegisterPageScreen,
+    CreateNewHearthPageScreen,
     DashboardHomePageScreen,
     DashboardUnitiesScreen,
     UnityPageScreen,
@@ -19,7 +20,7 @@ import {
     PreferencePageScreen
 } from './components'
 
-import AuthAPI from "./components/services/AuthAPI";
+import AuthAPI from "./services/AuthAPI";
 
 AuthAPI.setup();
 
@@ -30,12 +31,14 @@ function App() {
 
     const NavigationWithRouter = withRouter (Navigation)
 
+
   return (
     <div className="App">
 
         <NavigationWithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
         <main>
         <Switch>
+
 
             <Route exact path="/" render={props=> <HomePageScreen{...props}/>}/>
 
@@ -46,6 +49,8 @@ function App() {
             <Route exact path="/login" render={props=> <LoginPageScreen onLogin={setIsAuthenticated} {...props}/>}/>
 
             <Route exact path="/createNewRegisterPage" render={props=> <CreateNewRegisterPageScreen onLogin={setIsAuthenticated} {...props}/>}/>
+
+            <Route exact path="/createNewHearthPage" render={props=> <CreateNewHearthPageScreen onLogin={setIsAuthenticated} {...props}/>}/>
 
             <Route exact path="/dashboardHomePage" render={props=> <DashboardHomePageScreen onLogin={setIsAuthenticated} {...props}/>}/>
 
@@ -60,18 +65,6 @@ function App() {
             {/*TODO SECURISATION DES ROUTES*/}
 
 
-            {/*<Route exact path="/dashboardHomePageScreen"*/}
-            {/*       render={ props=> isAuthenticated ?  < DashboardHomePageScreen{...props}/> : <Redirect to="/login"/>  }*/}
-            {/*/>*/}
-
-
-            {/*<Route exact path="/dashboardUnitiesScreen"*/}
-            {/*       render={ props=> isAuthenticated ?  < DashboardUnitiesScreen{...props}/> : <Redirect to="/login"/>  }*/}
-            {/*/>*/}
-
-            {/*<Route exact path="/unityPageScreen"*/}
-            {/*       render={ props=> isAuthenticated ?  < UnityPageScreen{...props}/> : <Redirect to="/login"/>  }*/}
-            {/*/>*/}
 
             <Route exact path="/userPage"
                    render={ props=> isAuthenticated ?  < UserPageScreen{...props}/> : <Redirect to="/login"/>  }

@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
-
-import AuthAPI from "../../services/AuthAPI";
+import './login.scss'
+import AuthAPI from "../../../services/AuthAPI";
 
 
 export default function LoginPageScreen({onLogin , history}){
-    console.log(history)
 
+    //Affiche le nom de la page à l'ouverture de celle-ci
     useEffect(() => {
         document.title = "Login"
     }, []);
 
 
+    // Initialise et modifie les identités des personnes connecter
     const[credentials, setCredentials] = useState({
         username: '',
         password: ''
@@ -31,9 +32,10 @@ export default function LoginPageScreen({onLogin , history}){
         event.preventDefault();
         try {
             await AuthAPI.authenticate(credentials);
+
             setError(false);
             onLogin(true);
-            history.replace('/DashboardHomePage');
+            history.replace('/DashboardHomePage/');
             }catch(error){
                 setError(
                 "Aucun compte ne possède cette adresse email ou alors les informations ne correspondent pas. ");
@@ -42,12 +44,14 @@ export default function LoginPageScreen({onLogin , history}){
 
     return(
 
-        <div className="container">
-            <h1>Je suis la LoginPageScreen</h1>
+        <div className="login_box">
+            <h1>Veuillez vous connecter</h1>
 
-            <form onSubmit={handleSubmit} >
+            <form onSubmit={handleSubmit}
+                  className="login_box_form"
+            >
                 <div className="form-group">
-                    <label htmlFor="username">Adresse email</label>
+                    <label htmlFor="username"> Adresse email</label>
                     <input
                         value={credentials.username}
                         onChange={handleChange}
@@ -55,7 +59,7 @@ export default function LoginPageScreen({onLogin , history}){
                         placeholder="Adresse email de connexion"
                         name='username'
                         id='username'
-                        className={"from-control" + (error?  " is-invalid": " ")}
+                        className={"form-control" + (error?  " is-invalid": " ")}
                     />
                     {error && <p className="invalid-feedback alert alert-danger">{error} </p>}
                 </div>
@@ -69,12 +73,12 @@ export default function LoginPageScreen({onLogin , history}){
                         placeholder="Mot de passe"
                         name='password'
                         id='password'
-                        className={"from-control" }/>
+                        className={"form-control"}/>
 
                 </div>
 
-                <div className="form-group">
-                    <button type="submit" className="btn btn-success">Connecter-vous</button>
+                <div className="form-group d-flex justify-content-center">
+                    <button type="submit" className="btn btn-gold">Connecter-vous</button>
                 </div>
             </form>
 

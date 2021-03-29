@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-
+import "./workInProgress.scss"
 export default function AboutPageScreen(){
 
 
@@ -10,8 +10,15 @@ export default function AboutPageScreen(){
 
 
     return(
-        <div className="container">
-            <h1>Je suis la AboutPageScreen</h1>
+        <div className="container box">
+            <h1> AboutPageScreen</h1>
+
+           <div className="box_in_construct" >
+
+           </div>
+
+
+
         </div>
     )
 }

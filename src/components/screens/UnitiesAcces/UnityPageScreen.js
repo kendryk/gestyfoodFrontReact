@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 
-export default function UnityPageScreen(history) {
+export default function UnityPageScreen(history,location,unityName) {
 
     const [residents, setResidents] = useState([]);
 
@@ -14,8 +14,8 @@ export default function UnityPageScreen(history) {
     const [loading,setLoading] = useState(true);
 
 
-    // const idLocation = window.location.pathname.split( "/" )[2];
-
+    const idLocation = window.location.pathname.split( "/" )[2];
+    // console.log(window.location.pathname.split( "/" )[2]);
 
 
     useEffect(() => {
@@ -65,6 +65,8 @@ export default function UnityPageScreen(history) {
 
     return(
         <>
+
+
             <div className="d-flex">
                 <Aside/>
 
@@ -75,7 +77,7 @@ export default function UnityPageScreen(history) {
 
 
 
-                            <p>Ici vous  visualisez l'unité ,
+                            <p>Ici vous  visualisez l'unité {idLocation},
                                 Vous pouvez crée de nouvelle fiche de résidents ou les modifier  , supprimer.</p>
 
 

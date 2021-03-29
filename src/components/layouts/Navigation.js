@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavLink, Link} from "react-router-dom";
-import AuthAPI from "../services/AuthAPI";
+import AuthAPI from "../../services/AuthAPI";
 import './navigation.scss';
 
 export default function Navigation({isAuthenticated,onLogout, history}){
@@ -37,6 +37,8 @@ export default function Navigation({isAuthenticated,onLogout, history}){
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
 
+
+
                                 <li className="nav-item ">
                                     <NavLink exact to="/" className="nav-link buttonHeader">Accueil</NavLink>
                                 </li>
@@ -51,6 +53,7 @@ export default function Navigation({isAuthenticated,onLogout, history}){
 
                                 <li className="nav-item d-flex flex-column">
                                     <NavLink exact to="/login"  className="btn btn-connection mb-2">Se Connecter</NavLink>
+
                                     <button onClick={() => handleSubmit('createNewRegisterPage')}
                                             className="btn btn-gold ">Inscrivez-vous</button>
 

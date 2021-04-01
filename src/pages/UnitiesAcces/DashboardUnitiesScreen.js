@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import { Link} from "react-router-dom";
-import Aside from "../../layouts/Aside";
+import Aside from "../../components/layouts/Aside";
 import './dashboardUnities.scss';
-import Pagination from "../../layouts/Pagination"
-import UnitiesAPi from "../../../services/UnitiesAPi";
+import Pagination from "../../components/layouts/Pagination"
+import UnitiesAPi from "../../services/UnitiesAPi";
 
 export default function DashboardUnitiesScreen(){
 
-
-        console.log(window.location);
 
         const [unities, setUnities] = useState([]);
         const [currentPage, setCurrentPage]= useState(1);
@@ -24,7 +22,7 @@ export default function DashboardUnitiesScreen(){
         }catch(error){
             console.log(error.response)
         }
-    }
+    };
 
     // A Chargement de la page , on ira chercher les unité.
     useEffect(() => {
@@ -55,18 +53,18 @@ export default function DashboardUnitiesScreen(){
                 }
             }
         }
-    }
+    };
 
     // Modifier la page current
     const handlePageChange = (page) => {
         setCurrentPage(page);
-    }
+    };
 
     // Gestion de la recherche
     const handleSearch= ({currentTarget})=> {
         setSearch(currentTarget.value);
         setCurrentPage(1);
-    }
+    };
 
     //connaitre le nombre de page par element.
     const itemsPerPage = 10;
@@ -91,7 +89,7 @@ export default function DashboardUnitiesScreen(){
                 <section className="p-5 section_home bg_white">
                     <div className="unities_top">
                         <div>
-                        <h1>Bienvenue   </h1>
+                        <h1>Tableau de bord des Unités   </h1>
                         <p>Ici vous pouvez visualisez l'ensemble de vos unités,  en crée de nouvelle  ou en supprimer.</p>
                         </div>
                         <div className="unities_top_button">
@@ -123,7 +121,7 @@ export default function DashboardUnitiesScreen(){
                                         pathname: "/unity/"+unity.name,
 
                                         }}
-                                    className='btn'>
+                                    className='btn '>
 
                                 <div
                                     className='unity_element'
@@ -135,7 +133,7 @@ export default function DashboardUnitiesScreen(){
                                     <div className='unity_who'>
                                         <div/>
                                         <div className='unity_box'>
-                                            <h3>{unity.name}</h3>
+                                            <h3 className="text-capitalize">{unity.name}</h3>
                                             <h3>Nombre de résidents: {unity.residents.length}</h3>
                                         </div>
                                     </div>
@@ -172,7 +170,7 @@ export default function DashboardUnitiesScreen(){
                         {paginationUnities.map(unity =>
                             <tr key={unity.id}>
                             <td className="text-center">{unity.id}</td>
-                            <td className="text-center">{unity.name}</td>
+                            <td className="text-center text-capitalize">{unity.name}</td>
                             <td className="text-center">{unity.residents.length}</td>
                             <td><button
                                 onClick={()=> handleDelete(unity.id)}

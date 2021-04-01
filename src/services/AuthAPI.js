@@ -1,17 +1,12 @@
 import axios from 'axios';
 import jwtDecode from "jwt-decode";
 
-
-
-
 /**
  * Déconnection (suppression du token local storage)
  */
 function logout(){
-
     window.localStorage.removeItem('authToken')
     delete axios.defaults.headers['Authorization']
-
 }
 
 /**
@@ -78,6 +73,11 @@ function isAuthenticated() {
     return false;
 }
 
+
+/**
+ * permettre connaitre l'indentité de la personne
+ * @returns {boolean|unknown}
+ */
 function isAuthenticatedName() {
     //1. apperçoit-on  le token?
     const token = window.localStorage.getItem('authToken');

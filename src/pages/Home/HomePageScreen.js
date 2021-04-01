@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import './homePage.scss';
 export default function HomePageScreen({history}){
-    console.log(history)
+
 
     useEffect(() => {
         document.title = "Home Page"

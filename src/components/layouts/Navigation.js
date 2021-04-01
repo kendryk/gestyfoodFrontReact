@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavLink, Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import './navigation.scss';
+import AuthContext from "../../contexts/AuthContext";
 
-export default function Navigation({isAuthenticated,onLogout, history}){
+export default function Navigation({ history}){
 
+    const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext)
     const  handleLogout = ()=> {
         AuthAPI.logout();
-        onLogout(false);
+        setIsAuthenticated(false);
         history.push("/login")
     }
     const handleSubmit =(element)=> {

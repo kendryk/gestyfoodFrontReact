@@ -1,9 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './login.scss'
-import AuthAPI from "../../../services/AuthAPI";
+import AuthAPI from "../../services/AuthAPI";
+import AuthContext from "../../contexts/AuthContext";
 
 
-export default function LoginPageScreen({onLogin , history}){
+export default function LoginPageScreen({ history}){
+
+    const {setIsAuthenticated} = useContext(AuthContext);
 
     //Affiche le nom de la page à l'ouverture de celle-ci
     useEffect(() => {
@@ -34,8 +37,10 @@ export default function LoginPageScreen({onLogin , history}){
             await AuthAPI.authenticate(credentials);
 
             setError(false);
-            onLogin(true);
-            history.replace('/DashboardHomePage/');
+            setIsAuthenticated(true);
+
+            history.replace('/dashboardHomePage');
+
             }catch(error){
                 setError(
                 "Aucun compte ne possède cette adresse email ou alors les informations ne correspondent pas. ");

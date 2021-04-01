@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
-import {Switch, Route, withRouter, Redirect} from 'react-router-dom';
+import React, { useState} from 'react';
+import {HashRouter,Switch, Route, withRouter} from 'react-router-dom';
 import './App.scss';
-
 import {
     Navigation,
     Footer,
@@ -18,76 +17,113 @@ import {
     RegimePageScreen,
     GestionFoodPageScreen,
     PreferencePageScreen
-} from './components'
-
+} from './pages'
 import AuthAPI from "./services/AuthAPI";
+import AuthContext from "./contexts/AuthContext";
+import PrivateRoute from "./components/layouts/PrivateRoute";
+
 
 AuthAPI.setup();
 
+
 function App() {
-
     const[isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
-    console.log(isAuthenticated);
+    const NavigationWithRouter = withRouter (Navigation);
 
-    const NavigationWithRouter = withRouter (Navigation)
 
 
   return (
-    <div className="App">
+      <HashRouter>
+      <AuthContext.Provider value={
+          {
+              isAuthenticated,
+              setIsAuthenticated
+          }
+      }>
+        <div className="App">
 
-        <NavigationWithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
-        <main>
-        <Switch>
+            <NavigationWithRouter/>
+            <main>
+            <Switch>
 
+                {/*Route d'accueil*/}
+                <Route exact path="/" component={HomePageScreen} />
 
-            <Route exact path="/" render={props=> <HomePageScreen{...props}/>}/>
+                <Route exact path="/about" component={AboutPageScreen}/>
 
-            <Route exact path="/about" render={props=> <AboutPageScreen{...props}/>}/>
-
-            <Route exact path="/notice" render={props=> <NoticePageScreen{...props}/>}/>
-
-            <Route exact path="/login" render={props=> <LoginPageScreen onLogin={setIsAuthenticated} {...props}/>}/>
-
-            <Route exact path="/createNewRegisterPage" render={props=> <CreateNewRegisterPageScreen onLogin={setIsAuthenticated} {...props}/>}/>
-
-            <Route exact path="/createNewHearthPage" render={props=> <CreateNewHearthPageScreen onLogin={setIsAuthenticated} {...props}/>}/>
-
-            <Route exact path="/dashboardHomePage" render={props=> <DashboardHomePageScreen onLogin={setIsAuthenticated} {...props}/>}/>
-
-            <Route exact path="/dashboardUnities" render={props=> <DashboardUnitiesScreen onLogin={setIsAuthenticated}  {...props}/>}/>
-
-            <Route exact
-                   path="/unity/:id"
-                   render={props=> <UnityPageScreen
-                       onLogin={setIsAuthenticated} {...props}/>}/>
+                <Route exact path="/notice" component={NoticePageScreen}/>
 
 
-            {/*TODO SECURISATION DES ROUTES*/}
+                {/*Route de login*/}
+
+                <Route exact path="/login" component={LoginPageScreen}/>
+                <Route exact path="/createNewRegisterPage" component={ CreateNewRegisterPageScreen}/>}/>
+
+
+                {/*TODO SECURISATION DES ROUTES*/}
 
 
 
-            <Route exact path="/userPage"
-                   render={ props=> isAuthenticated ?  < UserPageScreen{...props}/> : <Redirect to="/login"/>  }
-            />
+                <PrivateRoute
+                    path="/createNewHearthPage"
+                    isAuthenticated={isAuthenticated}
+                    component={CreateNewHearthPageScreen}
+                />
 
-            <Route exact path="/regimePage"
-                   render={ props=> isAuthenticated ?  < RegimePageScreen{...props}/> : <Redirect to="/login"/>  }
-            />
-            <Route exact path="/gestionFoodPage"
-                   render={ props=> isAuthenticated ?  < GestionFoodPageScreen{...props}/> : <Redirect to="/login"/>  }
-            />
-            <Route exact path="/preferencePage"
-                   render={ props=> isAuthenticated ?  < PreferencePageScreen{...props}/> : <Redirect to="/login"/>  }
-            />
+                <PrivateRoute
+                    path="/dashboardHomePage"
+                    isAuthenticated={isAuthenticated}
+                    component={DashboardHomePageScreen }
+                />
 
-        </Switch>
+                <PrivateRoute
+                    path="/dashboardUnities"
+                    isAuthenticated={isAuthenticated}
+                    component={DashboardUnitiesScreen}
+                />
+
+                <PrivateRoute
+                    path="/unity/:id"
+                    isAuthenticated={isAuthenticated}
+                    component={UnityPageScreen}
+                />
+
+                <PrivateRoute
+                    path="/userPage"
+                    isAuthenticated={isAuthenticated}
+                    component={UserPageScreen}
+                />
+
+                <PrivateRoute
+                    path="/regimePage"
+                    isAuthenticated={isAuthenticated}
+                    component={RegimePageScreen}
+                />
+
+                <PrivateRoute
+                    path="/gestionFoodPage"
+                    isAuthenticated={isAuthenticated}
+                    component={GestionFoodPageScreen}
+                />
+
+                <PrivateRoute
+                    path="/preferencePage"
+                    isAuthenticated={isAuthenticated}
+                    component={PreferencePageScreen}
+                />
+
+
+
+            </Switch>
 
 
 
 
-        </main>
-       <Footer/>
-    </div>
+            </main>
+           <Footer/>
+        </div>
+      </AuthContext.Provider>
+      </HashRouter>
   );
 }
 

@@ -1,0 +1,16 @@
+.box_unities{
+  border: 1px solid blue;
+  margin: 0 4rem 2rem 4rem;
+  padding: 1rem;
+
+}
+.box_unity{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 12px rgba(59,59,59, 0.8);
+  margin: 1rem;
+  width: 5rem;
+  height: 5rem;
+
+}

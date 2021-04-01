@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import Aside from '../../layouts/Aside'
+import Aside from '../../components/layouts/Aside'
 import './dashboardhome.scss';
-import AuthAPI from "../../../services/AuthAPI";
+import AuthAPI from "../../services/AuthAPI";
 export default function DashboardHomePageScreen(){
 
 
@@ -10,11 +10,14 @@ export default function DashboardHomePageScreen(){
         NameIndentified();
     }, []);
 
-    const  [userIdentified, setUserIdentified] = useState();
+    const  [userIdentified, setUserIdentified] = useState("");
 
-//recuper le l'identié de la personne connecté.
-    const NameIndentified = async()=>{
 
+
+
+
+//recupere le l'identité de la personne connecté.
+    const NameIndentified = ()=>{
     try{
         const authAPI = AuthAPI.isAuthenticatedName();
         setUserIdentified (authAPI);
@@ -22,20 +25,24 @@ export default function DashboardHomePageScreen(){
         console.log(error)
     }
 }
-
     return(
 
         <>
-
             <div className="d-flex">
                 <Aside/>
                 <section className="p-5 section_home bg_white">
-                    <h1>Bienvenu   </h1>
-                    <p>Bienvenu  dans votre espace personnelle.</p>
-                    <p>Vous etes : </p>
+                    <h1>Bienvenue   </h1>
+
+                    {!userIdentified ? ['Aucun utilisateur'] :
+
+                        <p>
+                            <strong className="text-capitalize"> {userIdentified.firstName} {userIdentified.lastName}</strong></p>}
+
+
+                    <p>Rappel de vos roles : </p>
                         {!userIdentified ? ['Aucun utilisateur'] : (userIdentified.roles).map(role=>
 
-                    <p> - {role}</p>
+                    <p key={role}> - {role}</p>
 
                     )}
                     <p>D'ici vous pourrez naviguez sur l'ensemble des Services proposer par FoodGesty. </p>

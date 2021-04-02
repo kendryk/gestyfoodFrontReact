@@ -5,13 +5,13 @@ import moment from "moment";
 import UnityAPI from "../../services/UnityAPI";
 import './unity.scss'
 
-export default function UnityPageScreen() {
+export default function UnityPage() {
 
     const [residents, setResidents] = useState([]);
-
     const [currentPage, setCurrentPage]= useState(1);
     const [loading,setLoading] = useState(true);
     const[search,setSearch] = useState("");
+
 
     const idLocation = window.location.pathname.split( "/" )[2];
 
@@ -28,6 +28,7 @@ export default function UnityPageScreen() {
             const data = await UnityAPI.findAll();
             setResidents(data);
             setLoading(false);
+            console.log(data)
         }catch(error){
             console.log(error.response)
         }
@@ -111,8 +112,6 @@ export default function UnityPageScreen() {
         currentPage,
         itemsPerPage);
 
-
-    //todo liste des unités du foyer.
 
 
     return(

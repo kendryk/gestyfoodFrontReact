@@ -29,7 +29,6 @@ function authenticate(credentials){
         });
 }
 
-
 /**
  * Positionne le token JWT sur Axios
  * @param token
@@ -73,7 +72,6 @@ function isAuthenticated() {
     return false;
 }
 
-
 /**
  * permettre connaitre l'indentité de la personne
  * @returns {boolean|unknown}
@@ -88,7 +86,6 @@ function isAuthenticatedName() {
     }
     return false;
 }
-
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default{

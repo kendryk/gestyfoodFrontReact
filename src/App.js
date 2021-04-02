@@ -57,18 +57,15 @@ function App() {
                 {/*Route de login*/}
 
                 <Route exact path="/login" component={LoginPageScreen}/>
-                <Route exact path="/createNewRegisterPage" component={ CreateNewRegisterPageScreen}/>}/>
+
+                <Route exact path="/createNewHearthPage" component={CreateNewHearthPageScreen}/>
+
+                <Route exact path="/createNewRegisterPage/:id" component={ CreateNewRegisterPageScreen}/>}/>
 
 
                 {/*TODO SECURISATION DES ROUTES*/}
 
 
-
-                <PrivateRoute
-                    path="/createNewHearthPage"
-                    isAuthenticated={isAuthenticated}
-                    component={CreateNewHearthPageScreen}
-                />
 
                 <PrivateRoute
                     path="/dashboardHomePage"

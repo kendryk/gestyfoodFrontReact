@@ -1,27 +1,30 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import Field from './../../components/forms/Field'
 import axios from 'axios'
-import AuthContext from "../../contexts/AuthContext";
 
+export default function CreateNewHearthPage({history}){
 
-export default function CreateNewHearthPageScreen({history}){
-
-    const {setIsAuthenticated} = useContext(AuthContext);
-
+    /**
+     * Affiche le nom de la page à l'ouverture de celle-ci
+     */
     useEffect(() => {
-        document.title = "Nouveaux register"
+        document.title = "Nouveaux Foyer";
     }, []);
 
-
+    /**
+     * Initialise et modifie les foyers
+     */
     const [hearth,setHearth] = useState ({
         name: "",
         address:"",
         city:"",
         phone:"",
         email:"",
-
     });
 
+    /**
+     * Initialise et modifie les errors
+     */
     const [errors, setErrors] = useState({
         name: "",
         address:"",
@@ -30,23 +33,29 @@ export default function CreateNewHearthPageScreen({history}){
         email:"",
     });
 
-
+    /**
+     * Gestion des champs
+     * @param currentTarget
+     */
     const handleChange = ({currentTarget})=>{
         const {name,value}= currentTarget;
         setHearth({...hearth,[name]:value});
     };
 
-
+    /**
+     * gestion des soumissions
+     * @param event
+     * @returns {Promise<void>}
+     */
     const handleSubmit = async (event)=> {
         event.preventDefault();
-
-
-
         try{
-            await axios.post("https://localhost:8000/api/hearths", hearth )
+            const data = await axios
+                .post("https://localhost:8000/api/hearths", hearth)
+                .then(response =>  response.data.id)
             setErrors({});
-            setIsAuthenticated(true);
-            history.replace('/login');
+            // recuperation de l'id de hearth && renvoyer à l'user
+            history.replace('/createNewRegisterPage/'+data);
 
         }catch(error){
            if(error.response.data.violations) {
@@ -57,7 +66,6 @@ export default function CreateNewHearthPageScreen({history}){
                setErrors(apiErrors);
            }
         }
-
     };
 
     return(
@@ -96,7 +104,7 @@ export default function CreateNewHearthPageScreen({history}){
                         label="Téléphone"
                         name='phone'
                         type="tel"
-                        placeholder="0653648562"
+                        placeholder="0653648562- écriver vos numero attaché"
                         value= {hearth.phone}
                         onChange={handleChange}
                         error={errors.phone}/>

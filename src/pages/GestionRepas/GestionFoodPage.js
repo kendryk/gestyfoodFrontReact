@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-export default function GestionFoodPageScreen(){
+export default function GestionFoodPage(){
 
     useEffect(() => {
         document.title = "Gestion Food"

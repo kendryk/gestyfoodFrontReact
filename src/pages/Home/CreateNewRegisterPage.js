@@ -2,15 +2,25 @@ import React, {useEffect, useState} from 'react';
 import Field from "../../components/forms/Field";
 import { Link} from "react-router-dom";
 import axios from "axios";
-import Select from "../../components/forms/Select";
-export default function CreateNewRegisterPage({history}){
 
-    useEffect(() => {
-        document.title = "Nouveaux register"
-    }, []);
+export default function CreateNewRegisterPage({history,location}){
 
-    const roles=["ROLE_DIRECTOR"];
+    /**
+     * Redupere id dans la location
+     */
+    const id= location.pathname.split( "/" )[2];
+    
+    /**
+     * Initialise le role de l'utilisateur
+     */
+    const [roleUser] = useState ({
+        roles:["ROLE_DIRECTOR"],
+    });
+    const roles=roleUser.roles;
 
+    /**
+     * Initialise et modifie les nouvelles inscriptions
+     */
     const [register,setRegister] = useState ({
         work: "",
         firstName: "",
@@ -18,11 +28,13 @@ export default function CreateNewRegisterPage({history}){
         phone:"",
         email:"",
         password:"",
-        passwordConfirm:""
-
-
+        passwordConfirm:"",
+        hearth:"",
     });
 
+    /**
+     * Initialise et modifie les erreurs
+     */
     const [errors, setErrors] = useState({
         work: "",
         firstName: "",
@@ -30,21 +42,46 @@ export default function CreateNewRegisterPage({history}){
         phone:"",
         email:"",
         password:"",
-        passwordConfirm:""
+        passwordConfirm:"",
+        hearth:"",
+
     });
 
+    /**
+     * modifie le nom dans l'onglet a l'ouverture
+     * rajoute le role dans l'inscription
+     */
+    useEffect(() => {
+        document.title = "Nouveau Utilisateur";
+        setRegister({
+            ...register,
+            ['hearth']:"/api/hearths/"+id,
+            roles
 
+        });
+
+    }, []);
+
+    /**
+     * Gestion des champs
+     * @param currentTarget
+     */
     const handleChange = ({currentTarget})=>{
         const {name,value}= currentTarget;
         setRegister({...register,[name]:value});
-    };
 
-    console.log(register)
+    };
+    console.log( "1");
+    console.log( register);
+
+
+    /**
+     * Gestion de la soumission
+     * @param event
+     * @returns {Promise<void>}
+     */
     const handleSubmit = async (event)=> {
         event.preventDefault();
-        setRegister({...register,roles});
-
-        console.log(register)
         const apiErrors = {};
         if (register.password !== register.passwordConfirm){
             apiErrors.passwordConfirm =
@@ -52,12 +89,10 @@ export default function CreateNewRegisterPage({history}){
             setErrors(apiErrors);
             return;
         }
-
         try{
-             await axios.post("https://127.0.0.1:8000/api/users", register );
-
+            await axios.post("https://127.0.0.1:8000/api/users", register );
             setErrors({});
-            history.replace('/createNewHearthPage');
+            history.replace('/login');
 
         }catch(error){
             const {violations} = error.response.data
@@ -76,17 +111,20 @@ export default function CreateNewRegisterPage({history}){
                     <div className="login_box">
                             <h1>Inscrivez-vous en qualité de directeur</h1>
 
+
+
                         <form
                             onSubmit={handleSubmit}
                             className="login_box_form"
                         >
+
 
                             <Field
                                 label="Poste"
                                 name='work'
                                 value={register.work}
                                 onChange={handleChange}
-                                error={errors.register}/>
+                                error={errors.work}/>
 
 
                             <Field
@@ -94,7 +132,7 @@ export default function CreateNewRegisterPage({history}){
                                 name='firstName'
                                 value={register.firstName}
                                 onChange={handleChange}
-                                error={errors.register}/>
+                                error={errors.firstName}/>
 
 
                             <Field
@@ -102,7 +140,7 @@ export default function CreateNewRegisterPage({history}){
                                 name='lastName'
                                 value={register.lastName}
                                 onChange={handleChange}
-                                error={errors.register}/>
+                                error={errors.lastName}/>
 
                             <Field
                                 label="Télephone"
@@ -111,7 +149,7 @@ export default function CreateNewRegisterPage({history}){
                                 placeholder="0653648562"
                                 value={register.phone}
                                 onChange={handleChange}
-                                error={errors.register}/>
+                                error={errors.phone}/>
 
                             <Field
                                 label="email"
@@ -119,7 +157,7 @@ export default function CreateNewRegisterPage({history}){
                                 type="email"
                                 value={register.email}
                                 onChange={handleChange}
-                                error={errors.register}/>
+                                error={errors.email}/>
 
                             <Field
                                 label="Mot de passe"
@@ -128,7 +166,7 @@ export default function CreateNewRegisterPage({history}){
                                 placeholder="Mot de passe"
                                 value={register.password}
                                 onChange={handleChange}
-                                error={errors.register}/>
+                                error={errors.password}/>
 
 
                             <Field
@@ -138,9 +176,10 @@ export default function CreateNewRegisterPage({history}){
                                 placeholder="Mot de passe"
                                 value={register.passwordConfirm}
                                 onChange={handleChange}
-                                error={errors.register}/>
+                                error={errors.passwordConfirm}/>
 
                             <div className="form-group d-flex justify-content-center">
+
                                 <button type="submit" className=" btn btn-gold">Confirmation</button>
 
                                 <Link to="/login" className="btn btn-link">j'ai déja un compte</Link>

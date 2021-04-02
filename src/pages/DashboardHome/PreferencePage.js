@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-export default function PreferencePageScreen(){
+export default function PreferencePage(){
 
     useEffect(() => {
         document.title = "Préférence"

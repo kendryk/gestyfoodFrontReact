@@ -1,24 +1,24 @@
 export { default as Navigation} from "../components/layouts/Navigation";
 export { default as Footer} from "../components/layouts/Footer";
 
-export { default as HomePageScreen} from "./Home/HomePageScreen";
-export { default as AboutPageScreen} from "./Home/AboutPageScreen";
-export { default as NoticePageScreen} from "./Home/NoticePageScreen";
+export { default as HomePageScreen} from "./Home/HomePage";
+export { default as AboutPageScreen} from "./Home/AboutPage";
+export { default as NoticePageScreen} from "./Home/NoticePage";
 
-export { default as LoginPageScreen} from "./Home/LoginPageScreen";
+export { default as LoginPageScreen} from "./Home/LoginPage";
 export { default as CreateNewRegisterPageScreen} from "./Home/CreateNewRegisterPage";
-export { default as CreateNewHearthPageScreen} from "./Home/CreateNewHearthPageScreen";
+export { default as CreateNewHearthPageScreen} from "./Home/CreateNewHearthPage";
 
 
-export { default as DashboardHomePageScreen} from "./DashboardHome/DashboardHomePageScreen";
-export { default as DashboardUnitiesScreen} from "./UnitiesAcces/DashboardUnitiesScreen";
+export { default as DashboardHomePageScreen} from "./DashboardHome/DashboardHomePage";
+export { default as DashboardUnitiesScreen} from "./UnitiesAcces/DashboardUnities";
 
-export { default as UserPageScreen} from "./UsersAcces/UserPageScreen";
+export { default as UserPageScreen} from "./UsersAcces/UserPage";
 
-export { default as UnityPageScreen} from "./UnitiesAcces/UnityPageScreen";
+export { default as UnityPageScreen} from "./UnitiesAcces/UnityPage";
 
-export { default as RegimePageScreen} from "./GestionRepas/RegimePageScreen";
+export { default as RegimePageScreen} from "./GestionRepas/RegimePage";
 
-export { default as GestionFoodPageScreen} from "./GestionRepas/GestionFoodPageScreen";
+export { default as GestionFoodPageScreen} from "./GestionRepas/GestionFoodPage";
 
-export { default as PreferencePageScreen} from "./DashboardHome/PreferencePageScreen";
+export { default as PreferencePageScreen} from "./DashboardHome/PreferencePage";

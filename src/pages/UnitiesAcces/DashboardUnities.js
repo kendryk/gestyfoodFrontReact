@@ -5,31 +5,42 @@ import './dashboardUnities.scss';
 import Pagination from "../../components/layouts/Pagination"
 import UnitiesAPi from "../../services/UnitiesAPi";
 
-export default function DashboardUnitiesScreen(){
 
+export default function DashboardUnities(){
 
-        const [unities, setUnities] = useState([]);
-        const [currentPage, setCurrentPage]= useState(1);
-        const [loading,setLoading] = useState(true);
-        const[search,setSearch] = useState("");
+    const [unities, setUnities] = useState([]);
+    const [currentPage, setCurrentPage]= useState(1);
+    const [loading,setLoading] = useState(true);
+    const[search,setSearch] = useState("");
 
-    // Récupere les unités
+    /**
+     * connaitre le nombre de page par element.
+     * @type {number}
+     */
+    const itemsPerPage = 10;
+    /**
+     * Récupere les unités
+     * @returns {Promise<void>}
+     */
     const fetchUnities = async () => {
         try{
             const data = await UnitiesAPi.findAll()
             setUnities(data)
             setLoading(false)
+            console.log(data)
         }catch(error){
             console.log(error.response)
         }
     };
 
-    // A Chargement de la page , on ira chercher les unité.
+    /**
+     * cherche les unité a chaque chargement
+     */
     useEffect(() => {
         fetchUnities();
     }, []);
 
-    // Gestion de la suppresion d'une unités todo mettre dans unity modif
+    // Gestion de la suppresion d'une unités
     const handleDelete = async (id) => {
         //on récupere une copie du tableau d'élèments
         const originalUnities =[...unities];
@@ -55,27 +66,38 @@ export default function DashboardUnitiesScreen(){
         }
     };
 
-    // Modifier la page current
+    /**
+     * Modifier la page current
+     * @param page
+     */
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
-    // Gestion de la recherche
+    /**
+     * Gestion de la recherche
+     * @param currentTarget
+     */
     const handleSearch= ({currentTarget})=> {
         setSearch(currentTarget.value);
         setCurrentPage(1);
     };
 
-    //connaitre le nombre de page par element.
-    const itemsPerPage = 10;
-    // construction d'une function qui part d'une page sur un nombre de page prédéfini
-    // avec la methode slice qui renvoit la portion d'un  tableau ( copie) [indice de début, indice de fin]
+    /**********************************************************************************************
+     * construction d'une function qui renvoie une page sur un nombre de page prédéfini
+     * avec la methode slice qui renvoit la portion d'un  tableau ( copie) [indice de début, indice de fin]
+     *****************************************************************************************************/
 
-    //Filtrage des unities en fonction de la recherche
+    /**
+     * Filtrage des unities en fonction de la recherche
+     * @type {*[]}
+     */
     const filterUnities = unities.filter(u =>
          u.name.toLowerCase().includes(search.toLowerCase()));
 
-    //Pagination des données
+    /**
+     * Pagination des données
+     */
     const paginationUnities = Pagination.getData(
         filterUnities,
         currentPage,

@@ -19,6 +19,10 @@ export default function Aside({isAuthenticated,onLogout, history}){
                             <ul className="navbar-nav aside_nav">
 
                                 <li className="nav-item ">
+                                    <NavLink exact to="/dashboardHomePage"  className="nav-link buttonHeader">TABLEAU DE BORD</NavLink>
+                                </li>
+
+                                <li className="nav-item ">
                                     <NavLink exact to="/dashboardUnities"  className="nav-link buttonHeader">UNITES</NavLink>
                                 </li>
 

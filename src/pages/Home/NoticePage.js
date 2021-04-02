@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
 
-export default function NoticePageScreen(){
+export default function NoticePage(){
 
-
+    /**
+     * Affiche le nom de la page à l'ouverture de celle-ci
+     */
     useEffect(() => {
         document.title = "Notice"
     }, []);

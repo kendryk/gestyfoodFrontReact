@@ -56,7 +56,7 @@ export default function Navigation({ history}){
                                 <li className="nav-item d-flex flex-column">
                                     <NavLink exact to="/login"  className="btn btn-connection mb-2">Se Connecter</NavLink>
 
-                                    <button onClick={() => handleSubmit('createNewRegisterPage')}
+                                    <button onClick={() => handleSubmit('createNewHearthPage')}
                                             className="btn btn-gold ">Inscrivez-vous</button>
 
                                 </li>

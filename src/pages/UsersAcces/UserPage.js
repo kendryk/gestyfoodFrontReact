@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function RegimePageScreen(){
+export default function UserPage(){
     return(
         <div className="container">
-            <h1>Je suis la RegimePageScreen</h1>
+            <h1>Je suis la UserPageScreen</h1>
         </div>
     )
 }

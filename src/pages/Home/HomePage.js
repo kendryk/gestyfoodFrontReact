@@ -103,7 +103,7 @@ export default function HomePage({history}){
                                 <h2>Vous n'êtes pas inscrit ?</h2>
                             </div>
                             <div className=" block_button ">
-                                <button onClick={() => handleSubmit('createNewRegisterPage')}
+                                <button onClick={() => handleSubmit('createNewHearth')}
                                         className="btn btn-gold ">Inscrivez-vous</button>
                             </div>
                         </div>

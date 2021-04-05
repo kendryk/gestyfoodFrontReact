@@ -1,8 +1,8 @@
 import axios from "axios";
 
-function findAll(){
+function findAll(idLocation){
     return axios
-        .get("https://127.0.0.1:8000/api/residents")
+        .get("https://127.0.0.1:8000/api/unities/"+idLocation+"/residents")
         .then(response => response.data["hydra:member"]);
 }
 

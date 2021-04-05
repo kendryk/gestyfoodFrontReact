@@ -6,6 +6,8 @@ import jwtDecode from "jwt-decode";
  */
 function logout(){
     window.localStorage.removeItem('authToken')
+    window.localStorage.removeItem('id')
+    window.localStorage.removeItem('name')
     delete axios.defaults.headers['Authorization']
 }
 

@@ -1,9 +1,33 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavLink, Link} from "react-router-dom";
 
 import './navigation.scss';
+import AuthAPI from "../../services/AuthAPI";
 
-export default function Aside({isAuthenticated,onLogout, history}){
+export default function Aside({isAuthenticated}){
+
+    const  [userIdentified, setUserIdentified] = useState("");
+    /**
+     * recupère l'identité de la personne connecté.
+     * @constructor
+     */
+    const NameIndentified = ()=>{
+        try{
+            const authAPI = AuthAPI.isAuthenticatedName();
+            setUserIdentified (authAPI);
+
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    /**
+     * Charger les texture /regime au chargement de la page.
+     */
+    useEffect(() => {
+        NameIndentified();
+    }, []);
+
 
 
     return(
@@ -19,28 +43,45 @@ export default function Aside({isAuthenticated,onLogout, history}){
                             <ul className="navbar-nav aside_nav">
 
                                 <li className="nav-item ">
-                                    <NavLink exact to="/dashboardHomePage"  className="nav-link buttonHeader">TABLEAU DE BORD</NavLink>
+                                    <NavLink exact to="/dashboardHome"  className="nav-link buttonHeader">TABLEAU DE BORD</NavLink>
                                 </li>
+
+
+                                {userIdentified.roles === ["\"ROLE_DIRECTOR\""] ? '' :
 
                                 <li className="nav-item ">
                                     <NavLink exact to="/dashboardUnities"  className="nav-link buttonHeader">UNITES</NavLink>
                                 </li>
+                                }
+
+
+
+                                {userIdentified.roles === ["\"ROLE_DIRECTOR\""] ? '' :
+                                <li className="nav-item">
+                                    <NavLink exact to="/user"  className="nav-link buttonHeader">AUTORISATION</NavLink>
+                                </li>
+                                }
+
+
 
                                 <li className="nav-item">
-                                    <NavLink exact to="/userPage"  className="nav-link buttonHeader">AUTORISATION</NavLink>
+                                    <NavLink exact to="/gestionFood"  className="nav-link buttonHeader">REPAS</NavLink>
                                 </li>
 
-                                <li className="nav-item">
-                                    <NavLink exact to="/gestionFoodPage"  className="nav-link buttonHeader">REPAS</NavLink>
-                                </li>
 
-                                <li className="nav-item">
-                                    <NavLink exact to="/regimePage" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
-                                </li>
 
+                                {userIdentified.roles === ["\"ROLE_DIRECTOR\""] ? '' :
                                 <li className="nav-item">
-                                    <NavLink exact to="/preferencePage" className="nav-link buttonHeader">PREFERENCE</NavLink>
+                                    <NavLink exact to="/regime" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
                                 </li>
+                                }
+
+
+                                {userIdentified.roles === ["\"ROLE_DIRECTOR\""] ? '' :
+                                <li className="nav-item">
+                                    <NavLink exact to="/preference" className="nav-link buttonHeader">PREFERENCE</NavLink>
+                                </li>
+                                }
                             </ul>
 
                         </div>

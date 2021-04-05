@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import './login.scss'
 import AuthAPI from "../../services/AuthAPI";
 import AuthContext from "../../contexts/AuthContext";
+import { Link} from "react-router-dom";
 
 
 export default function LoginPage({ history}){
@@ -54,7 +55,7 @@ export default function LoginPage({ history}){
             await AuthAPI.authenticate(credentials);
             setError(false);
             setIsAuthenticated(true);
-            history.replace('/dashboardHomePage');
+            history.replace('/dashboardHome');
             }catch(error){
                 setError(
                 "Aucun compte ne possède cette adresse email ou alors les informations ne correspondent pas. ");
@@ -96,8 +97,9 @@ export default function LoginPage({ history}){
 
                 </div>
 
-                <div className="form-group d-flex justify-content-center">
-                    <button type="submit" className="btn btn-gold">Connecter-vous</button>
+                <div className="form-group d-flex justify-content-center align-items-center">
+                    <button type="submit" className="btn btn-gold mx-2" >Connectez-vous</button>
+                    <Link to="/createNewHearth">Vous n'êtes toujours pas inscrit ?</Link>
                 </div>
             </form>
 

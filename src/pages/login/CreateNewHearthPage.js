@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import Field from './../../components/forms/Field'
+import Field from '../../components/forms/Field'
 import axios from 'axios'
 
 export default function CreateNewHearthPage({history}){
@@ -53,9 +53,11 @@ export default function CreateNewHearthPage({history}){
             const data = await axios
                 .post("https://localhost:8000/api/hearths", hearth)
                 .then(response =>  response.data.id)
+            localStorage.setItem("id", data)
+            localStorage.setItem("name", hearth.name)
             setErrors({});
             // recuperation de l'id de hearth && renvoyer à l'user
-            history.replace('/createNewRegisterPage/'+data);
+            history.replace('/createNewRegister/'+ data);
 
         }catch(error){
            if(error.response.data.violations) {

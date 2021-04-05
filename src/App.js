@@ -1,22 +1,34 @@
 import React, { useState} from 'react';
-import {HashRouter,Switch, Route, withRouter} from 'react-router-dom';
+import {BrowserRouter,Switch, Route, withRouter} from 'react-router-dom';
 import './App.scss';
 import {
     Navigation,
     Footer,
-    HomePageScreen,
-    AboutPageScreen,
-    NoticePageScreen,
-    LoginPageScreen,
-    CreateNewRegisterPageScreen,
-    CreateNewHearthPageScreen,
-    DashboardHomePageScreen,
-    DashboardUnitiesScreen,
-    UnityPageScreen,
-    UserPageScreen,
-    RegimePageScreen,
-    GestionFoodPageScreen,
-    PreferencePageScreen
+
+    HomePage,
+    AboutPage,
+    NoticePage,
+
+    LoginPage,
+    CreateNewRegisterPage,
+    CreateNewHearthPage,
+
+    DashboardHomePage,
+    DashboardUnities,
+    NewUpDelUnity,
+    UnityPage,
+
+    ResidentPage,
+
+    UserPage,
+    UserNewUp,
+
+    RegimePage,
+    RegimeNewPage,
+    TextureNewPage,
+
+    GestionFoodPage,
+    PreferencePage
 } from './pages'
 import AuthAPI from "./services/AuthAPI";
 import AuthContext from "./contexts/AuthContext";
@@ -33,7 +45,7 @@ function App() {
 
 
   return (
-      <HashRouter>
+      <BrowserRouter>
       <AuthContext.Provider value={
           {
               isAuthenticated,
@@ -46,67 +58,117 @@ function App() {
             <main>
             <Switch>
 
-                {/*Route d'accueil*/}
-                <Route exact path="/" component={HomePageScreen} />
+                {/****************Route d'accueil****************/}
+                <Route exact path="/" component={HomePage} />
 
-                <Route exact path="/about" component={AboutPageScreen}/>
+                <Route exact path="/about" component={AboutPage}/>
 
-                <Route exact path="/notice" component={NoticePageScreen}/>
+                <Route exact path="/notice" component={NoticePage}/>
 
 
-                {/*Route de login*/}
+                {/****************Route de login********************/}
 
-                <Route exact path="/login" component={LoginPageScreen}/>
+                <Route exact path="/login" component={LoginPage}/>
 
-                <Route exact path="/createNewHearthPage" component={CreateNewHearthPageScreen}/>
+                <Route exact path="/createNewHearth" component={CreateNewHearthPage}/>
 
-                <Route exact path="/createNewRegisterPage/:id" component={ CreateNewRegisterPageScreen}/>}/>
+                <Route exact path="/createNewRegister/:id" component={ CreateNewRegisterPage}/>}/>
 
 
                 {/*TODO SECURISATION DES ROUTES*/}
 
-
+                {/*******************RESIDENT***********************/}
 
                 <PrivateRoute
-                    path="/dashboardHomePage"
+                    path="/dashboardHome"
                     isAuthenticated={isAuthenticated}
-                    component={DashboardHomePageScreen }
+                    component={DashboardHomePage }
+                />
+
+
+                {/*******************RESIDENT***********************/}
+                <PrivateRoute
+                    path="/dashboardUnities/unity/:id/:id/:id"
+                    isAuthenticated={isAuthenticated}
+                    component={ResidentPage}
+                />
+
+
+                {/******************UNITIES**************************/}
+                <PrivateRoute
+                    path="/dashboardUnities/unity/:id"
+                    isAuthenticated={isAuthenticated}
+                    component={UnityPage}
+                />
+
+                <PrivateRoute
+                    path="/dashboardUnities/:id"
+                    isAuthenticated={isAuthenticated}
+                    component={NewUpDelUnity}
                 />
 
                 <PrivateRoute
                     path="/dashboardUnities"
                     isAuthenticated={isAuthenticated}
-                    component={DashboardUnitiesScreen}
+                    component={DashboardUnities}
                 />
+                {/*******************USER***********************/}
+
 
                 <PrivateRoute
-                    path="/unity/:id"
+                    path="/user/:id"
                     isAuthenticated={isAuthenticated}
-                    component={UnityPageScreen}
+                    component={UserNewUp}
                 />
 
-                <PrivateRoute
-                    path="/userPage"
-                    isAuthenticated={isAuthenticated}
-                    component={UserPageScreen}
-                />
 
                 <PrivateRoute
-                    path="/regimePage"
+                    path="/user"
                     isAuthenticated={isAuthenticated}
-                    component={RegimePageScreen}
+                    component={UserPage}
                 />
 
-                <PrivateRoute
-                    path="/gestionFoodPage"
-                    isAuthenticated={isAuthenticated}
-                    component={GestionFoodPageScreen}
-                />
+
+
+                {/*******************REGIME***********************/}
 
                 <PrivateRoute
-                    path="/preferencePage"
+                    path="/texture/:id"
                     isAuthenticated={isAuthenticated}
-                    component={PreferencePageScreen}
+                    component={TextureNewPage}
+                />
+
+
+                <PrivateRoute
+                    path="/regime/:id"
+                    isAuthenticated={isAuthenticated}
+                    component={RegimeNewPage}
+                />
+
+
+                <PrivateRoute
+                    path="/regime"
+                    isAuthenticated={isAuthenticated}
+                    component={RegimePage}
+                />
+
+
+                {/*******************GESTIONFOOD***********************/}
+                <PrivateRoute
+                    path="/gestionFood"
+                    isAuthenticated={isAuthenticated}
+                    component={GestionFoodPage}
+                />
+
+
+
+
+
+                {/*******************PREFERENCE***********************/}
+                <PrivateRoute
+                    path="/preference"
+                    isAuthenticated={isAuthenticated}
+                    component={PreferencePage}
                 />
 
 
@@ -120,7 +182,7 @@ function App() {
            <Footer/>
         </div>
       </AuthContext.Provider>
-      </HashRouter>
+      </BrowserRouter>
   );
 }
 

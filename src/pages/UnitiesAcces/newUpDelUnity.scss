@@ -1,0 +1,44 @@
+
+
+.box{
+
+
+
+  &-form{
+
+
+    padding:2rem;
+  }
+  &-imgField{
+
+    border-radius: 25px;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+    display: flex;
+    margin: 2rem;
+    padding:2rem
+    }
+  &-bimg{
+    border-radius: 15px;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    height: 20rem;
+    width: 20rem;
+    margin: 2rem;
+    padding:.5rem;
+      }
+  &-input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20rem;
+    width: 100%;
+    margin: 2rem;
+    padding:.5rem;
+
+
+
+  }
+
+
+}

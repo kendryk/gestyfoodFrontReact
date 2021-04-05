@@ -4,6 +4,7 @@ import Pagination from "../../components/layouts/Pagination";
 import moment from "moment";
 import UnityAPI from "../../services/UnityAPI";
 import './unity.scss'
+import {Link} from "react-router-dom";
 
 export default function UnityPage() {
 
@@ -12,8 +13,9 @@ export default function UnityPage() {
     const [loading,setLoading] = useState(true);
     const[search,setSearch] = useState("");
 
+    const idLocation = window.location.pathname.split( "/" )[3];
 
-    const idLocation = window.location.pathname.split( "/" )[2];
+    const nameLocation = window.location.pathname.split( "/" )[4];
 
     /**
      * connaitre le nombre d'element par page.
@@ -25,10 +27,9 @@ export default function UnityPage() {
      */
     const fetchResidents = async () => {
         try{
-            const data = await UnityAPI.findAll();
+            const data = await UnityAPI.findAll(idLocation);
             setResidents(data);
             setLoading(false);
-            console.log(data)
         }catch(error){
             console.log(error.response)
         }
@@ -49,30 +50,6 @@ export default function UnityPage() {
      */
     const formatDate = (str) => moment(str).format("DD/MM/YYYY");
 
-
-    /**
-     * Fonction de suppression de résidents.
-     * @param id
-     * @returns {Promise<void>}
-     */
-    const handleDelete = async (id) => {
-        const originalResidents =[...residents];
-        setResidents(residents.filter(resident => resident.id !==id))
-        // eslint-disable-next-line no-restricted-globals
-        let val = confirm("Voulez-vous supprimer ce résidents?");
-        if (val === true) {
-            // eslint-disable-next-line no-restricted-globals
-            let val2 = confirm("Attention , il y aura pas de retour possible");
-            if (val2 === true) {
-                try {
-                await UnityAPI.delete(id)
-                }catch (error) {
-                        setResidents(originalResidents);
-                        console.log(error.response);
-                    }
-            }
-        }
-    };
 
     /**
      * Modifier la page current
@@ -112,8 +89,6 @@ export default function UnityPage() {
         currentPage,
         itemsPerPage);
 
-
-
     return(
         <>
 
@@ -121,26 +96,19 @@ export default function UnityPage() {
             <div className="d-flex">
                 <Aside/>
 
-                <section className="p-5 section_home bg_white">
+                <section className="p-5 section_home bg_white bdr-bs">
                     <div className="unities_top">
                         <div>
-                            <h1>Bienvenue    </h1>
+                            <h1>Bienvenue </h1>
 
-                            <p>Ici vous  visualisez l'unité {idLocation},
-                                Vous pouvez crée de nouvelle fiche de résidents ou les modifier  , supprimer.</p>
+                            <p>Ici vous  visualisez l'unité {nameLocation},
+                                Vous pouvez crée de nouvelle fiche de résident ou les modifier, supprimer.</p>
                         </div>
                         <div className="unities_top_button">
-                            <button className="btn btn-gold">Nouveau résidents</button>
+                            <Link to={`/dashboardUnities/unity/${idLocation}/${nameLocation}/new`} className="btn btn-gold">Nouveau résidents</Link>
                         </div>
 
                     </div>
-
-                    <div className='box_unities'>
-                        <div className='box_unity' >
-                            <h3>unity </h3>
-                        </div>
-                    </div>
-
 
 
                     <div className="form-group">
@@ -157,7 +125,6 @@ export default function UnityPage() {
                     <table className="table table-hover">
                         <thead>
                         <tr>
-                            <th className="text-center">unity</th>
                             <th className="text-center">N° de chambre</th>
                             <th className="text-center">Nom</th>
                             <th className="text-center">Prénom</th>
@@ -175,17 +142,18 @@ export default function UnityPage() {
                             </tr>
                         )}
                         {paginationResidents.map(resident =>
-                            <tr key={resident.id}>
-                                <td className="text-center">{resident.unity.name}</td>
+                            <tr key={resident.id} className="vertical-text-center">
                                 <td className="text-center">{resident.room}</td>
                                 <td className="text-center">{resident.firstName}</td>
                                 <td className="text-center">{resident.lastName}</td>
                                 <td className="text-center">{formatDate(resident.bornAt)}</td>
                                 <td className="text-center">{formatDate(resident.createdAt)}</td>
                                 <td className="text-center">{formatDate(resident.updateAt)}</td>
-                                <td><button
-                                    onClick={()=> handleDelete(resident.id)}
-                                    className="btn btn-sm btn-info"> modifier</button></td>
+
+                                <Link to={`/dashboardUnities/unity/${idLocation}/${nameLocation}/${resident.id}`} className=" m-1 btn btn-info">Modifier</Link>
+
+
+
                             </tr>)}
                         </tbody>
                     </table>

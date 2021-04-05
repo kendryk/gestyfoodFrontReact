@@ -57,7 +57,6 @@ export default function CreateNewRegisterPage({history,location}){
             ...register,
             ['hearth']:"/api/hearths/"+id,
             roles
-
         });
 
     }, []);
@@ -71,8 +70,6 @@ export default function CreateNewRegisterPage({history,location}){
         setRegister({...register,[name]:value});
 
     };
-    console.log( "1");
-    console.log( register);
 
 
     /**

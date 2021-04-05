@@ -2,52 +2,53 @@
 
 //BUTTON
 
-.btn-update{
-  border: 1px solid blue;
-  background:blue;
-  box-shadow: 0 0 15px rgba(91,91,91,0.2);
-  color: white;
-  width: 10rem;
-  height: 3rem;
+.btn{
+  &-update{
+    border: 1px solid blue;
+    border-radius: 15px 0 15px 0;
+    background:blue;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+    color: white;
+    width: 4rem;
+    height: 4rem;
 
-  &:hover{
-    background:white;
-    color: blue;
+    &:hover{
+      background:white;
+      color: blue;
+    }
+  }
+  &-gold{
+    border: 1px solid #D49725;
+    background-color:#D49725;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+    color: white;
+    width: 10rem;
+    height: 3rem;
+    &:hover{
+      background:white;
+      color: #D49725;
+    }
+  }
+  &-connection{
+    border: 1px solid #29537C;
+    background-color: #29537C;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+    color: white;
+    width: 10rem;
+    height:4rem;
+
+    &:hover {
+      background: white;
+      color: #29537C;
+    }
   }
 }
 
-
-
-.btn-gold{
-  border: 1px solid #D49725;
-  background-color:#D49725;
-  box-shadow: 0 0 15px rgba(91,91,91,0.2);
-  color: white;
-  width: 10rem;
-  height: 3rem;
-  &:hover{
-    background:white;
-    color: #D49725;
-  }
-}
 
 .text-gold{
   color:#D49725;
 }
 
-.btn-connection{
-  border: 1px solid #29537C;
-  background-color: #29537C;
-  box-shadow: 0 0 15px #5b5b5b;
-  color: white;
-  width: 10rem;
-  height:3rem;
-
-  &:hover {
-    background: white;
-    color: #29537C;
-  }
-}
 
 
 .buttonHeader{
@@ -55,7 +56,7 @@
   color: white;
   background-color:#c82333;
   border-radius: 25px;
-  box-shadow: 0 0 15px #5b5b5b;
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
   margin: 0 2rem 0 0;
   padding: 1rem 2rem;
   width: 10rem;
@@ -72,7 +73,12 @@
 
    }
 
-
-
-
 }
+
+// bordure général
+.bdr-bs{
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+}
+
+//checkbox
+

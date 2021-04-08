@@ -5,6 +5,7 @@ import AuthAPI from "../../services/AuthAPI";
 import axios from "axios";
 import UnityAPi from "./../../services/UnityAPI";
 import Field from "../../components/forms/Field";
+import {toast} from "react-toastify";
 
 
 export default function ResidentPage({history}){
@@ -112,10 +113,10 @@ export default function ResidentPage({history}){
             if(editing){
                 console.log(resident)
                 const response = await axios.put("https://127.0.0.1:8000/api/residents/"+id, resident );
-                //TODO flash  notification modification
+                toast.success("Vous venez de modifier un résident !")
             }else{
                 const response = await axios.post("https://127.0.0.1:8000/api/residents", resident);
-                //TODO flash  notification succes
+                toast.success("Vous venez de créer un nouveaux résident !")
                 history.replace("/dashboardUnities/unity/"+unitId+"/"+unitName);
             };
             setErrors({});
@@ -127,7 +128,7 @@ export default function ResidentPage({history}){
                     apiErrors[violation.propertyPath]= violation.message;
                 });
                 setErrors(apiErrors);
-                //TODO flash  notification modification
+                toast.error("Des erreurs dans le formulaires!")
             }
 
         }
@@ -150,8 +151,10 @@ export default function ResidentPage({history}){
             if (val2 === true) {
                 try {
                     await UnityAPi.delete(id)
+                    toast.success("le Résident a bien été supprimé!")
                 }catch (error){
                     console.log(error.response);
+                    toast.error("Des erreurs dans la suppression!")
                 }
             }
         }

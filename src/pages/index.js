@@ -34,3 +34,5 @@ export { default as TextureNewPage} from "./GestionRepas/TextureNewPage";
 export { default as GestionFoodPage} from "./GestionRepas/GestionFoodPage";
 
 export { default as PreferencePage} from "./DashboardHome/PreferencePage";
+
+export { default as NoMatchScreen} from "./NoMatchScreen";

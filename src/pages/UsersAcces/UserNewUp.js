@@ -5,6 +5,7 @@ import AuthAPI from "../../services/AuthAPI";
 import axios from "axios";
 import UsersAPi from "./../../services/UsersAPi";
 import Field from "../../components/forms/Field";
+import {toast} from "react-toastify";
 
 
 export default function UserNewUp({history}){
@@ -18,28 +19,28 @@ export default function UserNewUp({history}){
 
     const[stateCheck,setStateCheck]= useState({
         options: [
-            {id:'ROLE_DIRECTOR',name: "Role de direction"},
-            {id:'ROLE_MODERATOR',name: "Role de modération"},
-            {id:'ROLE_EDITOR',name: "Role d'édition"},
-            {id:'ROLE_USER',name: "Role d'utilisateur"},
+            {id:'ROLE_DIRECTOR',name:   "Ceci autorise la lecture,  la création, la modification, " +
+                                        "suppression d'une fiche résident et d'une unité, ainsi que  la modification des régimes / nature du résident." +
+                                        "De plus, il a accès à la  suppression du compte (attention ceci supprimera toutes les données)"},
+            {id:'ROLE_MODERATOR',name: "Ceci autorise la lecture,  la création, la modification, suppression d'une fiche résident " +
+                                        "et d'une unité, ainsi que  la modification des régimes / nature du résident"},
+            {id:'ROLE_EDITOR',name:     "Ceci autorise la lecture, la modification des régimes / nature du résident sur la page gestion  repas"},
+            {id:'ROLE_USER',name:       "Ceci autorise la lecture sur le site"},
             ],
-        optionSelected: 'ROLE_USER'
+        optionSelected: ['ROLE_USER']
 
     })
 
+
+    const roles=[stateCheck.optionSelected];
+    console.log(roles)
     const [user, setUser] = useState({
         firstName:"",
         lastName:"",
         work:"",
         hearth:"",
     });
-    /**
-     * Initialise le role de l'utilisateur
-     */
-    const [roleUser, setRoleUser] = useState ({
-        roles:["ROLE_USER"],
-    });
-    const roles=roleUser.roles;
+
 
 
     const [errors, setErrors] = useState({
@@ -56,10 +57,10 @@ export default function UserNewUp({history}){
     const NameIdentified = ()=>{
         try{
             setUserIdentified (AuthAPI.isAuthenticatedName());
+            const userHearthId = userIdentified.hearthId;
             setUser({
                 ...user,
-                ['hearth']:"/api/hearths/"+userIdentified.hearthId,
-
+                ['hearth']:"/api/hearths/"+userHearthId,
             });
 
         }catch(error){
@@ -76,19 +77,23 @@ export default function UserNewUp({history}){
         try{
             const data=await axios.get("https://127.0.0.1:8000/api/users/"+id)
                 .then(response => response.data);
-            const{firstName,lastName,work,phone,hearth}= data
-            setUser({firstName,lastName,work,phone,hearth});
+            const{firstName,lastName,work,phone,roles}= data
+            setUser({firstName,lastName,work,phone,roles});
         }catch(error){
             console.log(error.response)
         }
     };
 
+
+
+
     /**
-     * Appell de l'identification
+     * Si page avec un id appel de la fonction
      */
     useEffect(() => {
         NameIdentified();
-    }, [modif] );
+
+    }, [modif]);
 
     /**
      * Si page avec un id appel de la fonction
@@ -98,7 +103,9 @@ export default function UserNewUp({history}){
             setEditing(true);
             fetchUser(id);
         }
+
     }, [id]);
+
 
 
     /**
@@ -106,27 +113,38 @@ export default function UserNewUp({history}){
      * @param currentTarget
      */
     const handleChange = ({currentTarget})=>{
-        setModif(true)
+        modif === true? setModif(false) : setModif(true);
         const {name,value}= currentTarget;
         setUser({...user,[name]:value,roles});
     };
 
-
+    /**
+     * Gestion des champs des checks
+     * @param e
+     */
     const handleCheckChange = (e)=>{
+        modif === true? setModif(false) : setModif(true);
+        console.log(stateCheck.optionSelected)
         if (stateCheck.optionSelected === e.target.id) {
             setStateCheck({...stateCheck,["optionSelected"]:undefined});
 
         } else {
             setStateCheck({...stateCheck,["optionSelected"]:e.target.id});
-            setRoleUser({...roleUser,["roles"]:[e.target.id]});
-            setUser({...user,roles});
+
         }
+        setUser({...user,["roles"]:[e.target.id]});
     };
-    console.log(user);
-    console.log(roles);
 
+    console.log(user)
 
-
+    /**
+     * Gestion des de la liste checks
+     * @param options
+     * @param optionSelected
+     * @param handleCheckChange
+     * @returns {JSX.Element}
+     * @constructor
+     */
     const ItemList = ({ options, optionSelected, handleCheckChange }) => {
         return (
             <div className="col s12">
@@ -143,6 +161,14 @@ export default function UserNewUp({history}){
         )
     }
 
+    /**
+     * Gestion de item checks
+     * @param option
+     * @param checked
+     * @param handleCheckChange
+     * @returns {JSX.Element}
+     * @constructor
+     */
     const Item = ({ option, checked, handleCheckChange }) => {
         return (
             <div className="card my-3">
@@ -161,9 +187,6 @@ export default function UserNewUp({history}){
         )
     }
 
-
-
-
     /**
      * Gestion des soumissions
      * @param event
@@ -174,10 +197,10 @@ export default function UserNewUp({history}){
         try{
             if(editing){
                 const response = await axios.put("https://127.0.0.1:8000/api/users/"+id, user );
-                //TODO flash  notification modification
+                toast.success("Vous avez modifier un utilisateur")
             }else{
                 const response = await axios.post("https://127.0.0.1:8000/api/users", user);
-                //TODO flash  notification succes
+                toast.success("Vous avez crée un nouveaux un utilisateur")
                 history.replace("/user");
             };
             setErrors({});
@@ -189,7 +212,7 @@ export default function UserNewUp({history}){
                     apiErrors[violation.propertyPath]= violation.message;
                 });
                 setErrors(apiErrors);
-                //TODO flash  notification modification
+                toast.error("Des erreurs dans le formulaires!")
             }
 
         }
@@ -211,20 +234,19 @@ export default function UserNewUp({history}){
             if (val2 === true) {
                 try {
                     await UsersAPi.delete(id)
+                    toast.success("Vous avez supprimé un utilisateur")
                 }catch (error){
                     console.log(error.response);
+                    toast.error("Des erreurs dans la suppression!")
                 }
             }
         }
     };
 
-    console.log(user)
+
+
 
     return(
-
-
-
-
 
         <>
 
@@ -259,17 +281,6 @@ export default function UserNewUp({history}){
                                     optionSelected={stateCheck.optionSelected}
                                     handleCheckChange={(e) => handleCheckChange(e)} />
                             </div>
-                            {/*<label>*/}
-                            {/*    Vous avez selectionner {roleUser.roles} Vous confirmer ?*/}
-                            {/*    <input*/}
-                            {/*        name="isGoing"*/}
-                            {/*        type="checkbox"*/}
-                            {/*        checked={this.state.isGoing}*/}
-                            {/*        onChange={this.handleInputChange} />*/}
-                            {/*</label>*/}
-
-
-
 
 
                         </div>

@@ -4,15 +4,11 @@ import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import RegimeAPI from "../../services/RegimeAPI";
 import TextureAPI from "../../services/TextureAPI";
-import Pagination from "../../components/layouts/Pagination";
 export default function RegimePage(){
 
     const  [userIdentified, setUserIdentified] = useState("");
-
     const [regimes, setRegimes] = useState([]);
     const [textures, setTextures] = useState([]);
-
-
     const [loading,setLoading] = useState(true);
 
 
@@ -43,8 +39,6 @@ export default function RegimePage(){
         }
     };
 
-    console.log(regimes)
-    console.log(textures)
 
     /**
      * Charger les texture /regime au chargement de la page.

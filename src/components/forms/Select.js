@@ -1,6 +1,6 @@
 import React from "react";
 
-const Select = ({name, value, error,label,onChange,children})=>{
+const Select = ({name, value,label,onChange,children})=>{
 
 return(
     <div className="form-group">
@@ -10,11 +10,11 @@ return(
             name={name}
             id={name}
             value={value}
-            className="form-control"
+            className="form-select"
         >
             {children}
         </select>
-        <p className="invalid-feedback">{error}</p>
+
     </div>
     );
 };

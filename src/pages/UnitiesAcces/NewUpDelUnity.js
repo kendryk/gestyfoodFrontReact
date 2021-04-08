@@ -5,7 +5,8 @@ import Field from "../../components/forms/Field";
 import AuthAPI from "../../services/AuthAPI";
 import "./newUpDelUnity.scss";
 import axios from "axios";
-import UnitiesAPi from "../../services/UnitiesAPi";
+import UnitiesAPi from "../../services/UnitiesAPI";
+import {toast} from "react-toastify";
 
 
 const NewUpDelUnity =({history})=>{
@@ -60,6 +61,9 @@ const NewUpDelUnity =({history})=>{
             }
     };
 
+    /**
+     * Charge l'identification de la personne au chargement de la page
+     */
     useEffect(() => {
         NameIdentified();
 
@@ -96,10 +100,10 @@ const NewUpDelUnity =({history})=>{
             if(editing){
                 console.log(unit)
                 const response = await axios.put("https://127.0.0.1:8000/api/unities/"+id, unit );
-                //TODO flash  notification modification
+                toast.success("Vous venez de modifier une unité !")
             }else{
                 const response = await axios.post("https://127.0.0.1:8000/api/unities", unit);
-                //TODO flash  notification succes
+                toast.success("Vous venez de créer une unité !")
                 history.replace('/dashboardUnities');
             };
             setErrors({});
@@ -111,7 +115,7 @@ const NewUpDelUnity =({history})=>{
                     apiErrors[violation.propertyPath]= violation.message;
                 });
                 setErrors(apiErrors);
-                //TODO flash  notification modification
+                toast.error("Des erreurs dans le formulaires!")
             }
 
         }
@@ -134,8 +138,10 @@ const NewUpDelUnity =({history})=>{
             if (val2 === true) {
                 try {
                     await UnitiesAPi.delete(id)
+                    toast.success("L'unité a bien été supprimé!")
                 }catch (error){
                     console.log(error.response);
+                    toast.error("Des erreurs dans la suppression!")
                 }
             }
         }

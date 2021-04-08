@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import Field from '../../components/forms/Field'
 import axios from 'axios'
+import {toast} from "react-toastify";
 
 export default function CreateNewHearthPage({history}){
 
@@ -57,6 +58,7 @@ export default function CreateNewHearthPage({history}){
             localStorage.setItem("name", hearth.name)
             setErrors({});
             // recuperation de l'id de hearth && renvoyer à l'user
+            toast.success("Vous avez crée votre Foyer! Veuillez crée votre profil de direction !")
             history.replace('/createNewRegister/'+ data);
 
         }catch(error){
@@ -66,7 +68,9 @@ export default function CreateNewHearthPage({history}){
                    apiErrors[violation.propertyPath]= violation.message;
                });
                setErrors(apiErrors);
+               toast.error("Des erreurs dans le formulaires!")
            }
+
         }
     };
 

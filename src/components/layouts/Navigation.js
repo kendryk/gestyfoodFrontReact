@@ -3,6 +3,7 @@ import {NavLink, Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import './navigation.scss';
 import AuthContext from "../../contexts/AuthContext";
+import {toast} from "react-toastify";
 
 export default function Navigation({ history}){
 
@@ -10,6 +11,7 @@ export default function Navigation({ history}){
     const  handleLogout = ()=> {
         AuthAPI.logout();
         setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
         history.push("/login")
     }
     const handleSubmit =(element)=> {

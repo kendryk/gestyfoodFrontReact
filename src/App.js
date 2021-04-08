@@ -28,12 +28,15 @@ import {
     TextureNewPage,
 
     GestionFoodPage,
-    PreferencePage
+    PreferencePage,
+
+    NoMatchScreen
 } from './pages'
 import AuthAPI from "./services/AuthAPI";
 import AuthContext from "./contexts/AuthContext";
 import PrivateRoute from "./components/layouts/PrivateRoute";
-
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 AuthAPI.setup();
 
@@ -45,13 +48,14 @@ function App() {
 
 
   return (
-      <BrowserRouter>
+
       <AuthContext.Provider value={
           {
               isAuthenticated,
               setIsAuthenticated
           }
       }>
+      <BrowserRouter>
         <div className="App">
 
             <NavigationWithRouter/>
@@ -171,7 +175,7 @@ function App() {
                     component={PreferencePage}
                 />
 
-
+                <Route component={NoMatchScreen}/>
 
             </Switch>
 
@@ -181,8 +185,12 @@ function App() {
             </main>
            <Footer/>
         </div>
-      </AuthContext.Provider>
+
       </BrowserRouter>
+      <ToastContainer position={toast.POSITION.BOTTOM_RIGHT}/>
+      </AuthContext.Provider>
+
+
   );
 }
 

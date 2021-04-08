@@ -3,6 +3,7 @@ import './login.scss'
 import AuthAPI from "../../services/AuthAPI";
 import AuthContext from "../../contexts/AuthContext";
 import { Link} from "react-router-dom";
+import {toast} from "react-toastify";
 
 
 export default function LoginPage({ history}){
@@ -55,11 +56,15 @@ export default function LoginPage({ history}){
             await AuthAPI.authenticate(credentials);
             setError(false);
             setIsAuthenticated(true);
+            toast.success("Vous êtes desormais connecté !")
             history.replace('/dashboardHome');
             }catch(error){
                 setError(
                 "Aucun compte ne possède cette adresse email ou alors les informations ne correspondent pas. ");
-            }
+                toast.error("une Erreur est survenue!")
+            };
+
+
     };
 
     return(

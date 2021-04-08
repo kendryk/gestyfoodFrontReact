@@ -26,7 +26,7 @@ export default function DashboardHomePage(){
     try{
         const authAPI = AuthAPI.isAuthenticatedName();
         setUserIdentified (authAPI);
-        console.log(userIdentified)
+
 
     }catch(error){
         console.log(error)

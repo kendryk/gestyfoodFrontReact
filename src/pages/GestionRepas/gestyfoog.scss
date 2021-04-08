@@ -1,0 +1,57 @@
+.form-select{
+  display: block;
+  width: 100%;
+  padding: .375rem 2.25rem .375rem .75rem;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-color: #D49725;
+  background-position: right .75rem center;
+  background-size: 16px 12px;
+  border: 1px solid #ced4da;
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+  border-radius: .25rem;
+  -webkit-appearance: none;
+
+}
+
+.box-unity{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #DF4937;
+  color: #ffffff;
+  border: 1px solid #ced4da;
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+  border-radius: .25rem;
+  margin: 1rem;
+  width: 5rem;
+  height: 5rem;
+  &:hover{
+    background-color: #ffffff;
+    color: #DF4937;
+    border: 1px solid #DF4937;
+  }
+
+
+}
+.table-residents{
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+}
+.checkboxFlex{
+  width: 4rem;
+}
+.CheckChoice{
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding:  0.5rem 1rem ;
+  width: 100%;
+
+}
+
+.svg-check{
+  width: 20px;
+  margin: 0 0 0 2rem;
+  fill: #D49725;
+}

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Field from "../../components/forms/Field";
 import { Link} from "react-router-dom";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 export default function CreateNewRegisterPage({history,location}){
 
@@ -89,6 +90,7 @@ export default function CreateNewRegisterPage({history,location}){
         try{
             await axios.post("https://127.0.0.1:8000/api/users", register );
             setErrors({});
+            toast.success("Vous vous êtes inscrit, vous pouvez vous connecter !")
             history.replace('/login');
 
         }catch(error){
@@ -99,7 +101,9 @@ export default function CreateNewRegisterPage({history,location}){
                 });
                 setErrors(apiErrors);
                 console.log(apiErrors)
-            }
+                toast.error("Des erreurs dans le formulaires!")
+            };
+
         }
     };
 

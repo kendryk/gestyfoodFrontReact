@@ -1,5 +1,6 @@
 import axios from 'axios';
 import jwtDecode from "jwt-decode";
+import apiGesty from "../conf/axios-conf";
 
 /**
  * Déconnection (suppression du token local storage)
@@ -18,8 +19,8 @@ function logout(){
  */
 function authenticate(credentials){
 
-    return axios
-        .post('https://localhost:8000/api/login_check', credentials)
+    return apiGesty
+        .post('/login_check', credentials)
         .then(response=> response.data.token)
         .then(token => {
 

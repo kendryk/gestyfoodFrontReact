@@ -5,9 +5,12 @@ import moment from "moment";
 import UnityAPI from "../../services/UnityAPI";
 import './unity.scss'
 import {Link} from "react-router-dom";
+import AuthAPI from "../../services/AuthAPI";
+import TableLoader from "../../components/loaders/TableLoader";
 
 export default function UnityPage() {
 
+    const  [userIdentified, setUserIdentified] = useState("");
     const [residents, setResidents] = useState([]);
     const [currentPage, setCurrentPage]= useState(1);
     const [loading,setLoading] = useState(true);
@@ -16,6 +19,21 @@ export default function UnityPage() {
     const idLocation = window.location.pathname.split( "/" )[3];
 
     const nameLocation = window.location.pathname.split( "/" )[4];
+
+    /**
+     * recupère l'identité de la personne connecté.
+     * @constructor
+     */
+    const NameIndentified = ()=>{
+        try{
+            const authAPI = AuthAPI.isAuthenticatedName();
+            setUserIdentified (authAPI);
+            console.log(userIdentified)
+        }catch(error){
+            console.log(error)
+        }
+    }
+
 
     /**
      * connaitre le nombre d'element par page.
@@ -39,6 +57,7 @@ export default function UnityPage() {
      * Charger les residents au chargmentde la page.
      */
     useEffect(() => {
+        NameIndentified();
         fetchResidents();
     }, []);
 
@@ -97,6 +116,13 @@ export default function UnityPage() {
                 <Aside/>
 
                 <section className="p-5 section_home bg_white bdr-bs">
+                    {!userIdentified ? ['Aucun utilisateur'] :
+                        <div>
+                            <strong>
+                                <p>  {`${userIdentified.firstName}  ${userIdentified.lastName} vous êtes au foyer ${userIdentified.hearthName}`}</p>
+                            </strong>
+                        </div>}
+
                     <div className="unities_top">
                         <div>
                             <h1>Bienvenue </h1>
@@ -134,13 +160,8 @@ export default function UnityPage() {
                             <th/>
                         </tr>
                         </thead>
-                        <tbody>
-                        {loading && (
-                            <tr>
-                                <td>Chargement .....</td>
+                        {!loading && <tbody>
 
-                            </tr>
-                        )}
                         {paginationResidents.map(resident =>
                             <tr key={resident.id} className="vertical-text-center">
                                 <td className="text-center">{resident.room}</td>
@@ -155,8 +176,14 @@ export default function UnityPage() {
 
 
                             </tr>)}
-                        </tbody>
+                        </tbody>}
                     </table>
+                    {loading &&<TableLoader/>}
+                    <div className="form-group d-flex justify-content-center">
+
+                        <Link to='/dashboardUnities' className="btn btn-link"> Retour au tableau de bord </Link>
+                    </div>
+
 
                     {itemsPerPage < filterResidents.length &&
                     (

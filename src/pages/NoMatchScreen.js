@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-
+import error from '../img/404.gif'
 export default function NoMatchScreen(){
 
     useEffect(() => {
@@ -7,9 +7,17 @@ export default function NoMatchScreen(){
     }, []);
 
     return(
-        <div className="container">
-            <h1>Cette page n'existe pas </h1>
+        <>
+            <section class="my-5 text-center ">
+                <h1 class="fw-bold">Aie !  Dommage ! Cette page est introuvable.</h1>
+            </section>
 
-        </div>
+            <section className="d-flex justify-content-center m-5">
+                <div>
+                    <img src={error} alt="error404"/>
+                </div>
+
+            </section>
+        </>
     )
 }

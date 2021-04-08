@@ -5,6 +5,7 @@ import AuthAPI from "../../services/AuthAPI";
 import UsersAPi from "../../services/UsersAPi";
 import moment from "moment";
 import Pagination from "../../components/layouts/Pagination";
+import TableLoader from "../../components/loaders/TableLoader";
 
 export default function UserPage(){
 
@@ -118,8 +119,8 @@ export default function UserPage(){
                 <section className="unities_top">
                     <div>
 
-                        <h2>Ici vous pouvez gérer les autorisations de vos collaborateurs . <br/>
-                       Tous nouveaux Collaborateur pourra avoir un accès  de lecture au site.</h2>
+                        <h2>Ici vous pouvez gérer les autorisations de vos collaborateurs. </h2>
+                        <h3>Tous nouveaux Collaborateur pourra avoir un accès  de lecture au site.</h3>
                     </div>
                     <div className="unities_top_button">
                         <Link to="/user/new" className="btn btn-gold">Nouvelle Utilisateur</Link>
@@ -132,7 +133,7 @@ export default function UserPage(){
                         <div>
                             <img src="" alt=""/>
                         </div>
-                        <p> <strong>Accès Admin :</strong>   Ceci autorise la lecture,  la création, la modification, suppression d'une fiche résident <br/>
+                        <p> <strong>Accès Directeur :</strong>   Ceci autorise la lecture,  la création, la modification, suppression d'une fiche résident <br/>
                             et d'une unité, ainsi que  la modification des régimes / nature du résident. <br/>
                             De plus, il a accès à la  suppression du compte (attention ceci supprimera toutes les données).</p>
                     </article>
@@ -175,13 +176,8 @@ export default function UserPage(){
                         <th/>
                     </tr>
                     </thead>
-                    <tbody>
-                    {loading && (
-                        <tr>
-                            <td>Chargement .....</td>
+                    {!loading && <tbody>
 
-                        </tr>
-                    )}
                     {paginationUsers.map(user =>
                         <tr key={user.id} className="vertical-text-center">
                             <td className="text-center">{user.firstName}</td>
@@ -195,8 +191,11 @@ export default function UserPage(){
 
 
                         </tr>)}
-                    </tbody>
+                    </tbody>}
                 </table>
+                {loading &&<TableLoader/>}
+
+
                 {itemsPerPage < filterUsers.length &&
                 (
                     <Pagination currentPage={currentPage}

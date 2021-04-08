@@ -1,9 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
+import {NavLink} from "react-router-dom";
 
 
-export default class Footer extends Component {
+export default function Footer () {
 
-    render() {
+    const d = new Date();
+    const date = d.getFullYear();
+
+
         return (
             <>
                 <footer className="bg-dark   text-white">
@@ -20,13 +24,13 @@ export default class Footer extends Component {
                                         <a href="/" className="nav-link text-white">Accueil</a>
                                     </li>
                                     <li>
-                                        <a href="/" className=" nav-link text-white">À propos</a>
+                                        <NavLink exact to="/about"  className=" nav-link text-white">À propos</NavLink>
                                     </li>
                                     <li>
-                                        <a href="/" className="text-white">Notice</a>
+                                        <NavLink exact to="/notice" className="nav-link text-white">Notice</NavLink>
                                     </li>
                                     <li>
-                                        <a href="/" className="text-white">Contactez-nous</a>
+                                        <a href="/" className="nav-link text-white">Contactez-nous</a>
                                     </li>
                                 </ul>
                             </div>
@@ -51,16 +55,16 @@ export default class Footer extends Component {
                                 <ul className="list-unstyled">
 
                                     <li>
-                                        <a href="/" className="text-white">CHARTE DES DONNÉES PERSONNELLES</a>
+                                        <a href="/" className="nav-link text-white">CHARTE DES DONNÉES PERSONNELLES</a>
                                     </li>
                                     <li>
-                                        <a href="/" className="text-white">CGU</a>
+                                        <a href="/" className="nav-link text-white">CGU</a>
                                     </li>
                                     <li>
-                                        <a href="/" className="text-white">POLITIQUE D’USAGE DES COOKIES</a>
+                                        <a href="/" className="nav-link text-white">POLITIQUE D’USAGE DES COOKIES</a>
                                     </li>
                                     <li>
-                                        <a href="/" className="text-white">GESTION DES COOKIES
+                                        <a href="/" className="nav-link text-white">GESTION DES COOKIES
                                         </a>
                                     </li>
                                 </ul>
@@ -73,7 +77,7 @@ export default class Footer extends Component {
 
                    {/*Copyright */}
                     <div className="text-center p-3">
-                        © 2021 Copyright: © gestyfood.fr  Tous droits réservés
+                        ©{date} Copyright: gestyfood.fr  Tous droits réservés
 
                     </div>
                    {/*Copyright */}
@@ -85,4 +89,3 @@ export default class Footer extends Component {
         )
     }
 
-}

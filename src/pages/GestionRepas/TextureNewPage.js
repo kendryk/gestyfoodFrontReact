@@ -11,10 +11,7 @@ export default function RegimeNewPage({history}){
     const id= window.location.pathname.split( "/" )[2];
     const  [userIdentified, setUserIdentified] = useState("");
     const [editing, setEditing] = useState(false);
-
     const [modif,setModif]= useState(false);
-
-    console.log(id)
     const [texture, setTexture] = useState({
         name:"",
     });
@@ -53,7 +50,7 @@ export default function RegimeNewPage({history}){
 
 
     /**
-     * Charger les regimes au chargement de la page.
+     *  titre de l'onglet et Charge l'indtiter de la personne connecté
      */
     useEffect(() => {
         document.title = "Gestion Food";
@@ -62,6 +59,10 @@ export default function RegimeNewPage({history}){
 
     }, [modif]);
 
+
+    /**
+     * Charger les textures au chargement de la page si id= int
+     */
     useEffect(() => {
         if(id!=="new"){
             setEditing(true);
@@ -89,9 +90,7 @@ export default function RegimeNewPage({history}){
     const handleSubmit =async(event)=>{
         event.preventDefault();
         try{
-
             if(editing){
-
                 const response = await axios.put("https://127.0.0.1:8000/api/textures/"+id, texture );
                 //TODO flash  notification modification
             }else{
@@ -137,7 +136,6 @@ export default function RegimeNewPage({history}){
             }
         }
     };
-    console.log(texture)
     return(
         <>
 

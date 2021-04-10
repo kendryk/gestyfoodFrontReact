@@ -28,7 +28,6 @@ export default function UserNewUp({history}){
             {id:'ROLE_USER',name:       "Ceci autorise la lecture sur le site"},
             ],
         optionSelected: ['ROLE_USER']
-
     })
 
 
@@ -124,7 +123,6 @@ export default function UserNewUp({history}){
      */
     const handleCheckChange = (e)=>{
         modif === true? setModif(false) : setModif(true);
-        console.log(stateCheck.optionSelected)
         if (stateCheck.optionSelected === e.target.id) {
             setStateCheck({...stateCheck,["optionSelected"]:undefined});
 
@@ -175,12 +173,12 @@ export default function UserNewUp({history}){
                 <div className="card-content">
                     <p><label htmlFor={option.id}>
                         <input
-                            className="filled-in"
+                            className="bdr-bs "
                             type="checkbox"
                             id={option.id}
                             onChange={handleCheckChange}
                             checked={checked} />
-                        <span>{option.id}. {option.name}</span>
+                        <span><strong> {option.id}</strong> : {option.name}</span>
                     </label></p>
                 </div>
             </div>

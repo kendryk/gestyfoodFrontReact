@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
-import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 
-export default function PreferencePage(){
+import {toast} from "react-toastify";
+import axios from "axios";
+
+
+export default function PreferencePage({history}){
 
 
     const  [userIdentified, setUserIdentified] = useState("");
@@ -14,6 +17,7 @@ export default function PreferencePage(){
     useEffect(() => {
         document.title = "Préférence";
         NameIndentified();
+
     }, []);
 
     /**
@@ -29,6 +33,42 @@ export default function PreferencePage(){
             console.log(error)
         }
     }
+
+
+
+
+
+    /**
+     * Gestion de la suppresion d'une unités
+     * @param id
+     * @returns {Promise<void>}
+     */
+    const handleDelete = async (id) => {
+        console.log(id)
+        // eslint-disable-next-line no-restricted-globals
+        let val = confirm(`Voulez-vous supprimer l'unité ${userIdentified.hearthName}`);
+        if (val === true) {
+            //on vérifie que l'utilisateur est sur de son choix!
+            // eslint-disable-next-line no-restricted-globals
+            let val2 = confirm("Attention , il y aura pas de retour possible");
+            //on envoie une requete a la base de donnée pour supprimer l'element
+            if (val2 === true) {
+                try {
+
+                    await axios.delete("https://localhost:8000/api/hearths/"+id)
+                    toast.success("L'unité a bien été supprimé!")
+
+                    history.replace("/login");
+
+                }catch (error){
+                    console.log(error.response);
+                    toast.error("Des erreurs dans la suppression!")
+                }
+            }
+        }
+    };
+
+    console.log(userIdentified)
 
 
 
@@ -48,13 +88,21 @@ export default function PreferencePage(){
                     </div>}
                 <div className="unities_top">
                     <div>
-                        <h1>Je suis la PreferencePageScreen</h1>
-                        <p>Ici vous pouvez crée une nouvelle</p>
+                        <h1>Vosu êtes sur la page de préférence </h1>
+                        <p>Ici vous pouvez suppprimer votre compte. Attention aucun retour ne sera possible.</p>
                     </div>
-                    <div className="unities_top_button">
-                        <Link to="/dashboardUnities/new" className="btn btn-gold">Nouvelle Unité</Link>
-                    </div>
+
                 </div>
+
+
+
+                <div className=" d-flex justify-content-center">
+                    <button
+                        onClick={()=> handleDelete(`${userIdentified.hearthId}`)}
+                        className='btn btn-danger'> Supprimer</button>
+                </div>
+
+
             </section>
 
 

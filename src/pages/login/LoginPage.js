@@ -68,7 +68,7 @@ export default function LoginPage({ history}){
     };
 
     return(
-
+        <div className="login_main">
         <div className="login_box">
             <h1>Veuillez vous connecter</h1>
 
@@ -111,5 +111,7 @@ export default function LoginPage({ history}){
 
 
         </div>
+        </div>
+
     )
 }

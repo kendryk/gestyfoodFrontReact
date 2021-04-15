@@ -7,6 +7,7 @@ import AuthAPI from "../../services/AuthAPI";
 export default function Aside({isAuthenticated}){
 
     const  [userIdentified, setUserIdentified] = useState("");
+
     /**
      * recupère l'identité de la personne connecté.
      * @constructor
@@ -28,7 +29,9 @@ export default function Aside({isAuthenticated}){
         NameIndentified();
     }, []);
 
-
+    const Director = JSON.parse(JSON.stringify({0:["ROLE_DIRECTOR","ROLE_USER"]}));
+    const Moderator = JSON.parse(JSON.stringify({0:["ROLE_MODERATOR","ROLE_USER"]}));
+    const Editor = JSON.parse(JSON.stringify({0:["ROLE_EDITOR","ROLE_USER"]}));
 
     return(
 
@@ -47,16 +50,26 @@ export default function Aside({isAuthenticated}){
                                 </li>
 
 
-                                {userIdentified.roles === ["\"ROLE_DIRECTOR\""] ? '' :
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== Director[0][0]   ? '' :
 
                                 <li className="nav-item ">
                                     <NavLink exact to="/dashboardUnities"  className="nav-link buttonHeader">UNITES</NavLink>
                                 </li>
                                 }
 
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== Moderator[0][0]   ? '' :
+
+                                        <li className="nav-item ">
+                                            <NavLink exact to="/dashboardUnities"  className="nav-link buttonHeader">UNITES</NavLink>
+                                        </li>
+                                }
 
 
-                                {userIdentified.roles === ["\"ROLE_DIRECTOR\""] ? '' :
+
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== Director[0][0]  ? '' :
                                 <li className="nav-item">
                                     <NavLink exact to="/user"  className="nav-link buttonHeader">AUTORISATION</NavLink>
                                 </li>
@@ -70,14 +83,32 @@ export default function Aside({isAuthenticated}){
 
 
 
-                                {userIdentified.roles === ["\"ROLE_DIRECTOR\""] ? '' :
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== Director[0][0] ? '' :
                                 <li className="nav-item">
                                     <NavLink exact to="/regime" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
                                 </li>
                                 }
 
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== Moderator[0][0] ? '' :
+                                        <li className="nav-item">
+                                            <NavLink exact to="/regime" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
+                                        </li>
+                                }
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== Editor[0][0] ? '' :
+                                        <li className="nav-item">
+                                            <NavLink exact to="/regime" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
+                                        </li>
+                                }
 
-                                {userIdentified.roles === ["\"ROLE_DIRECTOR\""] ? '' :
+
+
+
+
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== Director[0][0] ? '' :
                                 <li className="nav-item">
                                     <NavLink exact to="/preference" className="nav-link buttonHeader">PREFERENCE</NavLink>
                                 </li>

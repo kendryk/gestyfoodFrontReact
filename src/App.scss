@@ -1,8 +1,22 @@
 @import '~bootstrap';
 
+h1,h2,h3,h4,h6,a{
+  font-family: 'Oswald', sans-serif;
+}
+
+p {
+  font-family: 'Montserrat', sans-serif;
+}
+
 //BUTTON
 
 .btn{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
   &-update{
     border: 1px solid blue;
     border-radius: 15px 0 15px 0;
@@ -23,7 +37,7 @@
     box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
     color: white;
     width: 10rem;
-    height: 3rem;
+    height: 4rem;
     &:hover{
       background:white;
       color: #D49725;

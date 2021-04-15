@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
@@ -6,8 +6,21 @@ import UsersAPi from "../../services/UsersAPi";
 import moment from "moment";
 import Pagination from "../../components/layouts/Pagination";
 import TableLoader from "../../components/loaders/TableLoader";
+import AuthContext from "../../contexts/AuthContext";
+import {toast} from "react-toastify";
 
-export default function UserPage(){
+export default function UserPage({history}){
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
 
     const  [userIdentified, setUserIdentified] = useState("");
 
@@ -33,6 +46,7 @@ export default function UserPage(){
             setLoading(false)
         }catch(error){
             console.log(error.response)
+            handleLogout()
         }
     };
 
@@ -100,6 +114,8 @@ export default function UserPage(){
         filterUsers,
         currentPage,
         itemsPerPage);
+
+
 
     return(
 

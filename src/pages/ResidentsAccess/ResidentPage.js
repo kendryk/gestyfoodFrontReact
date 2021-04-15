@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
@@ -6,9 +6,22 @@ import axios from "axios";
 import UnityAPi from "./../../services/UnityAPI";
 import Field from "../../components/forms/Field";
 import {toast} from "react-toastify";
+import AuthContext from "../../contexts/AuthContext";
 
 
 export default function ResidentPage({history}){
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
+
 
     const unitId= window.location.pathname.split( "/" )[3];
     const unitName= window.location.pathname.split( "/" )[4];
@@ -18,6 +31,7 @@ export default function ResidentPage({history}){
     const [editing, setEditing] = useState(false);
     const  [userIdentified, setUserIdentified] = useState("");
     const [modif,setModif]= useState(false);
+
 
     const [resident, setResident] = useState({
         firstName:"",
@@ -34,6 +48,9 @@ export default function ResidentPage({history}){
         bornAt:"",
         unity: "",
     });
+
+
+
 
     /**
      * recupère l'identité de la personne connecté.
@@ -63,11 +80,13 @@ export default function ResidentPage({history}){
         try{
             const data=await axios.get("https://127.0.0.1:8000/api/residents/"+id)
                 .then(response => response.data);
-            console.log(data)
+
             const{firstName,lastName,room,bornAt}= data
             setResident({firstName,lastName,room,bornAt});
+
         }catch(error){
             console.log(error.response)
+            handleLogout()
         }
     };
 
@@ -102,6 +121,71 @@ export default function ResidentPage({history}){
 
 
     /**
+     * Création de 7 (jours de semaine) days_check. error avec map(),foreach, ou for; boucle infinie dans console.
+     * @param data
+     * @returns {Promise<void>}
+     */
+    const postDaycheck= async(data)=>{
+
+        try{
+             await axios.post("https://127.0.0.1:8000/api/day_checks", {
+                name: "Lundi",
+                checkTime: "",
+                week: 1,
+                resident: "/api/residents/" + data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/day_checks", {
+                name: "Mardi",
+                checkTime: "",
+                week: 1,
+                resident: "/api/residents/" + data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/day_checks", {
+                name: "Mercredi",
+                checkTime: "",
+                week: 1,
+                resident: "/api/residents/" + data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/day_checks", {
+                name: "Jeudi",
+                checkTime: "",
+                week: 1,
+                resident: "/api/residents/" + data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/day_checks", {
+                name: "Vendredi",
+                checkTime: "",
+                week: 1,
+                resident: "/api/residents/" + data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/day_checks", {
+                name: "Samedi",
+                checkTime: "",
+                week: 1,
+                resident: "/api/residents/" + data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/day_checks", {
+                name: "Dimanche",
+                checkTime: "",
+                week: 1,
+                resident: "/api/residents/" + data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+        }catch (error){
+            console.log(error)
+            toast.error("Des erreurs dans le formulaires!")
+        }
+
+    }
+
+
+    /**
      * Gestion des soumissions
      * @param event
      * @returns {Promise<void>}
@@ -109,14 +193,17 @@ export default function ResidentPage({history}){
     const handleSubmit =async(event)=>{
         event.preventDefault();
         try{
-            console.log(resident)
+
             if(editing){
-                console.log(resident)
+
                 const response = await axios.put("https://127.0.0.1:8000/api/residents/"+id, resident );
                 toast.success("Vous venez de modifier un résident !")
+                history.replace("/dashboardUnities/unity/"+unitId+"/"+unitName);
             }else{
                 const response = await axios.post("https://127.0.0.1:8000/api/residents", resident);
                 toast.success("Vous venez de créer un nouveaux résident !")
+
+                postDaycheck(response.data)
                 history.replace("/dashboardUnities/unity/"+unitId+"/"+unitName);
             };
             setErrors({});
@@ -140,9 +227,9 @@ export default function ResidentPage({history}){
      * @returns {Promise<void>}
      */
     const handleDelete = async (id) => {
-        console.log(id)
+
         // eslint-disable-next-line no-restricted-globals
-        let val = confirm(`Voulez-vous supprimer l'unité ${resident.name}`);
+        let val = confirm(`Voulez-vous supprimer le résident ${resident.name}`);
         if (val === true) {
             //on vérifie que l'utilisateur est sur de son choix!
             // eslint-disable-next-line no-restricted-globals
@@ -151,6 +238,7 @@ export default function ResidentPage({history}){
             if (val2 === true) {
                 try {
                     await UnityAPi.delete(id)
+                    history.replace("/dashboardUnities/unity/"+unitId+"/"+unitName);
                     toast.success("le Résident a bien été supprimé!")
                 }catch (error){
                     console.log(error.response);
@@ -160,7 +248,6 @@ export default function ResidentPage({history}){
         }
     };
 
-    console.log(resident)
 
     return(
 
@@ -178,7 +265,7 @@ export default function ResidentPage({history}){
                         </div>}
                     <div >
                         <div>
-                            {!editing&&<h1> Création d'un résident'</h1> || <h1> Modification d'une Résident</h1>}
+                            {!editing&&<h1> Création d'un résident</h1> || <h1> Modification d'un Résident</h1>}
 
                             {!editing&&<p>Ici vous pouvez crée un nouveau</p>||<p>Ici vous pouvez  modifier ou supprimer un Résident</p>}
                         </div>
@@ -229,7 +316,6 @@ export default function ResidentPage({history}){
 
                         </article>
 
-
                         <div className="form-group d-flex justify-content-center">
                             <button type="submit" className="btn btn-gold">Enregistrer</button>
                             <Link to={"/dashboardUnities/unity/"+unitId+"/"+unitName} className="btn btn-link"> Retour au tableau de bord </Link>
@@ -244,13 +330,6 @@ export default function ResidentPage({history}){
                     </div>    }
 
                 </section>
-
-
-
-
-
-
-
             </div>
         </>
     )

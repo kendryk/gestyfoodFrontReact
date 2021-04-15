@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import Pagination from "../../components/layouts/Pagination";
 import moment from "moment";
@@ -7,8 +7,21 @@ import './unity.scss'
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import TableLoader from "../../components/loaders/TableLoader";
+import AuthContext from "../../contexts/AuthContext";
+import {toast} from "react-toastify";
 
-export default function UnityPage() {
+export default function UnityPage({history}) {
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
 
     const  [userIdentified, setUserIdentified] = useState("");
     const [residents, setResidents] = useState([]);
@@ -50,6 +63,7 @@ export default function UnityPage() {
             setLoading(false);
         }catch(error){
             console.log(error.response)
+            handleLogout()
         }
     };
 

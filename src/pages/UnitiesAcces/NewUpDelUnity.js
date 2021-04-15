@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import Field from "../../components/forms/Field";
@@ -7,9 +7,21 @@ import "./newUpDelUnity.scss";
 import axios from "axios";
 import UnitiesAPi from "../../services/UnitiesAPI";
 import {toast} from "react-toastify";
+import AuthContext from "../../contexts/AuthContext";
 
 
 const NewUpDelUnity =({history})=>{
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
 
     const id= window.location.pathname.split( "/" )[2];
     const [editing, setEditing] = useState(false);
@@ -43,7 +55,7 @@ const NewUpDelUnity =({history})=>{
         }
     }
 
-    // todo optimiser pour importation photo
+    // todo optimiser pour importation photo en V2
 
     /**
      * Récupération de l'unité selon son identification
@@ -58,6 +70,7 @@ const NewUpDelUnity =({history})=>{
             setUnit({name,photo});
             }catch(error){
                 console.log(error.response)
+                handleLogout()
             }
     };
 
@@ -101,6 +114,7 @@ const NewUpDelUnity =({history})=>{
                 console.log(unit)
                 const response = await axios.put("https://127.0.0.1:8000/api/unities/"+id, unit );
                 toast.success("Vous venez de modifier une unité !")
+                history.replace('/dashboardUnities');
             }else{
                 const response = await axios.post("https://127.0.0.1:8000/api/unities", unit);
                 toast.success("Vous venez de créer une unité !")

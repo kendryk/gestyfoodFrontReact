@@ -1,10 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import RegimeAPI from "../../services/RegimeAPI";
 import TextureAPI from "../../services/TextureAPI";
-export default function RegimePage(){
+import TableLoader from "../../components/loaders/TableLoader";
+import AuthContext from "../../contexts/AuthContext";
+import {toast} from "react-toastify";
+export default function RegimePage({history}){
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
+
+
 
     const  [userIdentified, setUserIdentified] = useState("");
     const [regimes, setRegimes] = useState([]);
@@ -36,6 +52,7 @@ export default function RegimePage(){
             setLoading(false);
         }catch(error){
             console.log(error.response)
+            handleLogout()
         }
     };
 
@@ -46,8 +63,8 @@ export default function RegimePage(){
     useEffect(() => {
         document.title = "Gestion Food";
         NameIndentified();
-        fetchRegime();
-        fetchTexture();
+        fetchRegime().then();
+        fetchTexture().then();
     }, []);
 
 
@@ -108,12 +125,7 @@ export default function RegimePage(){
                             </tr>
                             </thead>
                             <tbody>
-                            {loading && (
-                                <tr>
-                                    <td>Chargement .....</td>
 
-                                </tr>
-                            )}
                             {regimes.map(regime =>
                                 <tr key={regime.id}className="vertical-text-center">
                                     <td className="text-center">{regime.name}</td>
@@ -122,6 +134,7 @@ export default function RegimePage(){
                             )}
                             </tbody>
                         </table>
+                        {loading &&<TableLoader/>}
 
 
 

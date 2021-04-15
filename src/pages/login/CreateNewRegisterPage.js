@@ -45,8 +45,9 @@ export default function CreateNewRegisterPage({history,location}){
         password:"",
         passwordConfirm:"",
         hearth:"",
-
     });
+
+
 
     /**
      * modifie le nom dans l'onglet a l'ouverture
@@ -107,10 +108,15 @@ export default function CreateNewRegisterPage({history,location}){
         }
     };
 
+    console.log(register)
+
+
+
+
     return(
                 <>
                     <div className="login_box">
-                            <h1>Inscrivez-vous en qualité de directeur</h1>
+                            <h1>Inscrivez-vous en qualité d’un membre de la direction </h1>
 
 
 

@@ -1,13 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Link} from "react-router-dom";
 import Aside from "../../components/layouts/Aside";
 import './dashboardUnities.scss';
 import Pagination from "../../components/layouts/Pagination"
 import UnitiesAPi from "../../services/UnitiesAPI";
 import AuthAPI from "../../services/AuthAPI";
+import AuthContext from "../../contexts/AuthContext";
+import {toast} from "react-toastify";
 
 
-export default function DashboardUnities(){
+export default function DashboardUnities({history}){
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
+
 
     const [unities, setUnities] = useState([]);
     const [currentPage, setCurrentPage]= useState(1);
@@ -31,6 +45,7 @@ export default function DashboardUnities(){
             setLoading(false)
         }catch(error){
             console.log(error.response)
+            handleLogout()
         }
     };
 

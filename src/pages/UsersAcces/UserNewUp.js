@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
@@ -6,10 +6,20 @@ import axios from "axios";
 import UsersAPi from "./../../services/UsersAPi";
 import Field from "../../components/forms/Field";
 import {toast} from "react-toastify";
+import AuthContext from "../../contexts/AuthContext";
 
 
 export default function UserNewUp({history}){
 
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
 
     const id= window.location.pathname.split( "/" )[2];
 
@@ -27,7 +37,7 @@ export default function UserNewUp({history}){
             {id:'ROLE_EDITOR',name:     "Ceci autorise la lecture, la modification des régimes / nature du résident sur la page gestion  repas"},
             {id:'ROLE_USER',name:       "Ceci autorise la lecture sur le site"},
             ],
-        optionSelected: ['ROLE_USER']
+        optionSelected: 'ROLE_USER'
     })
 
 
@@ -80,6 +90,7 @@ export default function UserNewUp({history}){
             setUser({firstName,lastName,work,phone,roles});
         }catch(error){
             console.log(error.response)
+            handleLogout()
         }
     };
 
@@ -196,6 +207,7 @@ export default function UserNewUp({history}){
             if(editing){
                 const response = await axios.put("https://127.0.0.1:8000/api/users/"+id, user );
                 toast.success("Vous avez modifier un utilisateur")
+                history.replace("/user");
             }else{
                 const response = await axios.post("https://127.0.0.1:8000/api/users", user);
                 toast.success("Vous avez crée un nouveaux un utilisateur")
@@ -233,6 +245,7 @@ export default function UserNewUp({history}){
                 try {
                     await UsersAPi.delete(id)
                     toast.success("Vous avez supprimé un utilisateur")
+                    history.replace("/user");
                 }catch (error){
                     console.log(error.response);
                     toast.error("Des erreurs dans la suppression!")

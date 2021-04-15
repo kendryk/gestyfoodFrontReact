@@ -1,12 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import Field from "../../components/forms/Field";
 import axios from "axios";
 import RegimeAPI from "../../services/RegimeAPI";
-
+import {toast} from "react-toastify";
+import AuthContext from "../../contexts/AuthContext";
 export default function RegimeNewPage({history}){
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
+
 
     const id= window.location.pathname.split( "/" )[2];
     const  [userIdentified, setUserIdentified] = useState("");
@@ -48,6 +61,7 @@ export default function RegimeNewPage({history}){
             setRegime({name});
         }catch(error){
             console.log(error.response)
+            handleLogout()
         }
     };
 
@@ -93,10 +107,11 @@ export default function RegimeNewPage({history}){
             if(editing){
 
                 const response = await axios.put("https://127.0.0.1:8000/api/diets/"+id, regime );
-                //TODO flash  notification modification
+                toast.success("Vous avez modifié un régime !")
+                history.replace('/regime');
             }else{
                 const response = await axios.post("https://127.0.0.1:8000/api/diets", regime);
-                //TODO flash  notification succes
+                toast.success("Vous avez créer un nouveau régime !")
                 history.replace('/regime');
             };
             setErrors({});
@@ -108,7 +123,7 @@ export default function RegimeNewPage({history}){
                     apiErrors[violation.propertyPath]= violation.message;
                 });
                 setErrors(apiErrors);
-                //TODO flash  notification modification
+                toast.error("Des erreurs dans le formulaires!")
             }
 
         }
@@ -133,6 +148,7 @@ export default function RegimeNewPage({history}){
                     await RegimeAPI.delete(id)
                 }catch (error){
                     console.log(error.response);
+
                 }
             }
         }
@@ -153,8 +169,10 @@ export default function RegimeNewPage({history}){
                         </div>}
                     <div className="unities_top">
                         <div>
+                            {/* eslint-disable-next-line no-mixed-operators */}
                             {!editing&& <h1> Page de création des regimes </h1> || <h1> Page de modification des regimes </h1>}
 
+                            {/* eslint-disable-next-line no-mixed-operators */}
                             {!editing&&<p>Ici vous pouvez crée de nouveaux regimes</p>||<p>Ici vous pouvez  modifier ou supprimer un regimes</p>}
                         </div>
 

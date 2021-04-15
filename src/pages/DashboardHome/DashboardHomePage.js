@@ -40,7 +40,7 @@ export default function DashboardHomePage(){
 
                     {!userIdentified ? ['Aucun utilisateur'] :
                         <div>
-                            <strong className="text-capitalize">
+                            <strong>
                                 <p>  {`${userIdentified.firstName}  ${userIdentified.lastName} vous êtes au foyer ${userIdentified.hearthName}`}</p>
                             </strong>
                         </div>}

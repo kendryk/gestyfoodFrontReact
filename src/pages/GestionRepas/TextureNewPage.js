@@ -1,12 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import Field from "../../components/forms/Field";
 import axios from "axios";
 import TextureAPI from "../../services/TextureAPI"
+import {toast} from "react-toastify";
+import AuthContext from "../../contexts/AuthContext";
 
 export default function RegimeNewPage({history}){
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+
+
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
+
 
     const id= window.location.pathname.split( "/" )[2];
     const  [userIdentified, setUserIdentified] = useState("");
@@ -45,6 +59,7 @@ export default function RegimeNewPage({history}){
             setTexture({name});
         }catch(error){
             console.log(error.response)
+            handleLogout()
         }
     };
 
@@ -92,10 +107,11 @@ export default function RegimeNewPage({history}){
         try{
             if(editing){
                 const response = await axios.put("https://127.0.0.1:8000/api/textures/"+id, texture );
-                //TODO flash  notification modification
+                toast.success("Vous avez modifié une texture !")
+                history.replace('/regime');
             }else{
                 const response = await axios.post("https://127.0.0.1:8000/api/textures", texture);
-                //TODO flash  notification succes
+                toast.success("Vous avez crée une nouvelle texture !")
                 history.replace('/regime');
             };
             setErrors({});
@@ -107,7 +123,7 @@ export default function RegimeNewPage({history}){
                     apiErrors[violation.propertyPath]= violation.message;
                 });
                 setErrors(apiErrors);
-                //TODO flash  notification modification
+                toast.error("Des erreurs dans le formulaires!")
             }
 
         }

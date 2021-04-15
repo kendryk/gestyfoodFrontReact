@@ -8,12 +8,16 @@ import {toast} from "react-toastify";
 export default function Navigation({ history}){
 
     const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext)
+
     const  handleLogout = ()=> {
         AuthAPI.logout();
         setIsAuthenticated(false);
         toast.info("Vous êtes désormais déconnecté ")
         history.push("/login")
     }
+
+
+
     const handleSubmit =(element)=> {
         history.push("/"+element);
     }

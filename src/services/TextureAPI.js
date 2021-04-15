@@ -6,12 +6,6 @@ function findAll(){
         .then(response => response.data["hydra:member"]);
 }
 
-function findByResident(unityId){
-    return axios
-        .get("https://127.0.0.1:8000/api/unities/"+unityId+"/residents")
-        .then(response => response.data["hydra:member"]);
-}
-
 
 
 
@@ -23,6 +17,5 @@ function deleteTexture(id){
 
 export default {
     findAll,
-    findByResident,
     delete:deleteTexture
 }

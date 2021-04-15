@@ -13,7 +13,6 @@ export default function UserNewUp({history}){
 
     const {setIsAuthenticated} = useContext(AuthContext)
 
-
     const  handleLogout = ()=> {
         AuthAPI.logout();
         setIsAuthenticated(false);
@@ -40,7 +39,6 @@ export default function UserNewUp({history}){
         optionSelected: 'ROLE_USER'
     })
 
-
     const roles=[stateCheck.optionSelected];
     console.log(roles)
     const [user, setUser] = useState({
@@ -49,8 +47,6 @@ export default function UserNewUp({history}){
         work:"",
         hearth:"",
     });
-
-
 
     const [errors, setErrors] = useState({
         firstName:"",
@@ -94,9 +90,6 @@ export default function UserNewUp({history}){
         }
     };
 
-
-
-
     /**
      * Si page avec un id appel de la fonction
      */
@@ -115,8 +108,6 @@ export default function UserNewUp({history}){
         }
 
     }, [id]);
-
-
 
     /**
      * Gestion des champs
@@ -254,9 +245,6 @@ export default function UserNewUp({history}){
         }
     };
 
-
-
-
     return(
 
         <>
@@ -274,7 +262,6 @@ export default function UserNewUp({history}){
                     <div >
                         <div>
                             {!editing&&<h1> Création d'un collaborateur</h1> || <h1> Modification de collaborateur</h1>}
-
                             {!editing&&<p>Ici vous pouvez crée un nouveau collaborateur</p>||<p>Ici vous pouvez  modifier le collaborateur ou le supprimer</p>}
                         </div>
 
@@ -284,7 +271,6 @@ export default function UserNewUp({history}){
                         onSubmit={handleSubmit}
                         className="login_box_form"
                     >
-
                         <div className="container">
                             <div className="row p-2">
                                 <ItemList
@@ -295,8 +281,6 @@ export default function UserNewUp({history}){
 
 
                         </div>
-
-
 
                         <Field
                             label="Poste"
@@ -348,10 +332,6 @@ export default function UserNewUp({history}){
                             onChange={handleChange}
                             error={errors.password}/>}
 
-
-
-
-
                         <div className="form-group d-flex justify-content-center">
                             <button type="submit" className="btn btn-gold">Enregistrer</button>
                             <Link to={"/user"} className="btn btn-link"> Retour au tableau de bord </Link>
@@ -366,12 +346,6 @@ export default function UserNewUp({history}){
                     </div>    }
 
                 </section>
-
-
-
-
-
-
 
             </div>
         </>

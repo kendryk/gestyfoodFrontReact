@@ -10,14 +10,16 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction";
 import AuthContext from "../../contexts/AuthContext";
-import {toast} from "react-toastify"; // needed for dayClick
+import {toast} from "react-toastify";
 
 
 export default function GestionFoodPage({history}){
 
     const {setIsAuthenticated} = useContext(AuthContext)
 
-
+    /**
+     * Deconnection
+     */
     const  handleLogout = ()=> {
         AuthAPI.logout();
         setIsAuthenticated(false);
@@ -85,6 +87,7 @@ export default function GestionFoodPage({history}){
                 )
             )
         );
+        console.log(arrayDay)
         const jsonDay = arrayDay.reduce( (prev, item) => {
             const curr = item.split(':');
             prev[curr[0]] = curr[1].indexOf('true') > -1;
@@ -277,11 +280,7 @@ export default function GestionFoodPage({history}){
                                         :
                                         resident.dayChecks.filter(wk=> (
 
-                                                    // parseInt(wk.week) === parseInt(week.number)
-
-                                            // parseInt(wk.week) === parseInt(week.number)  && new Date(wk.updateAt).getFullYear() === year.number
-
-                                            (parseInt(wk.week)+1 > parseInt(wk.week))? parseInt(wk.week)-1 : parseInt(wk.week)
+                                            parseInt(wk.week) <= parseInt(week.number) ? wk.week : ''
 
 
 

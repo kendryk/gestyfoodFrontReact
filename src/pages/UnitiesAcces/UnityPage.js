@@ -13,16 +13,6 @@ import {toast} from "react-toastify";
 export default function UnityPage({history}) {
 
     const {setIsAuthenticated} = useContext(AuthContext)
-
-
-    const  handleLogout = ()=> {
-        AuthAPI.logout();
-        setIsAuthenticated(false);
-        toast.info("Vous êtes désormais déconnecté ")
-        history.push("/login")
-    }
-
-
     const  [userIdentified, setUserIdentified] = useState("");
     const [residents, setResidents] = useState([]);
     const [currentPage, setCurrentPage]= useState(1);
@@ -32,6 +22,19 @@ export default function UnityPage({history}) {
     const idLocation = window.location.pathname.split( "/" )[3];
 
     const nameLocation = window.location.pathname.split( "/" )[4];
+
+    /**
+     * Deconnection
+     */
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
+
+
 
     /**
      * recupère l'identité de la personne connecté.

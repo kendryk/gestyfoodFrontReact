@@ -8,12 +8,10 @@ import {toast} from "react-toastify";
 
 export default function LoginPage({ history}){
 
-
     /**
      * Appel le context pour modifier Identification
      */
     const {setIsAuthenticated} = useContext(AuthContext);
-
 
     /**
      * Affiche le nom de la page à l'ouverture de celle-ci
@@ -21,7 +19,6 @@ export default function LoginPage({ history}){
     useEffect(() => {
         document.title = "Login"
     }, []);
-
 
     /**
      * Initialise et modifie les identités des personnes connecter
@@ -62,11 +59,8 @@ export default function LoginPage({ history}){
                 setError(
                 "Aucun compte ne possède cette adresse email ou alors les informations ne correspondent pas. ");
                 toast.error("une Erreur est survenue!")
-            };
-
-
+            }
     };
-
     return(
         <div className="login_main">
         <div className="login_box">
@@ -99,7 +93,6 @@ export default function LoginPage({ history}){
                         name='password'
                         id='password'
                         className={"form-control"}/>
-
                 </div>
 
                 <div className="form-group d-flex justify-content-center align-items-center">
@@ -107,11 +100,7 @@ export default function LoginPage({ history}){
                     <Link to="/createNewHearth">Vous n'êtes toujours pas inscrit ?</Link>
                 </div>
             </form>
-
-
-
         </div>
         </div>
-
     )
 }

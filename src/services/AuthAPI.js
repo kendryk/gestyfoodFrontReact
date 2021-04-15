@@ -62,11 +62,11 @@ function setup(){
 }
 
 /**
- * permettre de savoir si on peut savoir si on est identifier ou non
+ * permettre de savoir si on peut savoir si on est identifié ou non
  * @returns {boolean}
  */
 function isAuthenticated() {
-    //1. apperçoit-on  le token?
+    //1. aperçoit-on  le token?
     const token = window.localStorage.getItem('authToken');
     //2. si le token est encore valide au niveau de la date expiration
     if (token) {
@@ -77,7 +77,7 @@ function isAuthenticated() {
 }
 
 /**
- * permettre connaitre l'indentité de la personne
+ * permettre connaitre l'identité de la personne
  * @returns {boolean|unknown}
  */
 function isAuthenticatedName() {

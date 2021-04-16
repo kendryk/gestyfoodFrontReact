@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {NavLink, Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import './navigation.scss';
@@ -16,6 +16,7 @@ export default function Navigation({ history}){
         history.push("/login")
     }
 
+    const [show, setSchow] = useState(false);
 
 
     const handleSubmit =(element)=> {
@@ -36,30 +37,42 @@ export default function Navigation({ history}){
                         <img src={logo} alt="LOGO" width="150" height="150"/>
                     </Link>
 
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
+                    <button className="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav"
+                            aria-controls="navbarNav"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation"
+                            onClick={() => setSchow(!show)}
+                    >
+                        <span className="navbar-toggler-icon"/>
                     </button>
 
-                    <div className="collapse navbar-collapse" id="navbarNav">
+                    <div
+                        className={
+                            show
+                                ? 'collapse navbar-collapse show'
+                                : 'collapse navbar-collapse'
+                        }>
+
                         <ul className="navbar-nav">
 
 
 
-                                <li className="nav-item ">
+                                <li className="nav-item my-2">
                                     <NavLink exact to="/" className="nav-link buttonHeader">Accueil</NavLink>
                                 </li>
 
-                                <li className="nav-item">
+                                <li className="nav-item my-2">
                                     <NavLink exact to="/about"  className="nav-link buttonHeader">A Propos</NavLink>
                                 </li>
 
-                                <li className="nav-item">
+                                <li className="nav-item my-2">
                                     <NavLink exact to="/notice"  className="nav-link buttonHeader">Notice</NavLink>
                                 </li>
 
-                                <li className="nav-item d-flex flex-column">
+                                <li className="nav-item d-flex flex-column my-2">
                                     <NavLink exact to="/login"  className="btn btn-connection mb-2">Se Connecter</NavLink>
 
                                     <button onClick={() => handleSubmit('createNewHearth')}

@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import "./gestyfoog.scss"
 // import {ReactComponent as Check} from "../../img/arrow-down.svg"
+import moment from "moment";
 import UnitiesAPi from "../../services/UnitiesAPI";
 import UnityAPI from "../../services/UnityAPI";
 import FullCalendar from '@fullcalendar/react'
@@ -83,11 +84,11 @@ export default function GestionFoodPage({history}){
         residents.map(resident =>
             resident.dayChecks.map( day =>
                 day.checkTime.split("|").map( v=>
-                    arrayDay.push( resident.id + '|' + day.name + '|' + v + '|' + day.week + '|' + new Date(day.updateAt).getFullYear()+ ":"+ true)
+                    arrayDay.push( resident.id + '|' + day.name + '|' + v + '|' + day.week + '|' + new Date(day.createdAt).getFullYear()+ ":"+ true)
                 )
             )
         );
-        console.log(arrayDay)
+
         const jsonDay = arrayDay.reduce( (prev, item) => {
             const curr = item.split(':');
             prev[curr[0]] = curr[1].indexOf('true') > -1;
@@ -95,13 +96,6 @@ export default function GestionFoodPage({history}){
         }, {});
         setStateCheck(jsonDay);
     }
-
-
-
-
-
-
-
 
     /**
      * Apple a l'ouverture de la page des identifiants, des unités, des weeks et des Years
@@ -135,13 +129,27 @@ export default function GestionFoodPage({history}){
 
     };
 
-    console.log('modifCheck',modifCheck);
+
+
+
+    const searchWeekDate=(arg)=>{
+
+        let d = new Date(arg.date);
+        // renvoie le jour de la semaine
+        d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
+        let ms = d.valueOf(); // GMT
+        d.setMonth(0);
+        d.setDate(4); // Thu in Week 1
+        return  Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    };
+
+
+
 
 
     const handleDateClick = (arg) => { // bind with an arrow function
 
         let YearDate = new Date(arg.date).getFullYear();
-
         setYear({...year,['number']:parseInt(YearDate)});
         let d = new Date(arg.date);
         // renvoie le jour de la semaine
@@ -153,7 +161,7 @@ export default function GestionFoodPage({history}){
         const weekDate= Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
         setWeek({...week,['number']:parseInt(weekDate)});
 
-        }
+        };
 
     /**
      * Récupération des Unités
@@ -170,7 +178,42 @@ export default function GestionFoodPage({history}){
     };
 
 
+
     const filterDays =(wk)=>{
+
+        console.log(wk)
+
+        // or  if(Number.isInteger(d.getFullYear/4) == true){return "52nd week"} else {return "53rd week"}
+        const yearWeek = (new Date(wk.createdAt).getFullYear())-1 ;
+        const lastWeek= moment("12-30-"+ yearWeek, "MM-DD-YYYY").isoWeek(); // 52 or 53
+
+        const firstWeek = 1;
+        const nowWeek = parseInt(wk.week)
+        let afterWeek= parseInt(wk.week) + 1 //
+        let beforeWeek= parseInt(wk.week) -1
+        if (beforeWeek === 0) {
+            beforeWeek = lastWeek
+        }
+        console.log('beforeWeek',beforeWeek)
+        if (afterWeek === lastWeek+1) {
+            afterWeek = firstWeek
+        }
+
+        //
+        console.log('nowWeek',nowWeek)
+
+        const arrayWeek = [];
+
+        console.log('arrayWeek',arrayWeek)
+        if(nowWeek > firstWeek ){
+            arrayWeek.push(beforeWeek);
+        }
+        const newWeek = arrayWeek.push(nowWeek);
+
+
+
+        return ( arrayWeek)
+
     }
 
 
@@ -280,11 +323,8 @@ export default function GestionFoodPage({history}){
                                         :
                                         resident.dayChecks.filter(wk=> (
 
-                                            parseInt(wk.week) <= parseInt(week.number) ? wk.week : ''
 
-
-
-
+                                            filterDays(wk)
 
 
                                         )).map(day =>
@@ -294,8 +334,8 @@ export default function GestionFoodPage({history}){
 
                                                     <input className="m-1"
                                                            type = "checkbox"
-                                                           name={resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.updateAt).getFullYear()}
-                                                           checked={stateCheck[resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.updateAt).getFullYear()]}
+                                                           name={resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                           checked={stateCheck[resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
                                                            onChange={handleCheckChange}
                                                     />
                                                     <label htmlFor={day.name+"-matin"}>Matin</label>
@@ -303,8 +343,8 @@ export default function GestionFoodPage({history}){
 
                                                     <input className="m-1"
                                                            type = "checkbox"
-                                                           name={resident.id+'|'+ day.name +"|midi|"+ day.week+'|'+ new Date(day.updateAt).getFullYear()}
-                                                           checked={stateCheck[resident.id+'|'+day.name+"|midi|"+ day.week+'|'+ new Date(day.updateAt).getFullYear()]}
+                                                           name={resident.id+'|'+ day.name +"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                           checked={stateCheck[resident.id+'|'+day.name+"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
                                                            onChange={handleCheckChange}
                                                     />
                                                     <label htmlFor={day.name+"-matin"}>Midi</label>
@@ -312,8 +352,8 @@ export default function GestionFoodPage({history}){
 
                                                     <input className="m-1"
                                                            type = "checkbox"
-                                                           name={resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.updateAt).getFullYear()}
-                                                           checked={stateCheck[resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.updateAt).getFullYear()]}
+                                                           name={resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                           checked={stateCheck[resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
                                                            onChange={handleCheckChange}
                                                     />
                                                     <label htmlFor={day.name+"-matin"}>Soir</label>
@@ -329,7 +369,7 @@ export default function GestionFoodPage({history}){
                                         <tr>
                                             <td key="DIET" rowSpan="1">
                                                 <div className='CheckChoice'>
-
+                                                    DIET
                                                     {/*mode edition */}
                                                     {/*<Check className='svg-check'/>*/}
                                                 </div>
@@ -342,7 +382,7 @@ export default function GestionFoodPage({history}){
                                         <tr>
                                             <td key="TEXTURE" rowSpan="1">
                                                 <div className='CheckChoice'>
-
+                                                    TEXTURE
                                                     {/*mode edition */}
                                                     {/*<Check className='svg-check'/>*/}
                                                 </div>

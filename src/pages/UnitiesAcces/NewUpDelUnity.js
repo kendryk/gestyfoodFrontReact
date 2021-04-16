@@ -13,8 +13,6 @@ import AuthContext from "../../contexts/AuthContext";
 const NewUpDelUnity =({history})=>{
 
     const {setIsAuthenticated} = useContext(AuthContext)
-
-
     const  handleLogout = ()=> {
         AuthAPI.logout();
         setIsAuthenticated(false);

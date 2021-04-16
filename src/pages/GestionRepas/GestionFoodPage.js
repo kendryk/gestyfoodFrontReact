@@ -3,7 +3,7 @@ import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import "./gestyfoog.scss"
-// import {ReactComponent as Check} from "../../img/arrow-down.svg"
+
 import moment from "moment";
 import UnitiesAPi from "../../services/UnitiesAPI";
 import UnityAPI from "../../services/UnityAPI";
@@ -28,7 +28,6 @@ export default function GestionFoodPage({history}){
         history.push("/login")
     }
 
-
     const  [userIdentified, setUserIdentified] = useState("");
     const [unities, setUnities] = useState([]);
     const [unity, setUnity] =useState({
@@ -49,6 +48,7 @@ export default function GestionFoodPage({history}){
 
     const [modifCheck,setModifCheck]= useState('');
 
+    const [residentWeek, setResidentWeek] = useState({})
 
     /**
      * Récupere les unités
@@ -70,14 +70,12 @@ export default function GestionFoodPage({history}){
         try{
             const data = await UnityAPI.findAll(idLocation)
             setResidents(data);
-
             setLoading(false);
         }catch(error){
             console.log(` Error ${error.response}`);
             handleLogout()
         }
     };
-
 
     const JsDay = ()=>{
         const arrayDay = [];
@@ -88,7 +86,7 @@ export default function GestionFoodPage({history}){
                 )
             )
         );
-
+        // console.log('arrayDay',arrayDay)
         const jsonDay = arrayDay.reduce( (prev, item) => {
             const curr = item.split(':');
             prev[curr[0]] = curr[1].indexOf('true') > -1;
@@ -102,24 +100,28 @@ export default function GestionFoodPage({history}){
      */
     useEffect(() => {
         document.title = "Gestion Food";
-        NameIndentified();
-        fetchUnities().then();
+        // NameIndentified();
+        fetchUnities()
+    }, []);
+    /**
+     * Apple a l'ouverture de la page des identifiants, des unités, des weeks et des Years
+     */
+    useEffect(() => {
         JsDay();
 
     }, [loading]);
 
-    /**
-     * recupère l'identité de la personne connecté.
-     * @constructor
-     */
-    const NameIndentified = ()=>{
-        try{
-            setUserIdentified(AuthAPI.isAuthenticatedName());
-        }catch(error){
-            console.log(error)
-        }
-    }
-
+    // /**
+    //  * recupère l'identité de la personne connecté.
+    //  * @constructor
+    //  */
+    // const NameIndentified = ()=>{
+    //     try{
+    //         setUserIdentified(AuthAPI.isAuthenticatedName());
+    //     }catch(error){
+    //         console.log(error)
+    //     }
+    // }
 
     //todo pour la partie modification.
     const handleCheckChange = ({currentTarget})=>{
@@ -129,23 +131,16 @@ export default function GestionFoodPage({history}){
 
     };
 
-
-
-
-    const searchWeekDate=(arg)=>{
-
-        let d = new Date(arg.date);
-        // renvoie le jour de la semaine
-        d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
-        let ms = d.valueOf(); // GMT
-        d.setMonth(0);
-        d.setDate(4); // Thu in Week 1
-        return  Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    };
-
-
-
-
+    // const searchWeekDate=(arg)=>{
+    //
+    //     let d = new Date(arg.date);
+    //     // renvoie le jour de la semaine
+    //     d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
+    //     let ms = d.valueOf(); // GMT
+    //     d.setMonth(0);
+    //     d.setDate(4); // Thu in Week 1
+    //     return  Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    // };
 
     const handleDateClick = (arg) => { // bind with an arrow function
 
@@ -173,48 +168,55 @@ export default function GestionFoodPage({history}){
             'id': currentTarget.id,
             'value': currentTarget.value}
         );
-        setLoading(true);
         fetchResidents(currentTarget.id);
+        setLoading(true);
     };
 
 
 
-    const filterDays =(wk)=>{
+    const DayFilter=(id)=>{
+        // console.log('id',id)
+        const dico = {};
 
-        console.log(wk)
+        //dico
+        let residentWeek = {};
+        for(let r in residents){
+            if (!residentWeek[r]) {
+                 residentWeek[r]=[];
+                 let week={};
+            residentWeek[r].push(residents[r].dayChecks);
+            }
 
-        // or  if(Number.isInteger(d.getFullYear/4) == true){return "52nd week"} else {return "53rd week"}
-        const yearWeek = (new Date(wk.createdAt).getFullYear())-1 ;
-        const lastWeek= moment("12-30-"+ yearWeek, "MM-DD-YYYY").isoWeek(); // 52 or 53
+            for(let k in residentWeek[r]){
+                if (residentWeek[r][k][week.number-1]){
+                    console.log('residentWeek[r]',residentWeek[r][k])
 
-        const firstWeek = 1;
-        const nowWeek = parseInt(wk.week)
-        let afterWeek= parseInt(wk.week) + 1 //
-        let beforeWeek= parseInt(wk.week) -1
-        if (beforeWeek === 0) {
-            beforeWeek = lastWeek
+
+
+                    if (!dico[residentWeek[r][k][week.number-1].id]) {
+                        dico[residentWeek[r][k][week.number-1].id] = []
+                    }
+
+                    dico[residentWeek[r][k][week.number-1].id].push(residentWeek[r][k][week.number-1])  ;
+
+                }else{
+
+                    if (!dico[residentWeek[r][k][((residentWeek[r]).length)-1].id]) {
+                        dico[residentWeek[r][k][((residentWeek[r]).length)-1].id] = []
+                    }
+
+                    dico[residentWeek[r][k][((residentWeek[r]).length)-1].id].push(residentWeek[r][k][((residentWeek[r]).length)-1]) ;
+
+                }
+
+            }
+            // console.log('dico',dico[id])
         }
-        console.log('beforeWeek',beforeWeek)
-        if (afterWeek === lastWeek+1) {
-            afterWeek = firstWeek
-        }
-
-        //
-        console.log('nowWeek',nowWeek)
-
-        const arrayWeek = [];
-
-        console.log('arrayWeek',arrayWeek)
-        if(nowWeek > firstWeek ){
-            arrayWeek.push(beforeWeek);
-        }
-        const newWeek = arrayWeek.push(nowWeek);
-
-
-
-        return ( arrayWeek)
-
     }
+
+
+
+
 
 
 
@@ -304,8 +306,6 @@ export default function GestionFoodPage({history}){
 
                             residents.map(resident =>
                                 <table className="table table-residents" key={resident.id}>
-
-
                                     <thead>
                                     <tr>
                                         <th  className="border-right" colSpan="3">N°Chambre: {resident.room}</th>
@@ -313,7 +313,6 @@ export default function GestionFoodPage({history}){
                                         <th  className="border-right" colSpan="2">{resident.lastName}</th>
                                         <th  className="border-right" colSpan="1">{"Semaine-"+week.number}</th>
                                         <th  className="border-right" colSpan="2">{year.number}</th>
-
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -323,9 +322,7 @@ export default function GestionFoodPage({history}){
                                         :
                                         resident.dayChecks.filter(wk=> (
 
-
-                                            filterDays(wk)
-
+                                            DayFilter(wk.id)
 
                                         )).map(day =>
 
@@ -363,8 +360,6 @@ export default function GestionFoodPage({history}){
 
                                         )
                                     }
-
-
 
                                         <tr>
                                             <td key="DIET" rowSpan="1">

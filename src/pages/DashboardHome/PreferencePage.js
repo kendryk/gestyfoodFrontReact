@@ -88,20 +88,20 @@ export default function PreferencePage({history}){
                     </div>}
                 <div className="unities_top">
                     <div>
-                        <h1>Vosu êtes sur la page de préférence </h1>
+                        <h1>Vous êtes sur la page de préférence </h1>
                         <p>Ici vous pouvez suppprimer votre compte. Attention aucun retour ne sera possible.</p>
                     </div>
 
                 </div>
 
 
-
+                <div className='border border-danger p-5 m-5'>
                 <div className=" d-flex justify-content-center">
                     <button
                         onClick={()=> handleDelete(`${userIdentified.hearthId}`)}
                         className='btn btn-danger'> Supprimer</button>
                 </div>
-
+                </div>
 
             </section>
 

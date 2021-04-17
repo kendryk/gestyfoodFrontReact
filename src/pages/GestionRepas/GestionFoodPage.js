@@ -43,6 +43,12 @@ export default function GestionFoodPage({history}){
     const [year, setYear]= useState({
         number: new Date().getFullYear()
     });
+    const [date, setDate]= useState({
+        data: new Date().toJSON()
+    });
+
+
+
     const [stateCheck,setStateCheck]= useState('');
 
 
@@ -86,7 +92,7 @@ export default function GestionFoodPage({history}){
                 )
             )
         );
-        // console.log('arrayDay',arrayDay)
+
         const jsonDay = arrayDay.reduce( (prev, item) => {
             const curr = item.split(':');
             prev[curr[0]] = curr[1].indexOf('true') > -1;
@@ -100,7 +106,7 @@ export default function GestionFoodPage({history}){
      */
     useEffect(() => {
         document.title = "Gestion Food";
-        // NameIndentified();
+        NameIndentified();
         fetchUnities()
     }, []);
     /**
@@ -111,17 +117,17 @@ export default function GestionFoodPage({history}){
 
     }, [loading]);
 
-    // /**
-    //  * recupère l'identité de la personne connecté.
-    //  * @constructor
-    //  */
-    // const NameIndentified = ()=>{
-    //     try{
-    //         setUserIdentified(AuthAPI.isAuthenticatedName());
-    //     }catch(error){
-    //         console.log(error)
-    //     }
-    // }
+    /**
+     * recupère l'identité de la personne connecté.
+     * @constructor
+     */
+    const NameIndentified = ()=>{
+        try{
+            setUserIdentified(AuthAPI.isAuthenticatedName());
+        }catch(error){
+            console.log(error)
+        }
+    }
 
     //todo pour la partie modification.
     const handleCheckChange = ({currentTarget})=>{
@@ -146,6 +152,11 @@ export default function GestionFoodPage({history}){
 
         let YearDate = new Date(arg.date).getFullYear();
         setYear({...year,['number']:parseInt(YearDate)});
+
+        let dateData = new Date(arg.date).toJSON();
+        setDate({...date,['data']:dateData});
+
+
         let d = new Date(arg.date);
         // renvoie le jour de la semaine
         let DoW = d.getDay();
@@ -174,44 +185,66 @@ export default function GestionFoodPage({history}){
 
 
 
-    const DayFilter=(id)=>{
-        // console.log('id',id)
-        const dico = {};
 
-        //dico
+    const DayFilter=(id)=>{
+        //creation du dictionaire residents qui va contenire les informations de la base de données par resident
+        const dico = {};
+        //creation du dictionaire resident par weekEnd qui va contenire une liste d'informations de la base de données
         let residentWeek = {};
+        let lastWeek = {};
+        let firstWeek={}
+
+        //boucle dans chaque resident suite au filtre
         for(let r in residents){
             if (!residentWeek[r]) {
                  residentWeek[r]=[];
-                 let week={};
+                 lastWeek=[];
+
             residentWeek[r].push(residents[r].dayChecks);
+            lastWeek.push(residents[r].dayChecks)
+
             }
 
-            for(let k in residentWeek[r]){
-                if (residentWeek[r][k][week.number-1]){
-                    console.log('residentWeek[r]',residentWeek[r][k])
+            for(let data in residentWeek[r]){ //boucle sur chaque liste de data par residents
+
+                //Retourne le derniere element de la liste data
+                lastWeek= residentWeek[r][data][residentWeek[r][data].length-1];
+                //Retourne le premier element de la liste data
+                firstWeek= residentWeek[r][data][0]; //todo ou mettre une condition <=
 
 
+                //Pour finir on se trouve avec un tableau resident_semaine["id du resident"]["int de la semaine recupéré dans la bdd"]
+                if ((residentWeek[r][data][week.number-1]) ){
 
-                    if (!dico[residentWeek[r][k][week.number-1].id]) {
-                        dico[residentWeek[r][k][week.number-1].id] = []
+                    console.log((residentWeek[r][data]))
+
+
+                    // si la semaine est presente dans le dictionaire pour le resident en cours
+                    if (!dico[residentWeek[r][data][week.number-1].id]) {
+                        //afficher la liste des data pour chaque ellement de la semaine associé au resident
+                        dico[residentWeek[r][data][week.number-1].id] = []
+
                     }
 
-                    dico[residentWeek[r][k][week.number-1].id].push(residentWeek[r][k][week.number-1])  ;
+                    dico[residentWeek[r][data][week.number-1].id].push(residentWeek[r][data][week.number-1]);
 
                 }else{
 
-                    if (!dico[residentWeek[r][k][((residentWeek[r]).length)-1].id]) {
-                        dico[residentWeek[r][k][((residentWeek[r]).length)-1].id] = []
+                    // sinon affiche les data pour la deniere semaine du resident en cours, la longeur de la liste permet de savoir quel semaine affiché,
+                    // par exemple si la taille de la liste est de 3 cela affichera la semaine 3
+
+                    if (!dico[residentWeek[r][data][residentWeek[r][data].length-1].id]) {
+                        dico[residentWeek[r][data][(residentWeek[r][data].length)-1].id] = []
                     }
 
-                    dico[residentWeek[r][k][((residentWeek[r]).length)-1].id].push(residentWeek[r][k][((residentWeek[r]).length)-1]) ;
-
+                    // dico[residentWeek[r][data][(residentWeek[r].length)-1].id].push(residentWeek[r][data][(residentWeek[r].length)-1]);
+                    dico[residentWeek[r][data][(residentWeek[r][data].length)-1].id].push(lastWeek)
                 }
-
             }
-            // console.log('dico',dico[id])
         }
+        // console.log('dico',dico[id])
+        return dico[id]
+
     }
 
 
@@ -361,29 +394,31 @@ export default function GestionFoodPage({history}){
                                         )
                                     }
 
+                                    {resident.dayChecks.length === 0 ?
+                                        "" :
+                                        <>
                                         <tr>
                                             <td key="DIET" rowSpan="1">
                                                 <div className='CheckChoice'>
-                                                    DIET
+                                                    {resident.dayChecks[0].diet.name}
                                                     {/*mode edition */}
                                                     {/*<Check className='svg-check'/>*/}
                                                 </div>
                                             </td>
                                         </tr>
-
-
-
 
                                         <tr>
                                             <td key="TEXTURE" rowSpan="1">
                                                 <div className='CheckChoice'>
-                                                    TEXTURE
+                                                    {resident.dayChecks[0].texture.name}
                                                     {/*mode edition */}
                                                     {/*<Check className='svg-check'/>*/}
                                                 </div>
 
                                             </td>
                                         </tr>
+                                        </>
+                                    }
 
 
                                     </tbody>

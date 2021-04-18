@@ -12,9 +12,10 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction";
 import AuthContext from "../../contexts/AuthContext";
 import {toast} from "react-toastify";
+import axios from "axios";
 
 export default function GestionFoodPage({history}){
-
+    document.title = "Gestion Food";
     const {setIsAuthenticated} = useContext(AuthContext)
 
     /**
@@ -69,7 +70,7 @@ export default function GestionFoodPage({history}){
     };
 
     /**
-     * Récupere les résidents aupres de l'API
+     * Récupere les résidents aupres de l'API selon l'unité choisi
      */
     const fetchResidents = async (idLocation) => {
         try{
@@ -77,11 +78,31 @@ export default function GestionFoodPage({history}){
             setResidents(data);
 
             setLoading(false);
+
         }catch(error){
             console.log(` Error ${error.response}`);
             handleLogout()
         }
     };
+
+
+    const fetchDays = async (numberweek) => {
+        try{
+            const data = await axios.get("https://127.0.0.1:8000/api/day_checks/"+numberweek+"/days" );
+           console.log(data)
+            return(data)
+        }catch(error){
+            console.log(` Error ${error.response}`);
+            handleLogout()
+        }
+    };
+
+    const recupAllDays =()=>{
+
+    }
+
+
+
 
     const JsDay = ()=>{
         const arrayDay = [];
@@ -101,16 +122,26 @@ export default function GestionFoodPage({history}){
         setStateCheck(jsonDay);
     }
 
+
     /**
      * Appel a l'ouverture de la page des identifiants, des unités, des weeks et des Years
      */
     useEffect(() => {
-        document.title = "Gestion Food";
         NameIndentified();
+    }, []);
+
+    /**
+     * Appel a l'ouverture de la page des identifiants, des unités, des weeks et des Years
+     */
+    useEffect(() => {
         fetchUnities().then();
         JsDay();
 
     }, [loading]);
+
+
+
+
 
     /**
      * recupère l'identité de la personne connecté.
@@ -137,18 +168,15 @@ export default function GestionFoodPage({history}){
     }
 
 
-
-
-
-    const searchWeekDate=(arg)=>{
-        let d = new Date(arg.date);
-        // renvoie le jour de la semaine
-        d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
-        let ms = d.valueOf(); // GMT
-        d.setMonth(0);
-        d.setDate(4); // Thu in Week 1
-        return  Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    };
+    // const searchWeekDate=(arg)=>{
+    //     let d = new Date(arg.date);
+    //     // renvoie le jour de la semaine
+    //     d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
+    //     let ms = d.valueOf(); // GMT
+    //     d.setMonth(0);
+    //     d.setDate(4); // Thu in Week 1
+    //     return  Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    // };
 
 
     const handleDateClick = (arg) => { // bind with an arrow function
@@ -348,63 +376,60 @@ export default function GestionFoodPage({history}){
                                             {resident.dayChecks.length === 0 ?
                                                 ""
                                                 :
-                                                resident.dayChecks.filter(wk=> (
+                                                resident.dayChecks.map(day =>
 
-                                                    // DayFilter(wk.id)
+
+                                                    console.log(day)
+
+
+
+
+
+
+                                                    // <td key={day.id} rowSpan="3"> <strong>{day.name}</strong>
+                                                    //     <div className={"checkboxFlex " + day.week} >
                                                     //
-                                                    // // //Todo revoir methode Celle ci affiche toutes les semaines qui sont dasn la base de donnée.
-                                                    wk.updateAt ?
-
-                                                        parseInt(wk.week) === parseInt(week.number)   && new Date(wk.updateAt).getFullYear() === parseInt(year.number)
-                                                        :
-                                                        parseInt(wk.week)+1
-
-                                                )).map(day =>
-
-                                                    <td key={day.id} rowSpan="3"> <strong>{day.name}</strong>
-                                                        <div className={"checkboxFlex " + day.week} >
-
-                                                            <input className="m-1"
-                                                                   type = "checkbox"
-                                                                   name={resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                                   checked={stateCheck[resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                                   onChange={handleCheckChange}
-                                                            />
-                                                            <label htmlFor={day.name+"-matin"}>Matin</label>
-
-
-                                                            <input className="m-1"
-                                                                   type = "checkbox"
-                                                                   name={resident.id+'|'+ day.name +"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                                   checked={stateCheck[resident.id+'|'+day.name+"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                                   onChange={handleCheckChange}
-                                                            />
-                                                            <label htmlFor={day.name+"-matin"}>Midi</label>
-
-
-                                                            <input className="m-1"
-                                                                   type = "checkbox"
-                                                                   name={resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                                   checked={stateCheck[resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                                   onChange={handleCheckChange}
-                                                            />
-                                                            <label htmlFor={day.name+"-matin"}>Soir</label>
-                                                        </div>
-
-                                                    </td>
+                                                    //         <input className="m-1"
+                                                    //                type = "checkbox"
+                                                    //                name={resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                    //                checked={stateCheck[resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
+                                                    //                onChange={handleCheckChange}
+                                                    //         />
+                                                    //         <label htmlFor={day.name+"-matin"}>Matin</label>
+                                                    //
+                                                    //
+                                                    //         <input className="m-1"
+                                                    //                type = "checkbox"
+                                                    //                name={resident.id+'|'+ day.name +"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                    //                checked={stateCheck[resident.id+'|'+day.name+"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
+                                                    //                onChange={handleCheckChange}
+                                                    //         />
+                                                    //         <label htmlFor={day.name+"-matin"}>Midi</label>
+                                                    //
+                                                    //
+                                                    //         <input className="m-1"
+                                                    //                type = "checkbox"
+                                                    //                name={resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                    //                checked={stateCheck[resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
+                                                    //                onChange={handleCheckChange}
+                                                    //         />
+                                                    //         <label htmlFor={day.name+"-matin"}>Soir</label>
+                                                    //     </div>
+                                                    //
+                                                    // </td>
 
                                                 )
                                             }
 
 
 
-                                            {resident.dayChecks.length === 0 ?
-                                                "" :
+                                            {/*{resident.dayChecks.length === 0 ?*/}
+                                            {/*    "" :*/}
                                                 <>
                                                     <tr>
                                                         <td key="DIET" rowSpan="1">
                                                             <div className='CheckChoice'>
-                                                                {resident.dayChecks[0].diet.name}
+                                                                {/*{resident.dayChecks[0].diet.name}*/}
                                                                 {/*mode edition */}
                                                                 {/*<Check className='svg-check'/>*/}
                                                             </div>
@@ -414,7 +439,7 @@ export default function GestionFoodPage({history}){
                                                     <tr>
                                                         <td key="TEXTURE" rowSpan="1">
                                                             <div className='CheckChoice'>
-                                                                {resident.dayChecks[0].texture.name}
+                                                                {/*{resident.dayChecks[0].texture.name}*/}
                                                                 {/*mode edition */}
                                                                 {/*<Check className='svg-check'/>*/}
                                                             </div>
@@ -422,7 +447,7 @@ export default function GestionFoodPage({history}){
                                                         </td>
                                                     </tr>
                                                 </>
-                                            }
+                                            {/*}*/}
                                             </tbody>
                                         </table>
                                     )

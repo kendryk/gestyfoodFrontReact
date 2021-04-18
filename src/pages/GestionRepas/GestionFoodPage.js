@@ -17,7 +17,6 @@ import axios from "axios";
 export default function GestionFoodPage({history}){
     document.title = "Gestion Food";
     const {setIsAuthenticated} = useContext(AuthContext)
-
     /**
      * Deconnection
      */
@@ -59,15 +58,23 @@ export default function GestionFoodPage({history}){
      */
     useEffect(() => {
         NameIndentified();
-        fetchUnities().then();
+        fetchUnities();
+
     }, []);
 
     /**
      * Appel a l'ouverture de la page
      */
     useEffect(() => {
-               JsDay();
+        JsDay();
+        return () => {
+
+            console.log('hey!')
+            console.log(residents)
+            console.log(residentWeek)
+        };
     }, [loading]);
+
 
     /**
      * Récupere les unités
@@ -81,7 +88,7 @@ export default function GestionFoodPage({history}){
             console.log(error.response)
         }
     };
-    console.log(loading)
+
     /**
      * Récupere les résidents aupres de l'API selon l'unité choisi
      */
@@ -89,7 +96,7 @@ export default function GestionFoodPage({history}){
         try{
             const data = await UnityAPI.findAll(idLocation)
             setResidents(data);
-            setLoading(true);
+            setLoading(false);
         }catch(error){
             console.log(` Error ${error.response}`);
             handleLogout()
@@ -98,6 +105,9 @@ export default function GestionFoodPage({history}){
 
 
     const JsDay = ()=>{
+        console.log('hey! JsDay')
+        console.log('residents JsDay',residents)
+        console.log('residentWeek JsDay',residentWeek)
         residents.map(resident =>
             resident.dayChecks.map( days =>
                 fetchDays(days.id,resident.id,days.name)
@@ -110,7 +120,7 @@ export default function GestionFoodPage({history}){
         try{
             const data = await axios.get("https://127.0.0.1:8000/api/day_checks/"+daysId+"/days" )
                 .then(response => response.data["hydra:member"]);
-                console.log('data',data)
+                console.log('data',data,'res',residentId)
              // setResidentWeek({...residentWeek, [`R${residentId} - W${daysWeek}`]: data})
 
         }catch(error){
@@ -119,8 +129,7 @@ export default function GestionFoodPage({history}){
         }
     };
 
-    console.log(residents)
-    console.log(residentWeek)
+
 
                 // checkTime.split("|").map( v=>
                 //     arrayDay.push( resident.id + '|' + day.name + '|' + v + '|' + day.week + '|' + new Date(day.createdAt).getFullYear()+ ":"+ true)
@@ -195,7 +204,7 @@ export default function GestionFoodPage({history}){
             'value': currentTarget.value}
         );
         fetchResidents(currentTarget.id).then();
-        setLoading(false);
+
 
     };
 

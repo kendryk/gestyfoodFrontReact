@@ -54,7 +54,20 @@ export default function GestionFoodPage({history}){
     const [modifCheck,setModifCheck]= useState('');
 
 
+    /**
+     * Appel a l'ouverture de la page des identifiants, des unités
+     */
+    useEffect(() => {
+        NameIndentified();
+        fetchUnities().then();
+    }, []);
 
+    /**
+     * Appel a l'ouverture de la page
+     */
+    useEffect(() => {
+               JsDay();
+    }, [loading]);
 
     /**
      * Récupere les unités
@@ -68,7 +81,7 @@ export default function GestionFoodPage({history}){
             console.log(error.response)
         }
     };
-
+    console.log(loading)
     /**
      * Récupere les résidents aupres de l'API selon l'unité choisi
      */
@@ -76,72 +89,49 @@ export default function GestionFoodPage({history}){
         try{
             const data = await UnityAPI.findAll(idLocation)
             setResidents(data);
-
-            setLoading(false);
-
+            setLoading(true);
         }catch(error){
             console.log(` Error ${error.response}`);
             handleLogout()
         }
     };
-
-
-    const fetchDays = async (numberweek) => {
-        try{
-            const data = await axios.get("https://127.0.0.1:8000/api/day_checks/"+numberweek+"/days" );
-           console.log(data)
-            return(data)
-        }catch(error){
-            console.log(` Error ${error.response}`);
-            handleLogout()
-        }
-    };
-
-    const recupAllDays =()=>{
-
-    }
-
-
 
 
     const JsDay = ()=>{
-        const arrayDay = [];
         residents.map(resident =>
-            resident.dayChecks.map( day =>
-                day.checkTime.split("|").map( v=>
-                    arrayDay.push( resident.id + '|' + day.name + '|' + v + '|' + day.week + '|' + new Date(day.createdAt).getFullYear()+ ":"+ true)
-                )
+            resident.dayChecks.map( days =>
+                fetchDays(days.id,resident.id,days.name)
             )
-        );
-
-        const jsonDay = arrayDay.reduce( (prev, item) => {
-            const curr = item.split(':');
-            prev[curr[0]] = curr[1].indexOf('true') > -1;
-            return prev;
-        }, {});
-        setStateCheck(jsonDay);
+        )
     }
 
 
-    /**
-     * Appel a l'ouverture de la page des identifiants, des unités, des weeks et des Years
-     */
-    useEffect(() => {
-        NameIndentified();
-    }, []);
+    const fetchDays = async (daysId,residentId,daysWeek) => {
+        try{
+            const data = await axios.get("https://127.0.0.1:8000/api/day_checks/"+daysId+"/days" )
+                .then(response => response.data["hydra:member"]);
+                console.log('data',data)
+             // setResidentWeek({...residentWeek, [`R${residentId} - W${daysWeek}`]: data})
 
-    /**
-     * Appel a l'ouverture de la page des identifiants, des unités, des weeks et des Years
-     */
-    useEffect(() => {
-        fetchUnities().then();
-        JsDay();
+        }catch(error){
+            console.log(` Error ${error.response}`);
+            handleLogout()
+        }
+    };
 
-    }, [loading]);
+    console.log(residents)
+    console.log(residentWeek)
 
+                // checkTime.split("|").map( v=>
+                //     arrayDay.push( resident.id + '|' + day.name + '|' + v + '|' + day.week + '|' + new Date(day.createdAt).getFullYear()+ ":"+ true)
+                // )
 
-
-
+        // const jsonDay = arrayDay.reduce( (prev, item) => {
+        //     const curr = item.split(':');
+        //     prev[curr[0]] = curr[1].indexOf('true') > -1;
+        //     return prev;
+        // }, {});
+        // setStateCheck(jsonDay);
 
     /**
      * recupère l'identité de la personne connecté.
@@ -199,15 +189,15 @@ export default function GestionFoodPage({history}){
      * @constructor
      */
     const GetUnity =({currentTarget})=>{
+        setResidentWeek({})
         setUnity({...unity,
             'id': currentTarget.id,
             'value': currentTarget.value}
         );
-        setLoading(true);
-        fetchResidents(currentTarget.id);
+        fetchResidents(currentTarget.id).then();
+        setLoading(false);
+
     };
-
-
 
     const DayFilter=(id)=>{
         //creation du dictionaire residents qui va contenire les informations de la base de données par resident
@@ -379,7 +369,7 @@ export default function GestionFoodPage({history}){
                                                 resident.dayChecks.map(day =>
 
 
-                                                    console.log(day)
+                                                    <div></div>
 
 
 

@@ -3,7 +3,7 @@ import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import "./gestyfoog.scss"
-
+// import {ReactComponent as Check} from "../../img/arrow-down.svg"
 import moment from "moment";
 import UnitiesAPi from "../../services/UnitiesAPI";
 import UnityAPI from "../../services/UnityAPI";
@@ -12,7 +12,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction";
 import AuthContext from "../../contexts/AuthContext";
 import {toast} from "react-toastify";
-
 
 export default function GestionFoodPage({history}){
 
@@ -47,14 +46,14 @@ export default function GestionFoodPage({history}){
         data: new Date().toJSON()
     });
 
-
+    const [residentWeek, setResidentWeek] = useState({})
 
     const [stateCheck,setStateCheck]= useState('');
 
-
     const [modifCheck,setModifCheck]= useState('');
 
-    const [residentWeek, setResidentWeek] = useState({})
+
+
 
     /**
      * Récupere les unités
@@ -76,6 +75,7 @@ export default function GestionFoodPage({history}){
         try{
             const data = await UnityAPI.findAll(idLocation)
             setResidents(data);
+
             setLoading(false);
         }catch(error){
             console.log(` Error ${error.response}`);
@@ -102,17 +102,12 @@ export default function GestionFoodPage({history}){
     }
 
     /**
-     * Apple a l'ouverture de la page des identifiants, des unités, des weeks et des Years
+     * Appel a l'ouverture de la page des identifiants, des unités, des weeks et des Years
      */
     useEffect(() => {
         document.title = "Gestion Food";
         NameIndentified();
-        fetchUnities()
-    }, []);
-    /**
-     * Apple a l'ouverture de la page des identifiants, des unités, des weeks et des Years
-     */
-    useEffect(() => {
+        fetchUnities().then();
         JsDay();
 
     }, [loading]);
@@ -132,31 +127,33 @@ export default function GestionFoodPage({history}){
     //todo pour la partie modification.
     const handleCheckChange = ({currentTarget})=>{
         setStateCheck({...stateCheck, [currentTarget.name]:currentTarget.checked});
-
-        setModifCheck({...modifCheck, [currentTarget.name]:currentTarget.checked});
-
+        getPostCheck(currentTarget)
     };
 
-    // const searchWeekDate=(arg)=>{
-    //
-    //     let d = new Date(arg.date);
-    //     // renvoie le jour de la semaine
-    //     d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
-    //     let ms = d.valueOf(); // GMT
-    //     d.setMonth(0);
-    //     d.setDate(4); // Thu in Week 1
-    //     return  Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    // };
+
+    //si déja rempli:
+    const getPostCheck=(currentTarget)=>{
+        console.log(currentTarget.name)
+    }
+
+
+
+
+
+    const searchWeekDate=(arg)=>{
+        let d = new Date(arg.date);
+        // renvoie le jour de la semaine
+        d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
+        let ms = d.valueOf(); // GMT
+        d.setMonth(0);
+        d.setDate(4); // Thu in Week 1
+        return  Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    };
+
 
     const handleDateClick = (arg) => { // bind with an arrow function
-
         let YearDate = new Date(arg.date).getFullYear();
         setYear({...year,['number']:parseInt(YearDate)});
-
-        let dateData = new Date(arg.date).toJSON();
-        setDate({...date,['data']:dateData});
-
-
         let d = new Date(arg.date);
         // renvoie le jour de la semaine
         let DoW = d.getDay();
@@ -166,8 +163,7 @@ export default function GestionFoodPage({history}){
         d.setDate(4); // Thu in Week 1
         const weekDate= Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
         setWeek({...week,['number']:parseInt(weekDate)});
-
-        };
+    };
 
     /**
      * Récupération des Unités
@@ -179,10 +175,9 @@ export default function GestionFoodPage({history}){
             'id': currentTarget.id,
             'value': currentTarget.value}
         );
-        fetchResidents(currentTarget.id);
         setLoading(true);
+        fetchResidents(currentTarget.id);
     };
-
 
 
 
@@ -197,11 +192,11 @@ export default function GestionFoodPage({history}){
         //boucle dans chaque resident suite au filtre
         for(let r in residents){
             if (!residentWeek[r]) {
-                 residentWeek[r]=[];
-                 lastWeek=[];
+                residentWeek[r]=[];
+                lastWeek=[];
 
-            residentWeek[r].push(residents[r].dayChecks);
-            lastWeek.push(residents[r].dayChecks)
+                residentWeek[r].push(residents[r].dayChecks);
+                lastWeek.push(residents[r].dayChecks)
 
             }
 
@@ -242,12 +237,9 @@ export default function GestionFoodPage({history}){
                 }
             }
         }
-        // console.log('dico',dico[id])
+
         return dico[id]
-
     }
-
-
 
 
 
@@ -255,191 +247,192 @@ export default function GestionFoodPage({history}){
 
     return(
 
-    <>
+        <>
 
-        <div className="d-flex">
-            <Aside/>
-            <section className="p-4 section_home bg_white bdr-bs">
+            <div className="d-flex">
+                <Aside/>
+                <section className="p-4 section_home bg_white bdr-bs">
 
-                {!userIdentified ? ['Aucun utilisateur'] :
-                    <div>
-                        <strong>
-                            <p>  {`${userIdentified.firstName}  ${userIdentified.lastName} vous êtes au foyer ${userIdentified.hearthName}`}</p>
-                        </strong>
-                    </div>}
-                <div className="unities_top">
-                    <div>
-                        <h1> Page De gestion des Présences Repas par unité.</h1>
-                        <p>Ici vous pouvez gérer les presences aux repas
-                            des residents selon leur unité. </p>
+                    {!userIdentified ? ['Aucun utilisateur'] :
+                        <div>
+                            <strong>
+                                <p>  {`${userIdentified.firstName}  ${userIdentified.lastName} vous êtes au foyer ${userIdentified.hearthName}`}</p>
+                            </strong>
+                        </div>}
+                    <div className="unities_top">
+                        <div>
+                            <h1> Page De gestion des Présences Repas par unité.</h1>
+                            <p>Ici vous pouvez gérer les presences aux repas
+                                des residents selon leur unité. </p>
+                            {(unity.id === "") ?
+                                <p>Veuillez Choisir une unité pour commencer.</p>
+                                :""}
+                        </div>
+                    </div>
+
+                    <section>
+                        <header className="border d-flex justify-content-around">
+                            { (unity.id !== "")?
+                                <div className="box-Calendar">
+                                    <div className="box-Calendar-main">
+                                        <FullCalendar
+                                            plugins={[ dayGridPlugin, interactionPlugin ]}
+                                            dateClick={handleDateClick}
+                                            selectable={true}
+                                            locale={"fr"}
+                                            buttonText={{today: "Aujourd'hui", month: "mois", week: "Semaine"}}
+                                        />
+                                    </div>
+                                </div>
+                                :""
+                            }
+
+                            <div  className="box-GestyUnities">
+                                {(unities === undefined)?'nothing' : unities.map(unity =>
+                                    <button
+                                        key={unity.id}
+                                        id = {unity.id}
+                                        value={unity.name}
+                                        onClick={(e)=>GetUnity(e)}
+                                        className="box-unity">
+                                        {unity.name}
+                                    </button>
+
+                                )}
+                            </div>
+                        </header>
                         {(unity.id === "") ?
-                            <p>Veuillez Choisir une unité pour commencer.</p>
-                            :""}
-                    </div>
-                </div>
-
-                <section>
-                    <header className="border d-flex justify-content-around">
-                    { (unity.id !== "")?
-                    <div className="box-Calendar">
-                    <div className="box-Calendar-main">
-                        <FullCalendar
-                            plugins={[ dayGridPlugin, interactionPlugin ]}
-                            dateClick={handleDateClick}
-                            selectable={true}
-                            locale={"fr"}
-                            buttonText={{today: "Aujourd'hui", month: "mois", week: "Semaine"}}
-                        />
-                    </div>
-                    </div>
-                        :""
-                    }
-
-                    <div  className="box-GestyUnities">
-                        {(unities === undefined)?'nothing' : unities.map(unity =>
-                        <button
-                            key={unity.id}
-                            id = {unity.id}
-                            value={unity.name}
-                            onClick={(e)=>GetUnity(e)}
-                            className="box-unity">
-                            {unity.name}
-                        </button>
-
-                        )}
-                    </div>
-                    </header>
-                    {(unity.id === "") ?
-                        <h2 className='text-center'>Vous n'avez pas choisi d'unité</h2>
-                        :
-                        (
-                            <>
-                                <h2 className='text-center mt-5'>Vous avez choisi <strong>{unity.value}</strong></h2>
-                                <div className='d-flex justify-content-end mx-5'>
-                                    <button className='btn btn-primary'> Modifier</button>
-                                </div>
-                            </>
-                        )
-                    }
-
-                    <div className="my-5">
-
-                        {(residents.length === 0)  ? (
-
-                                <div className="d-flex justify-content-center ">
-                                    { (unity.id !== "")?
-                                            <Link to={`/dashboardUnities/unity/${unity.id}/${unity.name}/new`} className="btn btn-gold">Pas de residents veuillez en crée!</Link>
-                                        :""
-                                    }
-                                </div>
-
-                            )
+                            <h2 className='text-center'>Vous n'avez pas choisi d'unité</h2>
                             :
                             (
-
-                            residents.map(resident =>
-                                <table className="table table-residents" key={resident.id}>
-                                    <thead>
-                                    <tr>
-                                        <th  className="border-right" colSpan="3">N°Chambre: {resident.room}</th>
-                                        <th  className="border-right" colSpan="2">{resident.firstName}</th>
-                                        <th  className="border-right" colSpan="2">{resident.lastName}</th>
-                                        <th  className="border-right" colSpan="1">{"Semaine-"+week.number}</th>
-                                        <th  className="border-right" colSpan="2">{year.number}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    {resident.dayChecks.length === 0 ?
-                                        ""
-                                        :
-                                        resident.dayChecks.filter(wk=> (
-
-                                            DayFilter(wk.id)
-
-                                        )).map(day =>
-
-                                            <td key={day.id} rowSpan="3"> <strong>{day.name}</strong>
-                                                <div className={"checkboxFlex " + day.week} >
-
-                                                    <input className="m-1"
-                                                           type = "checkbox"
-                                                           name={resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                           checked={stateCheck[resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                           onChange={handleCheckChange}
-                                                    />
-                                                    <label htmlFor={day.name+"-matin"}>Matin</label>
-
-
-                                                    <input className="m-1"
-                                                           type = "checkbox"
-                                                           name={resident.id+'|'+ day.name +"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                           checked={stateCheck[resident.id+'|'+day.name+"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                           onChange={handleCheckChange}
-                                                    />
-                                                    <label htmlFor={day.name+"-matin"}>Midi</label>
-
-
-                                                    <input className="m-1"
-                                                           type = "checkbox"
-                                                           name={resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                           checked={stateCheck[resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                           onChange={handleCheckChange}
-                                                    />
-                                                    <label htmlFor={day.name+"-matin"}>Soir</label>
-                                                </div>
-
-                                            </td>
-
-                                        )
-                                    }
-
-                                    {resident.dayChecks.length === 0 ?
-                                        "" :
-                                        <>
-                                        <tr>
-                                            <td key="DIET" rowSpan="1">
-                                                <div className='CheckChoice'>
-                                                    {resident.dayChecks[0].diet.name}
-                                                    {/*mode edition */}
-                                                    {/*<Check className='svg-check'/>*/}
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td key="TEXTURE" rowSpan="1">
-                                                <div className='CheckChoice'>
-                                                    {resident.dayChecks[0].texture.name}
-                                                    {/*mode edition */}
-                                                    {/*<Check className='svg-check'/>*/}
-                                                </div>
-
-                                            </td>
-                                        </tr>
-                                        </>
-                                    }
-
-
-                                    </tbody>
-                                </table>
-
+                                <>
+                                    <h2 className='text-center mt-5'>Vous avez choisi <strong>{unity.value}</strong></h2>
+                                    <div className='d-flex justify-content-end mx-5'>
+                                        <button className='btn btn-primary'> Modifier</button>
+                                    </div>
+                                </>
                             )
-
-                            )
-
                         }
 
+                        <div className="my-5">
 
-                    </div>
+                            {(residents.length === 0)  ? (
 
+                                    <div className="d-flex justify-content-center ">
+                                        { (unity.id !== "")?
+                                            <Link to={`/dashboardUnities/unity/${unity.id}/${unity.name}/new`} className="btn btn-gold">Pas de residents veuillez en crée!</Link>
+                                            :""
+                                        }
+                                    </div>
+
+                                )
+                                :
+                                (
+
+                                    residents.map(resident =>
+                                        <table className="table table-residents" key={resident.id}>
+
+
+                                            <thead>
+                                            <tr>
+                                                <th  className="border-right" colSpan="3">N°Chambre: {resident.room}</th>
+                                                <th  className="border-right" colSpan="2">{resident.firstName}</th>
+                                                <th  className="border-right" colSpan="2">{resident.lastName}</th>
+                                                <th  className="border-right" colSpan="1">{"Semaine-"+week.number}</th>
+                                                <th  className="border-right" colSpan="2">{year.number}</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {resident.dayChecks.length === 0 ?
+                                                ""
+                                                :
+                                                resident.dayChecks.filter(wk=> (
+
+                                                    // DayFilter(wk.id)
+                                                    //
+                                                    // // //Todo revoir methode Celle ci affiche toutes les semaines qui sont dasn la base de donnée.
+                                                    wk.updateAt ?
+
+                                                        parseInt(wk.week) === parseInt(week.number)   && new Date(wk.updateAt).getFullYear() === parseInt(year.number)
+                                                        :
+                                                        parseInt(wk.week)+1
+
+                                                )).map(day =>
+
+                                                    <td key={day.id} rowSpan="3"> <strong>{day.name}</strong>
+                                                        <div className={"checkboxFlex " + day.week} >
+
+                                                            <input className="m-1"
+                                                                   type = "checkbox"
+                                                                   name={resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                                   checked={stateCheck[resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
+                                                                   onChange={handleCheckChange}
+                                                            />
+                                                            <label htmlFor={day.name+"-matin"}>Matin</label>
+
+
+                                                            <input className="m-1"
+                                                                   type = "checkbox"
+                                                                   name={resident.id+'|'+ day.name +"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                                   checked={stateCheck[resident.id+'|'+day.name+"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
+                                                                   onChange={handleCheckChange}
+                                                            />
+                                                            <label htmlFor={day.name+"-matin"}>Midi</label>
+
+
+                                                            <input className="m-1"
+                                                                   type = "checkbox"
+                                                                   name={resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
+                                                                   checked={stateCheck[resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
+                                                                   onChange={handleCheckChange}
+                                                            />
+                                                            <label htmlFor={day.name+"-matin"}>Soir</label>
+                                                        </div>
+
+                                                    </td>
+
+                                                )
+                                            }
+
+
+
+                                            {resident.dayChecks.length === 0 ?
+                                                "" :
+                                                <>
+                                                    <tr>
+                                                        <td key="DIET" rowSpan="1">
+                                                            <div className='CheckChoice'>
+                                                                {resident.dayChecks[0].diet.name}
+                                                                {/*mode edition */}
+                                                                {/*<Check className='svg-check'/>*/}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td key="TEXTURE" rowSpan="1">
+                                                            <div className='CheckChoice'>
+                                                                {resident.dayChecks[0].texture.name}
+                                                                {/*mode edition */}
+                                                                {/*<Check className='svg-check'/>*/}
+                                                            </div>
+
+                                                        </td>
+                                                    </tr>
+                                                </>
+                                            }
+                                            </tbody>
+                                        </table>
+                                    )
+                                )
+                            }
+                        </div>
+                    </section>
                 </section>
+            </div>
+        </>
 
-
-            </section>
-
-        </div>
-    </>
-
-)
+    )
 }

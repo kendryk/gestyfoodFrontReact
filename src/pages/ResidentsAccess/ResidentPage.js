@@ -121,67 +121,79 @@ export default function ResidentPage({history}){
 
 
     /**
-     * Création de 7 (jours de semaine) days_check. error avec map(),foreach, ou for; boucle infinie dans console.
+     * Création d'une nouvelle semaine
      * @param data
      * @returns {Promise<void>}
      */
     const postDaycheck= async(data)=>{
 
         try{
-             await axios.post("https://127.0.0.1:8000/api/day_checks", {
-                name: "Lundi",
-                checkTime: "",
-                week: 1,
+            const response = await axios.post("https://127.0.0.1:8000/api/day_checks", {
+                name: "1",
                 resident: "/api/residents/" + data.id,
                 hearth: "/api/hearths/" + userIdentified.hearthId
             });
-            await axios.post("https://127.0.0.1:8000/api/day_checks", {
-                name: "Mardi",
-                checkTime: "",
-                week: 1,
-                resident: "/api/residents/" + data.id,
-                hearth: "/api/hearths/" + userIdentified.hearthId
-            });
-            await axios.post("https://127.0.0.1:8000/api/day_checks", {
-                name: "Mercredi",
-                checkTime: "",
-                week: 1,
-                resident: "/api/residents/" + data.id,
-                hearth: "/api/hearths/" + userIdentified.hearthId
-            });
-            await axios.post("https://127.0.0.1:8000/api/day_checks", {
-                name: "Jeudi",
-                checkTime: "",
-                week: 1,
-                resident: "/api/residents/" + data.id,
-                hearth: "/api/hearths/" + userIdentified.hearthId
-            });
-            await axios.post("https://127.0.0.1:8000/api/day_checks", {
-                name: "Vendredi",
-                checkTime: "",
-                week: 1,
-                resident: "/api/residents/" + data.id,
-                hearth: "/api/hearths/" + userIdentified.hearthId
-            });
-            await axios.post("https://127.0.0.1:8000/api/day_checks", {
-                name: "Samedi",
-                checkTime: "",
-                week: 1,
-                resident: "/api/residents/" + data.id,
-                hearth: "/api/hearths/" + userIdentified.hearthId
-            });
-            await axios.post("https://127.0.0.1:8000/api/day_checks", {
-                name: "Dimanche",
-                checkTime: "",
-                week: 1,
-                resident: "/api/residents/" + data.id,
-                hearth: "/api/hearths/" + userIdentified.hearthId
-            });
+            postDays(response.data)
         }catch (error){
             console.log(error)
             toast.error("Des erreurs dans le formulaires!")
         }
+    }
 
+    /**
+     * Création de 7 (jours de semaine) days_check. error avec map(),foreach, ou for; boucle infinie dans console.
+     * @param data
+     * @returns {Promise<void>}
+     */
+    const postDays= async(data)=>{
+        try{
+             await axios.post("https://127.0.0.1:8000/api/days", {
+                name: "Lundi",
+                checkTime: "matin|midi|soir",
+                dayCheck:"/api/day_checks/"+ data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/days", {
+                name: "Mardi",
+                checkTime: "matin|midi|soir",
+                dayCheck:"/api/day_checks/"+ data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/days", {
+                name: "Mercredi",
+                checkTime: "matin|midi|soir",
+                dayCheck:"/api/day_checks/"+ data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/days", {
+                name: "Jeudi",
+                checkTime: "matin|midi|soir",
+                dayCheck:"/api/day_checks/"+ data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/days", {
+                name: "Vendredi",
+                checkTime: "matin|midi|soir",
+                dayCheck:"/api/day_checks/"+ data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/days", {
+                name: "Samedi",
+                checkTime: "matin|midi|soir",
+                dayCheck:"/api/day_checks/"+ data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+            await axios.post("https://127.0.0.1:8000/api/days", {
+                name: "Dimanche",
+                checkTime: "matin|midi|soir",
+                dayCheck:"/api/day_checks/"+ data.id,
+                hearth: "/api/hearths/" + userIdentified.hearthId
+            });
+
+        }catch (error){
+            console.log(error)
+            toast.error("Des erreurs dans le formulaires!")
+        }
     }
 
 
@@ -248,6 +260,7 @@ export default function ResidentPage({history}){
         }
     };
 
+    console.log(resident)
 
     return(
 

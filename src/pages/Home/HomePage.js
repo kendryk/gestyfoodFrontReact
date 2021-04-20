@@ -69,16 +69,14 @@ export default function HomePage({history}){
                             </div>
 
                             <div >
-                                <p>La plateforme web sera consultable sur différents support,*/}
-                                                    tel qu’ordinateur, tablette, mobile.</p>
-                                                <p> La consultation de ce service sera sécurisée
-                                                    et ne s’effectuera par le consentement de la Direction.
-                                                    Celle-ci aura un accès à son service par un procède CRUD .</p>
-                                                <p> Lors de la création de l’instance, ils auront en charge l’attribution
-                                                    d’un accès sécurisé à leurs salariés.</p>
-                                                <p> Cette autorisation pourra donnée un accès à la lecture,
-                                                    à la modification ou à la suppression de certaine donnée.
-                                                    Cliquez sur Notice pour de plus ample information.</p>
+                                <p>La plateforme web sera consultable sur différents support, tel qu’ordinateur, tablette, mobile.</p>
+                                <p> La consultation de ce service sera sécurisée et ne s’effectuera par le consentement de la Direction.
+                                    Celle-ci aura un accès à son service par un procède CRUD .</p>
+                                <p> Lors de la création de l’instance, ils auront en charge l’attribution
+                                    d’un accès sécurisé à leurs salariés.</p>
+                                <p> Cette autorisation pourra donnée un accès à la lecture,
+                                    à la modification ou à la suppression de certaine donnée.
+                                    Cliquez sur Notice pour de plus ample information.</p>
                             </div>
 
                             <div className="d-flex justify-content-center">

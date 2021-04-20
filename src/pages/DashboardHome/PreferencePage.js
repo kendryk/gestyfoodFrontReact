@@ -1,15 +1,33 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Aside from "../../components/layouts/Aside";
 import AuthAPI from "../../services/AuthAPI";
 
 import {toast} from "react-toastify";
 import axios from "axios";
+import AuthContext from "../../contexts/AuthContext";
 
 
 export default function PreferencePage({history}){
 
 
     const  [userIdentified, setUserIdentified] = useState("");
+
+
+    const {setIsAuthenticated} = useContext(AuthContext)
+    /**
+     * Deconnection
+     */
+    const  handleLogout = ()=> {
+        AuthAPI.logout();
+        setIsAuthenticated(false);
+        toast.info("Vous êtes désormais déconnecté ")
+        history.push("/login")
+    }
+
+
+
+
+
 
     /**
      * affichage sur onglet et appel function iddentification
@@ -58,7 +76,7 @@ export default function PreferencePage({history}){
                     await axios.delete("https://localhost:8000/api/hearths/"+id)
                     toast.success("L'unité a bien été supprimé!")
 
-                    history.replace("/login");
+                    handleLogout()
 
                 }catch (error){
                     console.log(error.response);

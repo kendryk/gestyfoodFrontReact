@@ -85,8 +85,7 @@ function isAuthenticatedName() {
     const token = window.localStorage.getItem('authToken');
     //2. si le token est encore valide au niveau de la date expiration
     if (token) {
-        const jwtData = jwtDecode(token)
-        return jwtData;
+        return jwtDecode(token);
     }
     return false;
 }

@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import "./gestyfoog.scss"
 // import {ReactComponent as Check} from "../../img/arrow-down.svg"
-import moment from "moment";
+// import moment from "moment";
 import UnitiesAPi from "../../services/UnitiesAPI";
 import UnityAPI from "../../services/UnityAPI";
 import FullCalendar from '@fullcalendar/react'
@@ -36,21 +36,22 @@ export default function GestionFoodPage({history}){
 
     const [residents, setResidents] = useState([]);
     const [loading,setLoading] = useState(true);
+    const [load,setLoad] = useState(true);
     const [week, setWeek]= useState({
         number: 1
     });
     const [year, setYear]= useState({
         number: new Date().getFullYear()
     });
-    const [date, setDate]= useState({
-        data: new Date().toJSON()
-    });
+    // const [date, setDate]= useState({
+    //     data: new Date().toJSON()
+    // });
 
-    const [residentWeek, setResidentWeek] = useState({})
+    const [residentWeek, setResidentWeek] = useState([])
 
     const [stateCheck,setStateCheck]= useState('');
 
-    const [modifCheck,setModifCheck]= useState('');
+    // const [modifCheck,setModifCheck]= useState('');
 
 
     /**
@@ -58,23 +59,9 @@ export default function GestionFoodPage({history}){
      */
     useEffect(() => {
         NameIndentified();
-        fetchUnities();
+        fetchUnities().then();
 
     }, []);
-
-    /**
-     * Appel a l'ouverture de la page
-     */
-    useEffect(() => {
-        JsDay();
-        return () => {
-
-            console.log('hey!')
-            console.log(residents)
-            console.log(residentWeek)
-        };
-    }, [loading]);
-
 
     /**
      * Récupere les unités
@@ -90,57 +77,90 @@ export default function GestionFoodPage({history}){
     };
 
     /**
+     * Récupération des Unités
+     * @param currentTarget
+     * @constructor
+     */
+    const GetUnity =({currentTarget})=>{
+        setUnity({...unity,
+            'id': currentTarget.id,
+            'value': currentTarget.value}
+        );
+
+        fetchResidents(currentTarget.id).then();
+    };
+
+    /**
      * Récupere les résidents aupres de l'API selon l'unité choisi
      */
     const fetchResidents = async (idLocation) => {
         try{
             const data = await UnityAPI.findAll(idLocation)
             setResidents(data);
-            setLoading(false);
+            setLoading((loading)? false: (!loading)?true : "" );
         }catch(error){
             console.log(` Error ${error.response}`);
             handleLogout()
         }
     };
 
+    /**
+     * Appel a l'ouverture de la page
+     */
+    useEffect(() => {
+        JsDay();
+        setResidentWeek([])
+    }, [loading]);
+
+    useEffect(() => {
+        JsArrayDay();
+    }, [load]);
 
     const JsDay = ()=>{
-        console.log('hey! JsDay')
-        console.log('residents JsDay',residents)
-        console.log('residentWeek JsDay',residentWeek)
         residents.map(resident =>
             resident.dayChecks.map( days =>
-                fetchDays(days.id,resident.id,days.name)
+                fetchDays(days.id,resident.id,days.name,days.createdAt)
             )
         )
     }
 
-
-    const fetchDays = async (daysId,residentId,daysWeek) => {
+    const fetchDays = async (daysId,residentId,daysWeek,daysCreatedAt) => {
         try{
-            const data = await axios.get("https://127.0.0.1:8000/api/day_checks/"+daysId+"/days" )
+            const data = await axios
+                .get("https://127.0.0.1:8000/api/day_checks/"+daysId+"/days" )
                 .then(response => response.data["hydra:member"]);
-                console.log('data',data,'res',residentId)
-             // setResidentWeek({...residentWeek, [`R${residentId} - W${daysWeek}`]: data})
-
+                var tableau_associa={
+                    "residentID":residentId,
+                    "daysWeek":daysWeek,
+                    'daysCreatedAt':daysCreatedAt,
+                    "data":data
+                };
+                setResidentWeek(residentWeek => [...residentWeek, tableau_associa])
+                setLoad((load)? false: (!load)?true : "" );
         }catch(error){
             console.log(` Error ${error.response}`);
-            handleLogout()
         }
     };
 
+    // console.log('residents',residents)
+    // console.log('residentWeek',residentWeek)
 
 
-                // checkTime.split("|").map( v=>
-                //     arrayDay.push( resident.id + '|' + day.name + '|' + v + '|' + day.week + '|' + new Date(day.createdAt).getFullYear()+ ":"+ true)
-                // )
+    const JsArrayDay = ()=>{
+        const arrayDay = [];
+        const residentWeekValue= Object.values(residentWeek)
+        const dataWeek = residentWeekValue.map(resident =>
+            resident.data.map(day => day.checkTime.split("|").map( ck =>
+                arrayDay.push(resident.residentID + '|' + day.name + '|' + ck + '|' + resident.daysWeek + '|' + new Date(resident.daysCreatedAt).getFullYear()+ ":"+ true)
+            )));
+        const jsonDay = arrayDay.reduce( (prev, item) => {
+            const curr = item.split(':');
+            prev[curr[0]] = curr[1].indexOf('true') > -1;
+            return prev;
+        }, {});
+        setStateCheck(jsonDay)
+    }
 
-        // const jsonDay = arrayDay.reduce( (prev, item) => {
-        //     const curr = item.split(':');
-        //     prev[curr[0]] = curr[1].indexOf('true') > -1;
-        //     return prev;
-        // }, {});
-        // setStateCheck(jsonDay);
 
     /**
      * recupère l'identité de la personne connecté.
@@ -192,85 +212,55 @@ export default function GestionFoodPage({history}){
         setWeek({...week,['number']:parseInt(weekDate)});
     };
 
-    /**
-     * Récupération des Unités
-     * @param currentTarget
-     * @constructor
-     */
-    const GetUnity =({currentTarget})=>{
-        setResidentWeek({})
-        setUnity({...unity,
-            'id': currentTarget.id,
-            'value': currentTarget.value}
-        );
-        fetchResidents(currentTarget.id).then();
-
-
-    };
 
     const DayFilter=(id)=>{
-        //creation du dictionaire residents qui va contenire les informations de la base de données par resident
-        const dico = {};
+
+        //tableau contenant les donnée de l'unité : console.log("rere",residentWeek)
+
+        //creation du dictionaire residents qui va contenaire les informations de la base de données par resident
+        let dico_res={};
+        let dico_week={};
+        let residnetId = ""
         //creation du dictionaire resident par weekEnd qui va contenire une liste d'informations de la base de données
-        let residentWeek = {};
-        let lastWeek = {};
-        let firstWeek={}
+        //boucle dans chaque entrée de notre tableau residentWeek
 
-        //boucle dans chaque resident suite au filtre
-        for(let r in residents){
-            if (!residentWeek[r]) {
-                residentWeek[r]=[];
-                lastWeek=[];
-
-                residentWeek[r].push(residents[r].dayChecks);
-                lastWeek.push(residents[r].dayChecks)
-
-            }
-
-            for(let data in residentWeek[r]){ //boucle sur chaque liste de data par residents
-
-                //Retourne le derniere element de la liste data
-                lastWeek= residentWeek[r][data][residentWeek[r][data].length-1];
-                //Retourne le premier element de la liste data
-                firstWeek= residentWeek[r][data][0]; //todo ou mettre une condition <=
-
-
-                //Pour finir on se trouve avec un tableau resident_semaine["id du resident"]["int de la semaine recupéré dans la bdd"]
-                if ((residentWeek[r][data][week.number-1]) ){
-
-                    console.log((residentWeek[r][data]))
-
-
-                    // si la semaine est presente dans le dictionaire pour le resident en cours
-                    if (!dico[residentWeek[r][data][week.number-1].id]) {
-                        //afficher la liste des data pour chaque ellement de la semaine associé au resident
-                        dico[residentWeek[r][data][week.number-1].id] = []
-
-                    }
-
-                    dico[residentWeek[r][data][week.number-1].id].push(residentWeek[r][data][week.number-1]);
-
-                }else{
-
-                    // sinon affiche les data pour la deniere semaine du resident en cours, la longeur de la liste permet de savoir quel semaine affiché,
-                    // par exemple si la taille de la liste est de 3 cela affichera la semaine 3
-
-                    if (!dico[residentWeek[r][data][residentWeek[r][data].length-1].id]) {
-                        dico[residentWeek[r][data][(residentWeek[r][data].length)-1].id] = []
-                    }
-
-                    // dico[residentWeek[r][data][(residentWeek[r].length)-1].id].push(residentWeek[r][data][(residentWeek[r].length)-1]);
-                    dico[residentWeek[r][data][(residentWeek[r][data].length)-1].id].push(lastWeek)
-                }
+        for(let resident in residents){
+            if(residents[resident].id === id){
+                residnetId=residents[resident]
             }
         }
 
-        return dico[id]
+        for(let entry in residentWeek){
+
+            let resident_id=residentWeek[entry].residentID //type str
+
+            let week_name=residentWeek[entry].daysWeek //type str
+
+            let data_list=residentWeek[entry].data //type Array
+
+            let data_list_dd=[];
+
+            for (let dd in data_list){
+              data_list_dd = data_list[dd];
+
+                        // if (data_list_dd.dayCheck === residnetId.dayCheck){
+                        //     console.log('data_list_dd',data_list_dd.dayCheck)
+                        // }
+
+                }
+
+
+
+            if (!dico_res[resident_id]) {
+                dico_res[resident_id]=[];
+            }
+            dico_week[week_name]=data_list;
+            dico_res[resident_id].push(dico_week[week_name]);
+        }
+
+        // console.log('dico_res[id]',dico_res[id]);
+
     }
-
-
-
-
 
     return(
 
@@ -357,9 +347,8 @@ export default function GestionFoodPage({history}){
                                 (
 
                                     residents.map(resident =>
+
                                         <table className="table table-residents" key={resident.id}>
-
-
                                             <thead>
                                             <tr>
                                                 <th  className="border-right" colSpan="3">N°Chambre: {resident.room}</th>
@@ -372,83 +361,66 @@ export default function GestionFoodPage({history}){
                                             </thead>
                                             <tbody>
 
-                                            {resident.dayChecks.length === 0 ?
-                                                ""
-                                                :
-                                                resident.dayChecks.map(day =>
+                                            {DayFilter(13)}
+                                            {residentWeek.map(days =>
+                                                days.data.map(day=>
 
+                                            <td key= {day.id} rowSpan="3"> <strong>{day.name}</strong>
+                                                     <div className={"checkboxFlex "} >
+                                                         <input className="m-1"
+                                                                type = "checkbox"
+                                                                name={days.residentID+'|'+day.name+"|matin|"+ days.daysWeek+'|'+ new Date(days.daysCreatedAt).getFullYear()}
+                                                                checked={stateCheck[days.residentID+'|'+day.name+"|matin|"+ days.daysWeek+'|'+ new Date(days.daysCreatedAt).getFullYear()]}
+                                                                onChange={handleCheckChange}
+                                                            />
+                                                        <label htmlFor={day.name+"-matin"}>Matin</label>
 
-                                                    <div></div>
+                                                         <input className="m-1"
+                                                                type = "checkbox"
+                                                                name={days.residentID+'|'+day.name+"|midi|"+ days.daysWeek+'|'+ new Date(days.daysCreatedAt).getFullYear()}
+                                                                checked={stateCheck[days.residentID+'|'+day.name+"|midi|"+ days.daysWeek+'|'+ new Date(days.daysCreatedAt).getFullYear()]}
+                                                                onChange={handleCheckChange}
+                                                            />
+                                                         <label htmlFor={day.name+"-matin"}>Midi</label>
 
-
-
-
-
-
-                                                    // <td key={day.id} rowSpan="3"> <strong>{day.name}</strong>
-                                                    //     <div className={"checkboxFlex " + day.week} >
-                                                    //
-                                                    //         <input className="m-1"
-                                                    //                type = "checkbox"
-                                                    //                name={resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                    //                checked={stateCheck[resident.id+'|'+day.name+"|matin|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                    //                onChange={handleCheckChange}
-                                                    //         />
-                                                    //         <label htmlFor={day.name+"-matin"}>Matin</label>
-                                                    //
-                                                    //
-                                                    //         <input className="m-1"
-                                                    //                type = "checkbox"
-                                                    //                name={resident.id+'|'+ day.name +"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                    //                checked={stateCheck[resident.id+'|'+day.name+"|midi|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                    //                onChange={handleCheckChange}
-                                                    //         />
-                                                    //         <label htmlFor={day.name+"-matin"}>Midi</label>
-                                                    //
-                                                    //
-                                                    //         <input className="m-1"
-                                                    //                type = "checkbox"
-                                                    //                name={resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()}
-                                                    //                checked={stateCheck[resident.id+'|'+day.name+"|soir|"+ day.week+'|'+ new Date(day.createdAt).getFullYear()]}
-                                                    //                onChange={handleCheckChange}
-                                                    //         />
-                                                    //         <label htmlFor={day.name+"-matin"}>Soir</label>
-                                                    //     </div>
-                                                    //
-                                                    // </td>
-
+                                                        <input className="m-1"
+                                                               type = "checkbox"
+                                                               name={days.residentID+'|'+day.name+"|soir|"+ days.daysWeek+'|'+ new Date(days.daysCreatedAt).getFullYear()}
+                                                               checked={stateCheck[days.residentID+'|'+day.name+"|soir|"+ days.daysWeek+'|'+ new Date(days.daysCreatedAt).getFullYear()]}
+                                                               onChange={handleCheckChange}
+                                                             />
+                                                         <label htmlFor={day.name+"-matin"}>Soir</label>
+                                                 </div>
+                                             </td>
                                                 )
-                                            }
+                                                )
+                                                }
+                                            <tr>
+                                                <td key="DIET" rowSpan="1">
+                                                    <div className='CheckChoice'>
+                                                        {/*{resident.dayChecks[0].diet.name}*/}
+                                                        {/*mode edition */}
+                                                        {/*<Check className='svg-check'/>*/}
+                                                    </div>
+                                                </td>
+                                            </tr>
 
+                                            <tr>
+                                                <td key="TEXTURE" rowSpan="1">
+                                                    <div className='CheckChoice'>
+                                                        {/*{resident.dayChecks[0].texture.name}*/}
+                                                        {/*mode edition */}
+                                                        {/*<Check className='svg-check'/>*/}
+                                                    </div>
 
+                                                </td>
+                                            </tr>
 
-                                            {/*{resident.dayChecks.length === 0 ?*/}
-                                            {/*    "" :*/}
-                                                <>
-                                                    <tr>
-                                                        <td key="DIET" rowSpan="1">
-                                                            <div className='CheckChoice'>
-                                                                {/*{resident.dayChecks[0].diet.name}*/}
-                                                                {/*mode edition */}
-                                                                {/*<Check className='svg-check'/>*/}
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td key="TEXTURE" rowSpan="1">
-                                                            <div className='CheckChoice'>
-                                                                {/*{resident.dayChecks[0].texture.name}*/}
-                                                                {/*mode edition */}
-                                                                {/*<Check className='svg-check'/>*/}
-                                                            </div>
-
-                                                        </td>
-                                                    </tr>
-                                                </>
-                                            {/*}*/}
                                             </tbody>
+
                                         </table>
+
+
                                     )
                                 )
                             }

@@ -45,7 +45,6 @@ const NewUpDelUnity =({history})=>{
     const NameIdentified = ()=>{
         try{
             setUserIdentified (AuthAPI.isAuthenticatedName());
-            console.log(userIdentified)
             setUnit({...unit, 'hearth': "/api/hearths/"+userIdentified.hearthId});
 
         }catch(error){
@@ -107,7 +106,6 @@ const NewUpDelUnity =({history})=>{
     const handleSubmit =async(event)=>{
         event.preventDefault();
         try{
-            console.log(unit)
             if(editing){
                 console.log(unit)
                 const response = await axios.put("https://127.0.0.1:8000/api/unities/"+id, unit );
@@ -139,7 +137,6 @@ const NewUpDelUnity =({history})=>{
      * @returns {Promise<void>}
      */
     const handleDelete = async (id) => {
-        console.log(id)
         // eslint-disable-next-line no-restricted-globals
         let val = confirm(`Voulez-vous supprimer l'unité ${unit.name}`);
         if (val === true) {
@@ -201,7 +198,7 @@ const NewUpDelUnity =({history})=>{
 
                             <div className="box-input">
                                 <Field
-                                    label="Nom du foyer"
+                                    label="Nom de l'unité"
                                     name='name'
                                     value={unit.name}
                                     onChange={handleChange}

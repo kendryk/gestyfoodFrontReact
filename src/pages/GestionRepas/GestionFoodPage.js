@@ -97,7 +97,7 @@ export default function GestionFoodPage({history}){
         try{
             const data = await UnityAPI.findAll(idLocation)
             setResidents(data);
-            setLoading((loading)? false: (!loading)?true : "" );
+            setLoading(!loading) ;
         }catch(error){
             console.log(` Error ${error.response}`);
             handleLogout()
@@ -111,6 +111,7 @@ export default function GestionFoodPage({history}){
         JsDay();
         setResidentWeek([])
     }, [loading]);
+    console.log(loading)
 
     useEffect(() => {
         JsArrayDay();
@@ -136,7 +137,7 @@ export default function GestionFoodPage({history}){
                     "data":data
                 };
                 setResidentWeek(residentWeek => [...residentWeek, tableau_associa])
-                setLoad((load)? false: (!load)?true : "" );
+                setLoad(!load);
         }catch(error){
             console.log(` Error ${error.response}`);
         }

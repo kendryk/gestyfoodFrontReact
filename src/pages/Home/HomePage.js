@@ -26,9 +26,9 @@ export default function HomePage({history}){
                     <div className='d-flex'>
                         <div className='block-empty'/>
                         <div className='block-welcome'>
-                            <h1>Bienvenue sur GestyFood</h1>
+                            <h1>Bienvenue sur FoodGesty</h1>
                             <p>
-                            <strong>GestyFood® </strong> est une Plateforme web de gestion de repas dédié aux foyers
+                            <strong>FoodGesty </strong> est une Plateforme web de gestion de repas dédié aux foyers
                             médicaux-sociaux qui hébergent et accompagnent des personnes en situation d’handicap ou de vieillesse.
                             </p>
                         </div>
@@ -44,14 +44,14 @@ export default function HomePage({history}){
 
                         <div  className="p-2 ">
                             <div >
-                                <h2>Pourquoi utiliser GestyFood ?</h2>
+                                <h2>Pourquoi utiliser FoodGesty ?</h2>
                             </div>
 
                             <div >
-                                <p>GestyFood complète les outils de gestion administrative existant.</p>
+                                <p>FoodGesty complète les outils de gestion administrative existant.</p>
                                 <p>Par sa nature, l’ensemble des foyers ont la possibilité d’accéder
                                     à une plateforme de soutien dans la gestion de leur quotidien sur les repas.</p>
-                                <p>GestyFood® fournit une plateforme collaborative simplifié favorisant le partage
+                                <p>FoodGesty fournit une plateforme collaborative simplifié favorisant le partage
                                      d'informations auprès des équipes pluridisciplinaires travaillant au sein
                                     de l’établissement cette question.</p>
                             </div>
@@ -65,7 +65,7 @@ export default function HomePage({history}){
                     <article className=" block-article bg_myDark">
                         <div  className="py-2 ">
                             <div >
-                                <h2>Comment utiliser GestyFood ?</h2>
+                                <h2>Comment utiliser FoodGesty ?</h2>
                             </div>
 
                             <div >

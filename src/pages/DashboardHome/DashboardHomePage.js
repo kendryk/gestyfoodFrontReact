@@ -8,7 +8,7 @@ export default function DashboardHomePage(){
     const  [userIdentified, setUserIdentified] = useState("");
 
     /**
-     * affichage sur onglet et appel function iddentification
+     * affichage sur onglet et appel function identification
      */
     useEffect(() => {
         document.title = "Home Dasboard";

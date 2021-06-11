@@ -53,7 +53,7 @@ export default function LoginPage({ history}){
             await AuthAPI.authenticate(credentials);
             setError(false);
             setIsAuthenticated(true);
-            toast.success("Vous êtes desormais connecté !")
+            toast.success("Vous êtes désormais connecté !")
             history.replace('/dashboardHome');
             }catch(error){
                 setError(

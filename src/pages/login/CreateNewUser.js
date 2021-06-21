@@ -112,7 +112,6 @@ export default function CreateNewUser({history}){
                 .post("https://localhost:8000/api/hearths", hearth)
                 .then(response =>  response.data.id)
             setErrors({});
-
             setRegister({
                 ...register,
                 ['hearth']:"/api/hearths/"+ data,
@@ -137,7 +136,6 @@ export default function CreateNewUser({history}){
 
 
     const postRegister = async() => {
-
         console.log(roles);
         console.log(register);
         await axios.post("https://127.0.0.1:8000/api/users", register );

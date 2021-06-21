@@ -29,6 +29,7 @@ export default function Aside({isAuthenticated}){
         NameIndentified();
     }, []);
 
+    const Admin = JSON.parse(JSON.stringify({0:["ROLE_ADMIN","ROLE_USER"]}));
     const Director = JSON.parse(JSON.stringify({0:["ROLE_DIRECTOR","ROLE_USER"]}));
     const Moderator = JSON.parse(JSON.stringify({0:["ROLE_MODERATOR","ROLE_USER"]}));
     const Editor = JSON.parse(JSON.stringify({0:["ROLE_EDITOR","ROLE_USER"]}));
@@ -51,7 +52,15 @@ export default function Aside({isAuthenticated}){
 
 
                                 {!userIdentified ? "":
-                                    userIdentified.roles[0] !== Director[0][0]   ? '' :
+                                    userIdentified.roles[0] !== (Admin[0][0])    ? '' :
+
+                                        <li className="nav-item ">
+                                            <NavLink exact to="/dashboardUnities"  className="nav-link buttonHeader">UNITES</NavLink>
+                                        </li>
+                                }
+
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== (Director[0][0])    ? '' :
 
                                 <li className="nav-item ">
                                     <NavLink exact to="/dashboardUnities"  className="nav-link buttonHeader">UNITES</NavLink>
@@ -59,7 +68,7 @@ export default function Aside({isAuthenticated}){
                                 }
 
                                 {!userIdentified ? "":
-                                    userIdentified.roles[0] !== Moderator[0][0]   ? '' :
+                                    userIdentified.roles[0] !== (Moderator[0][0])   ? '' :
 
                                         <li className="nav-item ">
                                             <NavLink exact to="/dashboardUnities"  className="nav-link buttonHeader">UNITES</NavLink>
@@ -67,37 +76,53 @@ export default function Aside({isAuthenticated}){
                                 }
 
 
+                                {/******************************AUTORISATION/REPAS*****************************************/}
 
                                 {!userIdentified ? "":
-                                    userIdentified.roles[0] !== Director[0][0]  ? '' :
+                                    userIdentified.roles[0] !== (Admin[0][0])  ? '' :
+                                        <li className="nav-item">
+                                            <NavLink exact to="/user"  className="nav-link buttonHeader">AUTORISATION</NavLink>
+                                        </li>
+                                }
+
+
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== (Director[0][0])  ? '' :
                                 <li className="nav-item">
                                     <NavLink exact to="/user"  className="nav-link buttonHeader">AUTORISATION</NavLink>
                                 </li>
                                 }
-
-
 
                                 <li className="nav-item">
                                     <NavLink exact to="/gestionFood"  className="nav-link buttonHeader">REPAS</NavLink>
                                 </li>
 
 
+                                {/******************************REGIME/TEXTURE*****************************************/}
+                                {!userIdentified ? "":
+                                    userIdentified.roles[0] !== (Admin[0][0]) ? '' :
+                                        <li className="nav-item">
+                                            <NavLink exact to="/regime" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
+                                        </li>
+                                }
+
+
 
                                 {!userIdentified ? "":
-                                    userIdentified.roles[0] !== Director[0][0] ? '' :
+                                    userIdentified.roles[0] !== (Director[0][0]) ? '' :
                                 <li className="nav-item">
                                     <NavLink exact to="/regime" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
                                 </li>
                                 }
 
                                 {!userIdentified ? "":
-                                    userIdentified.roles[0] !== Moderator[0][0] ? '' :
+                                    userIdentified.roles[0] !== (Moderator[0][0] ) ? '' :
                                         <li className="nav-item">
                                             <NavLink exact to="/regime" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
                                         </li>
                                 }
                                 {!userIdentified ? "":
-                                    userIdentified.roles[0] !== Editor[0][0] ? '' :
+                                    userIdentified.roles[0] !== (Editor[0][0] ) ?  '' :
                                         <li className="nav-item">
                                             <NavLink exact to="/regime" className="nav-link buttonHeader">REGIME/TEXTURE</NavLink>
                                         </li>
@@ -108,7 +133,7 @@ export default function Aside({isAuthenticated}){
 
 
                                 {!userIdentified ? "":
-                                    userIdentified.roles[0] !== Director[0][0] ? '' :
+                                    userIdentified.roles[0] !== (Director[0][0]) ? '' :
                                 <li className="nav-item">
                                     <NavLink exact to="/preference" className="nav-link buttonHeader">PREFERENCE</NavLink>
                                 </li>

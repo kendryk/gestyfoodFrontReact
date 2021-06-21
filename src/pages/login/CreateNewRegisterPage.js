@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 
 export default function CreateNewRegisterPage({history,location}){
 
+
     /**
      * Redupere id dans la location
      */
@@ -101,15 +102,11 @@ export default function CreateNewRegisterPage({history,location}){
                     apiErrors[violation.propertyPath]= violation.message;
                 });
                 setErrors(apiErrors);
-                console.log(apiErrors)
                 toast.error("Des erreurs dans le formulaires!")
-            };
+            }
 
         }
     };
-
-    console.log(register)
-
 
 
 

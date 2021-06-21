@@ -57,7 +57,7 @@ export default function UserPage({history}){
         document.title = "Préférence";
         NameIndentified();
         fetchUsers();
-    }, []);
+    }, );
 
     /**
      * recupère l'identité de la personne connecté.
@@ -139,7 +139,7 @@ export default function UserPage({history}){
                         <h3>Tous nouveaux Collaborateur pourra avoir un accès  de lecture au site.</h3>
                     </div>
                     <div className="unities_top_button">
-                        <Link to="/user/new" className="btn btn-gold">Nouvelle Utilisateur</Link>
+                        <Link to="/user/new" className="btn btn-gold">Nouvel Utilisateur</Link>
                     </div>
 
                 </section>

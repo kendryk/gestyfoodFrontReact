@@ -3,8 +3,6 @@ import Aside from "../../components/layouts/Aside";
 import {Link} from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import "./gestyfoog.scss"
-// import {ReactComponent as Check} from "../../img/arrow-down.svg"
-// import moment from "moment";
 import UnitiesAPi from "../../services/UnitiesAPI";
 import UnityAPI from "../../services/UnityAPI";
 import FullCalendar from '@fullcalendar/react'
@@ -43,15 +41,20 @@ export default function GestionFoodPage({history}){
     const [year, setYear]= useState({
         number: new Date().getFullYear()
     });
-    // const [date, setDate]= useState({
-    //     data: new Date().toJSON()
-    // });
+
 
     const [residentWeek, setResidentWeek] = useState([])
 
     const [stateCheck,setStateCheck]= useState('');
 
-    // const [modifCheck,setModifCheck]= useState('');
+
+    /**
+     *  Test nouvel fonctionnalité
+      */
+    const [residentWeek2, setResidentWeek2] = useState({
+        residentID: [],
+    } )
+
 
 
     /**
@@ -111,7 +114,8 @@ export default function GestionFoodPage({history}){
         JsDay();
         setResidentWeek([])
     }, [loading]);
-    console.log(loading)
+
+
 
     useEffect(() => {
         JsArrayDay();
@@ -138,19 +142,27 @@ export default function GestionFoodPage({history}){
                 };
                 setResidentWeek(residentWeek => [...residentWeek, tableau_associa])
                 setLoad(!load);
+
+            //Test nouvel fonctionnalité
+                if (!residentWeek2.residentID[residentId]){
+                    residentWeek2.residentID[residentId]=[{[daysWeek] : data}]
+                }
+                else {
+                    residentWeek2.residentID[residentId].push({[daysWeek] : data})
+                }
+            //*************************
+
         }catch(error){
             console.log(` Error ${error.response}`);
+            handleLogout();
         }
     };
-
-    // console.log('residents',residents)
-    // console.log('residentWeek',residentWeek)
 
 
     const JsArrayDay = ()=>{
         const arrayDay = [];
         const residentWeekValue= Object.values(residentWeek)
-        const dataWeek = residentWeekValue.map(resident =>
+        residentWeekValue.map(resident =>
             resident.data.map(day => day.checkTime.split("|").map( ck =>
                 arrayDay.push(resident.residentID + '|' + day.name + '|' + ck + '|' + resident.daysWeek + '|' + new Date(resident.daysCreatedAt).getFullYear()+ ":"+ true)
             )));
@@ -161,7 +173,8 @@ export default function GestionFoodPage({history}){
         }, {});
         setStateCheck(jsonDay)
     }
-
+    console.log(residentWeek[0]);
+    console.log(stateCheck);
 
     /**
      * recupère l'identité de la personne connecté.
@@ -188,17 +201,6 @@ export default function GestionFoodPage({history}){
     }
 
 
-    // const searchWeekDate=(arg)=>{
-    //     let d = new Date(arg.date);
-    //     // renvoie le jour de la semaine
-    //     d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
-    //     let ms = d.valueOf(); // GMT
-    //     d.setMonth(0);
-    //     d.setDate(4); // Thu in Week 1
-    //     return  Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    // };
-
-
     const handleDateClick = (arg) => { // bind with an arrow function
         let YearDate = new Date(arg.date).getFullYear();
         setYear({...year,['number']:parseInt(YearDate)});
@@ -217,41 +219,25 @@ export default function GestionFoodPage({history}){
     const DayFilter=(id)=>{
 
         //tableau contenant les donnée de l'unité : console.log("rere",residentWeek)
-
-        //creation du dictionaire residents qui va contenaire les informations de la base de données par resident
+        //creation du dictionaire residents qui va contenire les informations de la base de données par resident
         let dico_res={};
         let dico_week={};
-        let residnetId = ""
+        let residentId = ""
         //creation du dictionaire resident par weekEnd qui va contenire une liste d'informations de la base de données
         //boucle dans chaque entrée de notre tableau residentWeek
-
         for(let resident in residents){
             if(residents[resident].id === id){
-                residnetId=residents[resident]
+                residentId=residents[resident]
             }
         }
-
         for(let entry in residentWeek){
-
             let resident_id=residentWeek[entry].residentID //type str
-
             let week_name=residentWeek[entry].daysWeek //type str
-
             let data_list=residentWeek[entry].data //type Array
-
             let data_list_dd=[];
-
             for (let dd in data_list){
               data_list_dd = data_list[dd];
-
-                        // if (data_list_dd.dayCheck === residnetId.dayCheck){
-                        //     console.log('data_list_dd',data_list_dd.dayCheck)
-                        // }
-
                 }
-
-
-
             if (!dico_res[resident_id]) {
                 dico_res[resident_id]=[];
             }
@@ -259,7 +245,7 @@ export default function GestionFoodPage({history}){
             dico_res[resident_id].push(dico_week[week_name]);
         }
 
-        // console.log('dico_res[id]',dico_res[id]);
+
 
     }
 
@@ -280,8 +266,8 @@ export default function GestionFoodPage({history}){
                     <div className="unities_top">
                         <div>
                             <h1> Page De gestion des Présences Repas par unité.</h1>
-                            <p>Ici vous pouvez gérer les presences aux repas
-                                des residents selon leur unité. </p>
+                            <p>Ici vous pouvez gérer les présences aux repas
+                                des résidents selon leur unité. </p>
                             {(unity.id === "") ?
                                 <p>Veuillez Choisir une unité pour commencer.</p>
                                 :""}
@@ -362,7 +348,7 @@ export default function GestionFoodPage({history}){
                                             </thead>
                                             <tbody>
 
-                                            {DayFilter(13)}
+                                            {DayFilter(resident.id)}
                                             {residentWeek.map(days =>
                                                 days.data.map(day=>
 
@@ -399,9 +385,8 @@ export default function GestionFoodPage({history}){
                                             <tr>
                                                 <td key="DIET" rowSpan="1">
                                                     <div className='CheckChoice'>
-                                                        {/*{resident.dayChecks[0].diet.name}*/}
-                                                        {/*mode edition */}
-                                                        {/*<Check className='svg-check'/>*/}
+                                                        {resident.dayChecks[0].diet.name}
+
                                                     </div>
                                                 </td>
                                             </tr>
@@ -409,9 +394,8 @@ export default function GestionFoodPage({history}){
                                             <tr>
                                                 <td key="TEXTURE" rowSpan="1">
                                                     <div className='CheckChoice'>
-                                                        {/*{resident.dayChecks[0].texture.name}*/}
-                                                        {/*mode edition */}
-                                                        {/*<Check className='svg-check'/>*/}
+                                                        {resident.dayChecks[0].texture.name}
+
                                                     </div>
 
                                                 </td>

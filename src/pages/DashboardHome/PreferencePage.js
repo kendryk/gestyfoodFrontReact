@@ -86,7 +86,6 @@ export default function PreferencePage({history}){
         }
     };
 
-    console.log(userIdentified)
 
 
 

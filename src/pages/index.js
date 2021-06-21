@@ -8,7 +8,7 @@ export { default as NoticePage} from "./Home/NoticePage";
 export { default as LoginPage} from "./login/LoginPage";
 export { default as CreateNewRegisterPage} from "./login/CreateNewRegisterPage";
 export { default as CreateNewHearthPage} from "./login/CreateNewHearthPage";
-
+export { default as CreateNewUser} from "./login/CreateNewUser";
 
 export { default as DashboardHomePage} from "./DashboardHome/DashboardHomePage";
 

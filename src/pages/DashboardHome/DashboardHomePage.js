@@ -42,20 +42,20 @@ export default function DashboardHomePage(){
                         </div>}
                     <h1>Bienvenue </h1>
 
-                    <p>D'ici vous pourrez naviguez sur l'ensemble des Services proposer par FoodGesty. </p>
+                    <p>D'ici vous avez la possibilité de naviguer sur l'ensemble des Services proposé par FoodGesty. </p>
                     <p>En cliquant sur Unités, vous avez accès à l'ensemble des unités.</p>
                     <p>En cliquant sur Autorisation, vous avez accès à la gestion de vos collaborateurs ou salarié.</p>
                     <p>En cliquant sur Repas, vous avez accès à la gestion des repas.</p>
-                    <p>En cliquant sur Regime/Texture, vous avez accès à la gestion des regimes textures.</p>
-                    <p>En cliquant sur Préférence, vous avez accès au préférence.</p>
+                    <p>En cliquant sur Régime/Texture, vous avez accès à la gestion des régimes textures.</p>
+                    <p>En cliquant sur Préférence, vous avez accès aux préférences.</p>
 
                     {/*todo 1er visite*/}
                     <div>
-                        <h2>Premiere recommendation</h2>
+                        <h2>Première recommandation</h2>
 
-                        <p>Pour votre premiere visite nous vous conseillons de commencer à
-                            allez  sur la gestion de vos collaborateurs en cliquant sur Autorisation.
-                        Par ce principe, vous pourriez invitez vos collaboratuer et personnels à untiliser cette application.</p>
+                        <p>Pour votre première visite nous vous conseillons de commencer à
+                            aller  sur la gestion de vos collaborateurs en cliquant sur Autorisation.</p>
+                        <p> Par ce principe, vous vous avez la possibilité d'inviter vos collaborateurs et personnels à utiliser cette application.</p>
                     </div>
 
                 </section>

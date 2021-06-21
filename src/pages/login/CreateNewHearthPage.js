@@ -4,7 +4,7 @@ import axios from 'axios'
 import {toast} from "react-toastify";
 
 export default function CreateNewHearthPage({history}){
-
+    //TODO Reglé probleme de syncro entre le useState
     /**
      * Affiche le nom de la page à l'ouverture de celle-ci
      */
@@ -19,8 +19,8 @@ export default function CreateNewHearthPage({history}){
         name: "",
         address:"",
         city:"",
-        phone:"",
-        email:"",
+        phoneHearth:"",
+        emailHearth:"",
     });
 
     /**
@@ -30,8 +30,8 @@ export default function CreateNewHearthPage({history}){
         name: "",
         address:"",
         city:"",
-        phone:"",
-        email:"",
+        phoneHearth:"",
+        emailHearth:"",
     });
 
     /**
@@ -108,19 +108,19 @@ export default function CreateNewHearthPage({history}){
 
                     <Field
                         label="Téléphone"
-                        name='phone'
+                        name='phoneHearth'
                         type="tel"
                         placeholder="0653648562- écriver vos numero attaché"
-                        value= {hearth.phone}
+                        value= {hearth.phoneHearth}
                         onChange={handleChange}
                         error={errors.phone}/>
 
                     <Field
                         label="E-mail"
-                        name='email'
+                        name='emailHearth'
                         type="email"
                         placeholder="email Asso"
-                        value={hearth.email}
+                        value={hearth.emailHearth}
                         onChange={handleChange}
                         error={errors.email}/>
 

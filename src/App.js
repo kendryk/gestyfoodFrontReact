@@ -12,6 +12,7 @@ import {
     LoginPage,
     CreateNewRegisterPage,
     CreateNewHearthPage,
+    CreateNewUser,
 
     DashboardHomePage,
     DashboardUnities,
@@ -74,10 +75,11 @@ function App() {
 
                 <Route exact path="/login" component={LoginPage}/>
 
-                <Route exact path="/createNewHearth" component={CreateNewHearthPage}/>
+                {/*<Route exact path="/createNewHearth" component={CreateNewHearthPage}/>*/}
 
-                <Route exact path="/createNewRegister/:id" component={ CreateNewRegisterPage}/>}/>
+                {/*<Route exact path="/createNewRegister/:id" component={ CreateNewRegisterPage}/>}/>*/}
 
+                <Route exact path="/createNewUser" component={CreateNewUser}/>
 
                 {/*TODO SECURISATION DES ROUTES*/}
 

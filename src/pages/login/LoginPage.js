@@ -34,7 +34,7 @@ export default function LoginPage({ history}){
     const  [error, setError] = useState();
 
     /**
-     * Gestion des champs
+     * Gestion des champs Piece identité
      * @param currentTarget
      */
     const handleChange = ({currentTarget})=>{

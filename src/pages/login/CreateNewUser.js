@@ -4,18 +4,21 @@ import axios from 'axios'
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 
-export default function CreateNewUser(){
+export default function CreateNewUser({history}){
 
-
+    const [load,setLoad] = useState ({
+        load:false,
+    })
     /**
      * Affiche le nom de la page à l'ouverture de celle-ci
      */
     useEffect(() => {
         document.title = "Nouvel Utilisateur";
+        postRegister()
         return ()=> {
             console.log(register);
         }
-    }, []);
+    }, [load]);
 
     /**
      * Initialise et modifie les foyers
@@ -115,7 +118,8 @@ export default function CreateNewUser(){
                 ['hearth']:"/api/hearths/"+ data,
                 roles
             });
-            await postRegister(data);
+            setLoad(!load);
+
 
 
         }catch(error){
@@ -132,20 +136,14 @@ export default function CreateNewUser(){
     };
 
 
-    const postRegister = async(data) => {
+    const postRegister = async() => {
 
-        console.log(data);
-        let apiHearth= {['hearth']:"/api/hearths/"+ data}
-
-
-
-        console.log(apiHearth);
         console.log(roles);
         console.log(register);
-        // await axios.post("https://127.0.0.1:8000/api/users", register );
-        // setErrors({});
-        // toast.success("Vous vous êtes inscrit, vous pouvez vous connecter !")
-        // history.replace('/login');
+        await axios.post("https://127.0.0.1:8000/api/users", register );
+        setErrors({});
+        toast.success("Vous vous êtes inscrit, vous pouvez vous connecter !")
+        history.replace('/login');
     }
 
 

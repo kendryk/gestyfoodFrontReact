@@ -57,7 +57,7 @@ export default function UserPage({history}){
         document.title = "Préférence";
         NameIndentified();
         fetchUsers();
-    }, );
+    }, []);
 
     /**
      * recupère l'identité de la personne connecté.

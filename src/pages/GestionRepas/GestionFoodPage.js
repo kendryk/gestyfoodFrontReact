@@ -173,8 +173,8 @@ export default function GestionFoodPage({history}){
         }, {});
         setStateCheck(jsonDay)
     }
-    console.log(residentWeek[0]);
-    console.log(stateCheck);
+    // console.log(residentWeek[0]);
+    // console.log(stateCheck);
 
     /**
      * recupère l'identité de la personne connecté.
@@ -385,7 +385,10 @@ export default function GestionFoodPage({history}){
                                             <tr>
                                                 <td key="DIET" rowSpan="1">
                                                     <div className='CheckChoice'>
-                                                        {resident.dayChecks[0].diet.name}
+                                                        {  !resident.dayChecks[0].diet?  <p> régime vide  </p> :
+
+                                                            resident.dayChecks[0].diet.name
+                                                        }
 
                                                     </div>
                                                 </td>
@@ -394,7 +397,11 @@ export default function GestionFoodPage({history}){
                                             <tr>
                                                 <td key="TEXTURE" rowSpan="1">
                                                     <div className='CheckChoice'>
-                                                        {resident.dayChecks[0].texture.name}
+
+                                                        {  !resident.dayChecks[0].texture?  <p> texture vide  </p> :
+
+                                                            resident.dayChecks[0].texture.name
+                                                        }
 
                                                     </div>
 

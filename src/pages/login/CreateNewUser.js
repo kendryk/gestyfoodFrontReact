@@ -15,9 +15,6 @@ export default function CreateNewUser({history}){
     useEffect(() => {
         document.title = "Nouvel Utilisateur";
         postRegister()
-        return ()=> {
-            console.log(register);
-        }
     }, [load]);
 
     /**
@@ -136,8 +133,6 @@ export default function CreateNewUser({history}){
 
 
     const postRegister = async() => {
-        console.log(roles);
-        console.log(register);
         await axios.post("https://127.0.0.1:8000/api/users", register );
         setErrors({});
         toast.success("Vous vous êtes inscrit, vous pouvez vous connecter !")

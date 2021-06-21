@@ -77,7 +77,7 @@ export default function Footer () {
 
                    {/*Copyright */}
                     <div className="text-center p-3">
-                        ©{date} Copyright: gestyfood.fr  Tous droits réservés
+                        ©{date}  gestyfood.fr
 
                     </div>
                    {/*Copyright */}

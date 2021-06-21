@@ -28,7 +28,7 @@ function authenticate(credentials){
             // je stocke mon token dans mon localstorage
             window.localStorage.setItem('authToken', token);
 
-            // On previent axios qu'on a maintenant un header par default sur toutes nos futurs requetes HTTP
+            // On previent axios qu'on a maintenant un header par default sur toutes nos futurs requetes HTTPS
             setAxiosToken(token);
         });
 }

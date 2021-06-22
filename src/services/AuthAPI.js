@@ -10,7 +10,6 @@ function logout(){
     window.localStorage.removeItem('id')
     window.localStorage.removeItem('name')
     delete axios.defaults.headers['Authorization']
-
 }
 
 /**

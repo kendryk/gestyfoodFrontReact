@@ -147,6 +147,7 @@ const NewUpDelUnity =({history})=>{
             if (val2 === true) {
                 try {
                     await UnitiesAPi.delete(id)
+                    history.replace('/dashboardUnities');
                     toast.success("L'unité a bien été supprimé!")
                 }catch (error){
                     console.log(error.response);
